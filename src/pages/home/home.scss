@@ -1,3 +1,23 @@
 page-home {
 
+    .product_data_input
+    {
+    	line-height: 10px;
+    	background-color : #d1d1d1;
+    }
+
+    page-transport {
+ 
+    	.product_list {
+      		max-height: 350px;
+      		overflow-y: scroll;
+    	}
+	}
+
+	.ion-list-viewport {
+  		max-height: 200px;
+  		width:100%;
+  		display:block !important;
+  		overflow:scroll !important;
+	}
 }

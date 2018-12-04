@@ -9,6 +9,11 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { HttpClientModule } from '@angular/common/http';
+import { ProductList } from '../providers/productlist/productlist';
+import { RestProvider } from '../providers/rest/rest';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -17,7 +22,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    HttpClientModule,
+    IonicModule.forRoot(MyApp, {
+      scrollAssist: false
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -28,6 +36,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
+    BarcodeScanner,
+    ProductList,
+    RestProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

@@ -3,16 +3,44 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>Julkaisumyynnin varastonhallinta</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
 
+  <h5>
+    Tuotenumero: {{productNumber}}
+  </h5>
   <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <h3>
+    Nimi: {{productName}}
+  </h3>
+  <p>
+  <h3>
+    Hinta: {{price}} €
+  </h3>
+  <p>
+  <h5>
+    Varastosaldo: {{amountInStock}} <font color="red">{{inProductionInfo}}</font>
+  </h5>
+  <!--
+  <button ion-button (click)="saveProducts()">Tallenna tuote</button>
+  -->
+  <p>
+  <button ion-button full round (click)="readProduct()">Lue tuote</button>
+  <p>
+  <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+  <p>
+  <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+  <!--ion-content-->
+  <div class="ion-list-viewport">
+    <ion-list class="product_list">
+      <ion-item text-wrap *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >      
+        <p>{{element.productName}}</p>
+      </ion-item>
+    </ion-list>
+  </div>
+  <!--/ion-content-->
+  <!--button ion-button secondary menuToggle>Toggle Menu</button-->
 </ion-content>
