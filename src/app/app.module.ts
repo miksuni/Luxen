@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { ProductUpdatePage } from '../pages/productUpdate/productUpdate';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -18,7 +19,8 @@ import { RestProvider } from '../providers/rest/rest';
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    ProductUpdatePage
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import { RestProvider } from '../providers/rest/rest';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    ListPage,
+    ProductUpdatePage
   ],
   providers: [
     StatusBar,
