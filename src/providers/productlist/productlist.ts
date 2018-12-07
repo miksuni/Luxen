@@ -95,4 +95,13 @@ export class ProductList {
 	getProductCount() {
 		//return this.productList.length;
 	}
+
+	updateProductInfo(updatedInfo) {
+		this.restProvider.saveTraining(updatedInfo).then((result:any) => {
+			console.log(">> product info saved");
+			//this.getProductInfo();
+		}, (err) => {
+			console.log(err);
+		});
+	}
 }
