@@ -1,8 +1,24 @@
 page-productUpdate {
 
+    .table_1 tr
+    {
+		line-height: 12px;
+    }
+
+    td, th {
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 5px 5px 5px 5px;
+	}
+
+	.input_narrow
+	{
+		width:40px;
+		background-color : #d1d1d1;
+	}
+
     .product_data_input
     {
-		line-height: 10px;
 		background-color : #d1d1d1;
     }
 }

@@ -63,8 +63,8 @@ export class ProductUpdatePage {
     console.log('>> productUpdate.onProductNumberUpdated: ' + this.productNumberInitials);
     var found = this.productList.getProductProgressivelyByNumber(this.productNumberInitials);
     this.searchResult = found;
-    console.log('>> found: ' + found.length);
-    console.log('>> json: ' + JSON.stringify(found));
+    //console.log('>> found: ' + found.length);
+    //console.log('>> json: ' + JSON.stringify(found));
     this.clear();
     if (this.searchResult.length == 1) {
       console.log('>> found item: ' + found[0].productName);
@@ -76,8 +76,8 @@ export class ProductUpdatePage {
     console.log('>> productUpdate.onProductNameUpdated: ' + this.productNameInitials);
     var found = this.productList.getProductByName(this.productNameInitials);
     this.searchResult = found;
-    console.log('>> found: ' + found.length);
-    console.log('>> json: ' + JSON.stringify(found));
+    //console.log('>> found: ' + found.length);
+    //console.log('>> json: ' + JSON.stringify(found));
     this.clear();
     if (found.length == 1) {
       console.log('>> found item: ' + found[0].productName);
@@ -86,8 +86,9 @@ export class ProductUpdatePage {
   }
 
   onProductSelected(productName, index) {
-    console.log('>> productUpdate.onProductSelected: ' + productName + ' index: ' + index);
+    console.log('>> productUpdate.onProductSelected: ' + productName + ' index: ' + index + ' obj: ' + this.searchResult[index].objectId);
     //this.productName = productName;
+    this.objectId = this.searchResult[index].objectId;
     this.productNumber = this.searchResult[index].ISBN;
     this.productName = this.searchResult[index].productName;
     this.price = this.searchResult[index].price;
@@ -100,7 +101,9 @@ export class ProductUpdatePage {
   }
 
   showProduct(productInfo) {
-      this.productNumber = productInfo.ISBN + " : " +  productInfo.objectId;
+      console.log('>> productUpdate.showProduct: ' + productInfo.objectId);
+      this.objectId = productInfo.objectId;
+      this.productNumber = productInfo.ISBN;
       this.productName = productInfo.productName;
       this.price = productInfo.price;
       this.amountInStock = productInfo.amountInStock;

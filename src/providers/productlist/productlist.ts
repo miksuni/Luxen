@@ -29,7 +29,7 @@ export class ProductList {
 		console.log('>> productList.getProductInfo');
 		this.restProvider.productInfo("").then((result:any) => {
 			this.productInfoStr = result.result;
-			console.log(">> productInfo as string: " + this.productInfoStr);
+			//console.log(">> productInfo as string: " + this.productInfoStr);
 			this.productInfo = JSON.parse(this.productInfoStr);
 			//console.log(">> productInfo as len: " + this.productInfo.length);
 		}, (err) => {
@@ -57,9 +57,9 @@ export class ProductList {
 		//console.log('>> LEN ' + this.productInfo.length);
 		for (var i = 0; i < this.productInfo.length; i++) {
 			if (this.productInfo[i].ISBN.replace(/-/g,'').startsWith(letters)) {
-				console.log('>> candicate found');
-				console.log('>> ISBN: ' + this.productInfo[i].ISBN);
-				console.log('>> product code: ' + this.productInfo[i].ISBN.replace(/-/g,''));
+				//console.log('>> candicate found');
+				//console.log('>> ISBN: ' + this.productInfo[i].ISBN);
+				//console.log('>> product code: ' + this.productInfo[i].ISBN.replace(/-/g,''));
 				results.push(this.productInfo[i]);
 			}
 		}
@@ -75,9 +75,9 @@ export class ProductList {
 		//console.log('>> LEN ' + this.productInfo.length);
 		for (var i = 0; i < this.productInfo.length; i++) {
 			if (this.productInfo[i].productName.toLowerCase().startsWith(letters.toLowerCase())) {
-				console.log('>> candicate found');
-				console.log('>> ISBN: ' + this.productInfo[i].ISBN);
-				console.log('>> product code: ' + this.productInfo[i].ISBN.replace(/-/g,''));
+				//console.log('>> candicate found');
+				//console.log('>> ISBN: ' + this.productInfo[i].ISBN);
+				//console.log('>> product code: ' + this.productInfo[i].ISBN.replace(/-/g,''));
 				results.push(this.productInfo[i]);
 			}
 		}
@@ -97,7 +97,7 @@ export class ProductList {
 	}
 
 	updateProductInfo(updatedInfo) {
-		this.restProvider.saveTraining(updatedInfo).then((result:any) => {
+		this.restProvider.saveProduct(updatedInfo).then((result:any) => {
 			console.log(">> product info saved");
 			//this.getProductInfo();
 		}, (err) => {

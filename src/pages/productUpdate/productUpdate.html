@@ -9,13 +9,60 @@
 
 <ion-content padding>
 
-  <ion-input class="product_data_input" [(ngModel)]="productNumber" placeholder="Tuotenumero"></ion-input>
-  <ion-input class="product_data_input" [(ngModel)]="productName" placeholder="Tuotenimi"></ion-input>
+  <table class="table_1" border="1">
+    <tr>
+      <td>
+        Tuotenumero:
+      </td>
+      <td>
+        &nbsp;{{productNumber}}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Nimi:
+      </td>
+      <td>
+        &nbsp;{{productName}}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Hinta:
+      </td>
+      <td>
+        &nbsp;<input class="input_narrow" [(ngModel)]="price">
+        <button ion-button round button color="danger">-</button>
+        <button ion-button round button color="secondary">+</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Varastosaldo:
+      </td>
+      <td>
+        &nbsp;<input class="input_narrow" [(ngModel)]="amountInStock">
+        <button ion-button round button color="danger">-</button>
+        <button ion-button round button color="secondary">+</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Tuotannossa:
+      </td>
+      <td>
+        &nbsp;<ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+      </td>
+    </tr>
+  </table>
+
+  <!--
+  <ion-input readonly class="product_data_input" [(ngModel)]="productNumber" placeholder="Tuotenumero"></ion-input>
+  <ion-input readonly class="product_data_input" [(ngModel)]="productName" placeholder="Tuotenimi"></ion-input>
   <ion-input class="product_data_input" [(ngModel)]="price" placeholder="Hinta"></ion-input>
   <ion-input class="product_data_input" [(ngModel)]="amountInStock" placeholder="Varastosaldo"></ion-input>
-  <!--
-  <button ion-button (click)="saveProducts()">Tallenna tuote</button>
   -->
+
   <p>
   <ion-grid>
     <ion-row>
@@ -28,7 +75,7 @@
     </ion-row>
   </ion-grid>
   <p>
-  <ion-input type="number" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+  <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
   <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
   <!--ion-content-->
   <div class="ion-list-viewport">

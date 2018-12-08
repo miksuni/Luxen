@@ -11,8 +11,9 @@ import { RestProvider } from '../../providers/rest/rest';
 })
 export class HomePage {
 
-  productNumber: string = "..";
-  productName: string = "..";
+  productObject: string ="";
+  productNumber: string = "";
+  productName: string = "";
   productNumberInitials: string = "";
   productNameInitials: string = "";
   price: string = "";
@@ -78,7 +79,6 @@ export class HomePage {
 
   onProductSelected(productName, index) {
     console.log('>> home.onProductSelected: ' + productName + ' index: ' + index);
-    //this.productName = productName;
     this.productNumber = this.searchResult[index].ISBN;
     this.productName = this.searchResult[index].productName;
     this.price = this.searchResult[index].price;
