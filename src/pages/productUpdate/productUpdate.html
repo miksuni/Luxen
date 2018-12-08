@@ -32,8 +32,8 @@
       </td>
       <td>
         &nbsp;<input class="input_narrow" [(ngModel)]="price">
-        <button ion-button round button color="danger">-</button>
-        <button ion-button round button color="secondary">+</button>
+        <button ion-button round button color="danger" (click)="reducePrice()">-</button>
+        <button ion-button round button color="secondary" (click)="increasePrice()">+</button>
       </td>
     </tr>
     <tr>
@@ -42,8 +42,8 @@
       </td>
       <td>
         &nbsp;<input class="input_narrow" [(ngModel)]="amountInStock">
-        <button ion-button round button color="danger">-</button>
-        <button ion-button round button color="secondary">+</button>
+        <button ion-button round button color="danger" (click)="reduceAmount()">-</button>
+        <button ion-button round button color="secondary" (click)="increaseAmount()">+</button>
       </td>
     </tr>
     <tr>
@@ -51,7 +51,7 @@
         Tuotannossa:
       </td>
       <td>
-        &nbsp;<ion-checkbox [(ngModel)]="pepperoni"></ion-checkbox>
+        &nbsp;<ion-checkbox [(ngModel)]="inProduction" (click)="inProductionChanged()"></ion-checkbox>
       </td>
     </tr>
   </table>

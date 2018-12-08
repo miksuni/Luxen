@@ -15,7 +15,7 @@ export class ProductUpdatePage {
   productName: string = "";
   price: string = "";
   amountInStock: string = "";
-  inProductionInfo: string = "";
+  inProduction: boolean = false;
 
   objectId: string = "";
 
@@ -42,7 +42,7 @@ export class ProductUpdatePage {
     //this.productInfo.productName = this.productName;
     this.productInfo.price = this.price;
     this.productInfo.amountInStock = this.amountInStock;
-    //this.productInfo.inProductionInfo = this.inProductionInfo;
+    this.productInfo.availableFromPublisher = this.inProduction ? "true" : "false";
     console.log('>> home.saveProduct ' + JSON. stringify(this.productInfo));
     this.productList.updateProductInfo(this.productInfo);
   }
@@ -93,11 +93,7 @@ export class ProductUpdatePage {
     this.productName = this.searchResult[index].productName;
     this.price = this.searchResult[index].price;
     this.amountInStock = this.searchResult[index].amountInStock;
-    if (!this.searchResult[index].availableFromPublisher) {
-      this.inProductionInfo = "(Poistunut tuote)";
-    } else {
-      this.inProductionInfo = "";
-    }
+    this.inProduction = this.searchResult[index].availableFromPublisher;
   }
 
   showProduct(productInfo) {
@@ -107,12 +103,56 @@ export class ProductUpdatePage {
       this.productName = productInfo.productName;
       this.price = productInfo.price;
       this.amountInStock = productInfo.amountInStock;
-      if (!productInfo.availableFromPublisher) {
-        this.inProductionInfo = "(Poistunut tuote)";
-      } else {
-        this.inProductionInfo = "";
-      }
+      this.inProduction = productInfo.availableFromPublisher;
       console.log('>> ' + JSON.stringify(productInfo));
+  }
+
+  increasePrice() {
+    console.log('>> productUpdate.increasePrice, current price ' + this.price);
+    var tmpStr = this.price.toString();
+    if (tmpStr.length > 0) {
+      var price = parseInt(tmpStr, 10);
+      price++;
+      this.price = price.toString();
+    }
+  }
+
+  reducePrice() {
+    console.log('>> productUpdate.increasePrice, current price ' + this.price);
+    var tmpStr = this.price.toString();
+    if (tmpStr.length > 0) {
+      var price = parseInt(tmpStr, 10);
+      if (price > 0) {
+        price--;
+        this.price = price.toString();
+      }
+    }
+  }
+
+  increaseAmount() {
+    console.log('>> productUpdate.increaseAmount, current amountInStock ' + this.amountInStock);
+    var tmpStr = this.amountInStock.toString();
+    if (tmpStr.length > 0) {
+      var amountInStock = parseInt(tmpStr, 10);
+      amountInStock++;
+      this.amountInStock = amountInStock.toString();
+    }
+  }
+
+  reduceAmount() {
+    console.log('>> productUpdate.reduceAmount, current amountInStock ' + this.amountInStock);
+    var tmpStr = this.amountInStock.toString();
+    if (tmpStr.length > 0) {
+      var amountInStock = parseInt(tmpStr, 10);
+      if (amountInStock > 0) {
+        amountInStock--;
+        this.amountInStock = amountInStock.toString();
+      }
+    }
+  }
+
+  inProductionChanged() {
+    console.log('>> productUpdate.inProductionChanged, new value: ' + this.inProduction);
   }
 
   clear() {
@@ -120,7 +160,7 @@ export class ProductUpdatePage {
     this.productName = "";
     this.price = "";
     this.amountInStock = "";
-    this.inProductionInfo = "";
+    this.inProduction = false;
     this.objectId = "";
   }
 }
