@@ -9,21 +9,49 @@
 
 <ion-content padding>
 
-  <h5>
-    Tuotenumero: {{productNumber}}
-  </h5>
-  <p>
-  <h3>
-    Nimi: {{productName}}
-  </h3>
-  <p>
-  <h3>
-    Hinta: {{price}} €
-  </h3>
-  <p>
-  <h5>
-    Varastosaldo: {{amountInStock}} <font color="red">{{inProductionInfo}}</font>
-  </h5>
+  <table class="fixed">
+    <colgroup>
+        <col width="200px">
+        <col width="200px">
+    </colgroup>
+    <tr>
+      <td colspan="2">
+        Tuotenumero
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <h5>{{productNumber}}</h5>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Nimi
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <h5>{{productName}}</h5>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Hinta
+      </td>
+      <td>
+        Varatosaldo
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h5>{{price}} €</h5>
+      </td>
+      <td>
+        <h5>{{amountInStock}}<font color="red"> &nbsp;{{inProductionInfo}}</font></h5>
+      </td>
+    </tr>
+  </table>
+
   <!--
   <button ion-button (click)="saveProducts()">Tallenna tuote</button>
   -->

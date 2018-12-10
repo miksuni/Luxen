@@ -4,6 +4,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ProductList } from '../../providers/productlist/productlist';
 import { HttpClient } from '@angular/common/http';
 import { RestProvider } from '../../providers/rest/rest';
+import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -22,13 +23,18 @@ export class HomePage {
   //searchResult = []; //*-* Chrome
   searchResult: any; //*-* Android
 
+  loadingIndicator: any;
+
   productInfoStr: any;
   //productInfo = {ISBN:'',Tuotenro:'',Tuote:'',Kpl:'',Hinta:''};
   productInfo = { createdAt:'', updatedAt:'', ISBN:'', order:'', exerciseId:'', targetArea:'',
                 pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
 
-  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider) {
+  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider, public loadingCtrl: LoadingController) {
     console.log('>> home.constructor');
+    //this.presentLoading();
+    this.productList.getProductInfo();
+    //this.finishLoading();
   }
 
   saveProducts() {
@@ -110,4 +116,16 @@ export class HomePage {
     this.amountInStock = "";
     this.inProductionInfo = "";
   }
+
+	presentLoading() {
+		this.loadingIndicator = this.loadingCtrl.create({
+			content: "Haetaan tuotteet..."
+			//duration: 3000;
+		});
+		this.loadingIndicator.present();
+	}
+
+	finishLoading() {
+		this.loadingIndicator.dismiss();
+	}
 }

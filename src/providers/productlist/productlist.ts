@@ -21,23 +21,23 @@ export class ProductList {
 
 	constructor( public httpClient: HttpClient, public restProvider: RestProvider) {
 		console.log('Hello ProductList Provider');
-		this.getProductInfo();
+		//this.getProductInfo();
 	}
 
 
 	getProductInfo() {
 		console.log('>> productList.getProductInfo');
 		this.restProvider.productInfo("").then((result:any) => {
+		    console.log('>> result received');
 			this.productInfoStr = result.result;
-			//console.log(">> productInfo as string: " + this.productInfoStr);
 			this.productInfo = JSON.parse(this.productInfoStr);
-			//console.log(">> productInfo as len: " + this.productInfo.length);
 		}, (err) => {
-      		console.log(err);
-    	});
-  	}
+			console.log(err);
+		});
+	}
 
 	getProductByNumber(isbnNumber) {
+		console.log('>> productList.getProductByNumber');
 		for (var i = 0; i < this.productInfo.length; i++) {
 			if (isbnNumber == this.productInfo[i].ISBN.replace(/-/g,'')) {
 				console.log('>> found');
@@ -49,6 +49,7 @@ export class ProductList {
 
 
 	getProductProgressivelyByNumber(letters) {
+		console.log('>> productList.getProductProgressivelyByNumber');
 		if (letters.length == 0) {
 			return this.nullProduct;
 		}
@@ -67,6 +68,7 @@ export class ProductList {
 	}
 
 	getProductByName(letters) {
+		console.log('>> productList.getProductByName');
 		if (letters.length == 0) {
 			return this.nullProduct;
 		}
@@ -97,6 +99,7 @@ export class ProductList {
 	}
 
 	updateProductInfo(updatedInfo) {
+		console.log('>> ProductList.updateProductInfo');
 		this.restProvider.saveProduct(updatedInfo).then((result:any) => {
 			console.log(">> product info saved");
 			//this.getProductInfo();

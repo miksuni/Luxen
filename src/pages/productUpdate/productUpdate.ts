@@ -4,6 +4,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ProductList } from '../../providers/productlist/productlist';
 import { HttpClient } from '@angular/common/http';
 import { RestProvider } from '../../providers/rest/rest';
+import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'page-productUpdate',
@@ -24,19 +25,21 @@ export class ProductUpdatePage {
 
   searchResult: any;
 
+  loadingIndicator: any;
+
   productInfoStr: any;
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
 
-  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider) {
+  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider, public loadingCtrl: LoadingController) {
     console.log('>> productUpdate.constructor');
   }
 
   saveProducts() {
     console.log('>> home.saveProducts');
-    this.productList.updateProductInfo
   }
 
   saveProduct() {
+    this.presentLoading();
     this.productInfo.objectId = this.objectId;
     //this.productInfo.ISBN = this.productNumber;
     //this.productInfo.productName = this.productName;
@@ -45,6 +48,11 @@ export class ProductUpdatePage {
     this.productInfo.availableFromPublisher = this.inProduction ? "true" : "false";
     console.log('>> home.saveProduct ' + JSON. stringify(this.productInfo));
     this.productList.updateProductInfo(this.productInfo);
+    setTimeout( () => {
+      console.log('>> timeout ends');
+      this.productList.getProductInfo();
+      this.finishLoading();
+    }, 3000);
   }
 
   readProduct() {
@@ -162,5 +170,17 @@ export class ProductUpdatePage {
     this.amountInStock = "";
     this.inProduction = false;
     this.objectId = "";
+  }
+
+  presentLoading() {
+    this.loadingIndicator = this.loadingCtrl.create({
+      content: "Haetaan tuotteet..."
+      //duration: 3000;
+    });
+    this.loadingIndicator.present();
+  }
+
+  finishLoading() {
+    this.loadingIndicator.dismiss();
   }
 }
