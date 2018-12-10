@@ -14,27 +14,27 @@
         <col width="200px">
         <col width="200px">
     </colgroup>
-    <tr>
+    <tr class="header_class">
       <td colspan="2">
         Tuotenumero
       </td>
     </tr>
-    <tr>
+    <tr class="content_class">
       <td colspan="2">
         <h5>{{productNumber}}</h5>
       </td>
     </tr>
-    <tr>
+    <tr class="header_class">
       <td colspan="2">
         Nimi
       </td>
     </tr>
-    <tr>
+    <tr class="content_class">
       <td colspan="2">
         <h5>{{productName}}</h5>
       </td>
     </tr>
-    <tr>
+    <tr class="header_class">
       <td>
         Hinta
       </td>
@@ -42,7 +42,7 @@
         Varatosaldo
       </td>
     </tr>
-    <tr>
+    <tr class="content_class">
       <td>
         <h5>{{price}} €</h5>
       </td>
@@ -59,7 +59,6 @@
   <button ion-button full round (click)="readProduct()">Lue tuote</button>
   <p>
   <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
-  <p>
   <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
   <!--ion-content-->
   <div class="ion-list-viewport">
