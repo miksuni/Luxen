@@ -1,36 +1,44 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <!--img src="./assets/icon/700396-200.png" alt="icon" width="auto" height="20"-->
+      <ion-buttons end>
+        <button class="cart_button" (click)="goToShoppingCart()">
+          Kassalle&nbsp;
+          <ion-icon name="basket"></ion-icon>
+        </button>
+      </ion-buttons>
     <ion-title>Julkaisumyynti</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <table class="fixed">
+  <table class="table_1">
     <colgroup>
-        <col width="200px">
-        <col width="200px">
+      <col width="150px">
+      <col width="150px">
+      <col width="100px">
     </colgroup>
     <tr class="header_class">
-      <td colspan="2">
+      <td colspan="3">
         Tuotenumero
       </td>
     </tr>
     <tr class="content_class">
-      <td colspan="2">
+      <td colspan="3">
         <h5>{{productNumber}}</h5>
       </td>
     </tr>
     <tr class="header_class">
-      <td colspan="2">
+      <td colspan="3">
         Nimi
       </td>
     </tr>
     <tr class="content_class">
-      <td colspan="2">
+      <td colspan="3">
         <h5>{{productName}}</h5>
       </td>
     </tr>
@@ -40,6 +48,11 @@
       </td>
       <td>
         Varatosaldo
+      </td>
+      <td rowspan="2">
+        <button ion-button round icon-end (click)="addToShoppingCart()">
+          Osto<ion-icon name="basket"></ion-icon>
+        </button>
       </td>
     </tr>
     <tr class="content_class">
@@ -55,11 +68,26 @@
   <!--
   <button ion-button (click)="saveProducts()">Tallenna tuote</button>
   -->
-  <p>
-  <button ion-button full round (click)="readProduct()">Lue tuote</button>
-  <p>
-  <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
-  <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+  <table class="table_2">
+    <colgroup>
+      <col width="217px">
+      <col width="217px">
+    </colgroup>
+    <tr>
+      <td colspan = "3">
+        <button ion-button full round (click)="readProduct()">Lue tuote</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+      </td>
+      <td>
+        <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+      </td>
+    </tr>
+  </table>
+
   <!--ion-content-->
   <div class="ion-list-viewport">
     <ion-list class="product_list">

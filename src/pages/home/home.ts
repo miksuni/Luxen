@@ -28,93 +28,103 @@ export class HomePage {
   productInfoStr: any;
   //productInfo = {ISBN:'',Tuotenro:'',Tuote:'',Kpl:'',Hinta:''};
   productInfo = { createdAt:'', updatedAt:'', ISBN:'', order:'', exerciseId:'', targetArea:'',
-                pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
+				pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
 
   constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider, public loadingCtrl: LoadingController) {
-    console.log('>> home.constructor');
-    //this.presentLoading();
-    this.productList.getProductInfo();
-    //this.finishLoading();
+	console.log('>> home.constructor');
+	//this.presentLoading();
+	this.productList.getProductInfo();
+	//this.finishLoading();
   }
 
   saveProducts() {
-    console.log('>> home.saveProducts');
-    //var productCount = this.productList.getProductCount();
-    //for (var i = 0; i < productCount; i++) {
-    //  this.restProvider.addProduct(this.productList.getProductByIndex(i));
-    //}
+	console.log('>> home.saveProducts');
+	//var productCount = this.productList.getProductCount();
+	//for (var i = 0; i < productCount; i++) {
+	//  this.restProvider.addProduct(this.productList.getProductByIndex(i));
+	//}
   }
 
   readProduct() {
-    console.log('>> home.readProduct');
-    this.clear();
-    this.barcodeScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-      this.productNumber = barcodeData.text;
-      this.showProduct( this.productList.getProductByNumber(this.productNumber));
-    }).catch(err => {
-      console.log('Error', err);
-    });
+	console.log('>> home.readProduct');
+	this.clear();
+	this.barcodeScanner.scan().then(barcodeData => {
+	  console.log('Barcode data', barcodeData);
+	  this.productNumber = barcodeData.text;
+	  this.showProduct( this.productList.getProductByNumber(this.productNumber));
+	}).catch(err => {
+	  console.log('Error', err);
+	});
   }
 
-  onProductNumberUpdated() {
-    console.log('>> home.onProductNumberUpdated: ' + this.productNumberInitials);
-    var found = this.productList.getProductProgressivelyByNumber(this.productNumberInitials);
-    this.searchResult = found;
-    console.log('>> found: ' + found.length);
-    console.log('>> json: ' + JSON.stringify(found));
-    this.clear();
-    if (this.searchResult.length == 1) {
-      console.log('>> found item: ' + found[0].productName);
-      this.showProduct(found[0]);
-    }
-  }
+	onProductNumberUpdated() {
+		console.log('>> home.onProductNumberUpdated: ' + this.productNumberInitials);
+		if (this.productNumberInitials.length > 0) {
+			var found = this.productList.getProductProgressivelyByNumber(this.productNumberInitials);
+			this.searchResult = found;
+			console.log('>> found: ' + found.length);
+			console.log('>> json: ' + JSON.stringify(found));
+			this.clear();
+			if (this.searchResult.length == 1) {
+				console.log('>> found item: ' + found[0].productName);
+				this.showProduct(found[0]);
+			}
+		}
+	}
 
   onProductNameUpdated() {
-    console.log('>> home.onProductNameUpdated: ' + this.productNameInitials);
-    var found = this.productList.getProductByName(this.productNameInitials);
-    this.searchResult = found;
-    console.log('>> found: ' + found.length);
-    console.log('>> json: ' + JSON.stringify(found));
-    this.clear();
-    if (found.length == 1) {
-      console.log('>> found item: ' + found[0].productName);
-      this.showProduct(found[0]);
-    }
+	console.log('>> home.onProductNameUpdated: ' + this.productNameInitials);
+	var found = this.productList.getProductByName(this.productNameInitials);
+	this.searchResult = found;
+	console.log('>> found: ' + found.length);
+	console.log('>> json: ' + JSON.stringify(found));
+	this.clear();
+	if (found.length == 1) {
+	  console.log('>> found item: ' + found[0].productName);
+	  this.showProduct(found[0]);
+	}
   }
 
   onProductSelected(productName, index) {
-    console.log('>> home.onProductSelected: ' + productName + ' index: ' + index);
-    this.productNumber = this.searchResult[index].ISBN;
-    this.productName = this.searchResult[index].productName;
-    this.price = this.searchResult[index].price;
-    this.amountInStock = this.searchResult[index].amountInStock;
-    if (!this.searchResult[index].availableFromPublisher) {
-      this.inProductionInfo = "(Poistunut tuote)";
-    } else {
-      this.inProductionInfo = "";
-    }
+	console.log('>> home.onProductSelected: ' + productName + ' index: ' + index);
+	this.productNumber = this.searchResult[index].ISBN;
+	this.productName = this.searchResult[index].productName;
+	this.price = this.searchResult[index].price;
+	this.amountInStock = this.searchResult[index].amountInStock;
+	if (!this.searchResult[index].availableFromPublisher) {
+	  this.inProductionInfo = "(Poistunut tuote)";
+	} else {
+	  this.inProductionInfo = "";
+	}
   }
 
   showProduct(productInfo) {
-      this.productNumber = productInfo.ISBN;
-      this.productName = productInfo.productName;
-      this.price = productInfo.price;
-      this.amountInStock = productInfo.amountInStock;
-      if (!productInfo.availableFromPublisher) {
-        this.inProductionInfo = "(Poistunut tuote)";
-      } else {
-        this.inProductionInfo = "";
-      }
-      console.log('>> ' + JSON.stringify(productInfo));
+	  this.productNumber = productInfo.ISBN;
+	  this.productName = productInfo.productName;
+	  this.price = productInfo.price;
+	  this.amountInStock = productInfo.amountInStock;
+	  if (!productInfo.availableFromPublisher) {
+		this.inProductionInfo = "(Poistunut tuote)";
+	  } else {
+		this.inProductionInfo = "";
+	  }
+	  console.log('>> ' + JSON.stringify(productInfo));
   }
 
+	addToShoppingCart() {
+		console.log('>> home.addToShoppingCart');
+	}
+
+	goToShoppingCart() {
+		console.log('>> home.goToShoppingCart');
+	}
+
   clear() {
-    this.productNumber = "";
-    this.productName = "";
-    this.price = "";
-    this.amountInStock = "";
-    this.inProductionInfo = "";
+	this.productNumber = "";
+	this.productName = "";
+	this.price = "";
+	this.amountInStock = "";
+	this.inProductionInfo = "";
   }
 
 	presentLoading() {
