@@ -117,6 +117,7 @@ export class HomePage {
 
 	goToShoppingCart() {
 		console.log('>> home.goToShoppingCart');
+		this.navCtrl.push('ShoppingCartPage', {});
 	}
 
   clear() {
