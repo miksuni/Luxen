@@ -14,6 +14,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductList } from '../providers/productlist/productlist';
 import { RestProvider } from '../providers/rest/rest';
+import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { RestProvider } from '../providers/rest/rest';
     BarcodeScanner,
     ProductList,
     RestProvider,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ShoppingcartProvider
   ]
 })
 export class AppModule {}

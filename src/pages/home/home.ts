@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ProductList } from '../../providers/productlist/productlist';
+import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart';
 import { HttpClient } from '@angular/common/http';
 import { RestProvider } from '../../providers/rest/rest';
 import { LoadingController } from 'ionic-angular';
@@ -25,12 +26,16 @@ export class HomePage {
 
   loadingIndicator: any;
 
-  productInfoStr: any;
-  //productInfo = {ISBN:'',Tuotenro:'',Tuote:'',Kpl:'',Hinta:''};
   productInfo = { createdAt:'', updatedAt:'', ISBN:'', order:'', exerciseId:'', targetArea:'',
 				pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
 
-  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, 
+              private barcodeScanner: BarcodeScanner,
+              public productList: ProductList, 
+              public httpClient: HttpClient, 
+              public restProvider: RestProvider,
+              public loadingCtrl: LoadingController,
+              public shoppingCart: ShoppingcartProvider) {
 	console.log('>> home.constructor');
 	//this.presentLoading();
 	this.productList.getProductInfo();
@@ -99,6 +104,7 @@ export class HomePage {
   }
 
   showProduct(productInfo) {
+      this.productInfo = productInfo;
 	  this.productNumber = productInfo.ISBN;
 	  this.productName = productInfo.productName;
 	  this.price = productInfo.price;
@@ -113,6 +119,7 @@ export class HomePage {
 
 	addToShoppingCart() {
 		console.log('>> home.addToShoppingCart');
+        this.shoppingCart.addProduct(this.productInfo);
 	}
 
 	goToShoppingCart() {

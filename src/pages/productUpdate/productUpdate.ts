@@ -27,7 +27,7 @@ export class ProductUpdatePage {
 
   loadingIndicator: any;
 
-  productInfoStr: any;
+  //productInfoStr: any;
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
 
   constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider, public loadingCtrl: LoadingController) {
