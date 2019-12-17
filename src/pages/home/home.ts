@@ -92,6 +92,7 @@ export class HomePage {
 
   onProductSelected(productName, index) {
 	console.log('>> home.onProductSelected: ' + productName + ' index: ' + index);
+	this.productInfo = this.searchResult[index];
 	this.productNumber = this.searchResult[index].ISBN;
 	this.productName = this.searchResult[index].productName;
 	this.price = this.searchResult[index].price;
@@ -101,9 +102,11 @@ export class HomePage {
 	} else {
 	  this.inProductionInfo = "";
 	}
+	//this.showProduct(this.searchResult[index]);
   }
 
   showProduct(productInfo) {
+      console.log('>> home.showProduct: ' + JSON.stringify(productInfo));
       this.productInfo = productInfo;
 	  this.productNumber = productInfo.ISBN;
 	  this.productName = productInfo.productName;
@@ -114,11 +117,10 @@ export class HomePage {
 	  } else {
 		this.inProductionInfo = "";
 	  }
-	  console.log('>> ' + JSON.stringify(productInfo));
   }
 
 	addToShoppingCart() {
-		console.log('>> home.addToShoppingCart');
+		//console.log('>> home.addToShoppingCart: ' + JSON.stringify(this.shoppingCart));
         this.shoppingCart.addProduct(this.productInfo);
 	}
 

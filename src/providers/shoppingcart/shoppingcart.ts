@@ -24,12 +24,9 @@ export class ShoppingcartProvider {
       shoppingCart.push(productInfo);
       this.shoppingCart.push(productInfo);
       console.log('>> cart content: ' + JSON.stringify(this.shoppingCart));
-      //this.objectId = productInfo.objectId;
-      //this.productNumber = productInfo.ISBN;
-      //this.productName = productInfo.productName;
-      //this.price = productInfo.price;
-      //this.amountInStock = productInfo.amountInStock;
-      //this.inProduction = productInfo.availableFromPublisher;
-      //console.log('>> ' + JSON.stringify(productInfo));
+  }
+  
+  getProducts() {
+      return this.shoppingCart;
   }
 }

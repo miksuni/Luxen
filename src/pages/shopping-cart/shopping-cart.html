@@ -14,5 +14,14 @@
 
 
 <ion-content padding>
+  <!--ion-content-->
+  <div class="ion-list-viewport">
+    <ion-list class="product_list">
+      <ion-item text-wrap *ngFor="let element of cartContent let i = index" (click)="onProductSelected(element.productName, i)" >      
+        <p>{{element.productName}}</p>
+      </ion-item>
+    </ion-list>
+  </div>
+  <!--/ion-content-->
 
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart';
 
 /**
  * Generated class for the ShoppingCartPage page.
@@ -15,11 +16,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ShoppingCartPage {
     
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  productInfo = { createdAt:'', updatedAt:'', ISBN:'', order:'', exerciseId:'', targetArea:'',
+            pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
+  cartContent = [];
+    
+  constructor(public navCtrl: NavController, public navParams: NavParams, private shoppingCart: ShoppingcartProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShoppingCartPage');
+    //cartContent = 
+    this.cartContent = this.shoppingCart.getProducts();
   }
-  
 }
