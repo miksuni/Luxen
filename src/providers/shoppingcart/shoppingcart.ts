@@ -26,6 +26,13 @@ export class ShoppingcartProvider {
       console.log('>> cart content: ' + JSON.stringify(this.shoppingCart));
   }
   
+  removeProduct(index) {
+      if (index >= 0 && index < this.shoppingCart.length) {
+          this.shoppingCart.splice(index, 1);
+      }
+      return this.shoppingCart;
+  }
+  
   getProducts() {
       return this.shoppingCart;
   }

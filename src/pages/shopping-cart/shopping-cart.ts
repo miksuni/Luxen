@@ -16,8 +16,7 @@ import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart'
 })
 export class ShoppingCartPage {
     
-  productInfo = { createdAt:'', updatedAt:'', ISBN:'', order:'', exerciseId:'', targetArea:'',
-            pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
+  //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   cartContent = [];
     
   constructor(public navCtrl: NavController, public navParams: NavParams, private shoppingCart: ShoppingcartProvider) {
@@ -40,6 +39,7 @@ export class ShoppingCartPage {
   
   increase(productName, i) {
       console.log('increase: ' + productName + ", index: " + i);
+      this.cartContent[i]
   }
   
   decrease(productName, i) {
