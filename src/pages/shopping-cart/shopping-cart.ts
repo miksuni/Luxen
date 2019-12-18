@@ -28,4 +28,12 @@ export class ShoppingCartPage {
     //cartContent = 
     this.cartContent = this.shoppingCart.getProducts();
   }
+  
+  onProductSelected(productName, i) {
+      console.log('onProductSelected: ' + productName + ", index: " + i);
+  }
+  
+  buttonClick() {
+      console.log('buttonClick');
+  }
 }
