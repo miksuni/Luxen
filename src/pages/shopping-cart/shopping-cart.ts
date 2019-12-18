@@ -30,10 +30,19 @@ export class ShoppingCartPage {
   }
   
   onProductSelected(productName, i) {
-      console.log('onProductSelected: ' + productName + ", index: " + i);
+    console.log('onProductSelected: ' + productName + ", index: " + i);
   }
   
-  buttonClick() {
-      console.log('buttonClick');
+  removeFromCart(productName, i) {
+    console.log('removeFromCart: ' + productName + ", index: " + i);
+    this.cartContent.splice(i, 1);
+  }
+  
+  increase(productName, i) {
+      console.log('increase: ' + productName + ", index: " + i);
+  }
+  
+  decrease(productName, i) {
+      console.log('decrease: ' + productName + ", index: " + i);
   }
 }

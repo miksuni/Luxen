@@ -17,12 +17,28 @@
   <!--ion-content-->
   <div class="ion-list-viewport">
     <ion-list class="product_list">
-      <ion-item *ngFor="let element of cartContent let i = index" (click)="onProductSelected(element.productName, i)" >   
-        {{element.productName}} {{element.price}} {{element.quantity}}
-        <button ion-button (click)="buttonClick()">
-  			Button Item
+
+      <ion-item *ngFor="let element of cartContent let i = index" (click)="onProductSelected(element.productName, i)" >
+        <ion-row class="Absolute-Center"> 
+        <ion-col col-4>{{element.productName}}</ion-col><ion-col col-1>{{element.price}}e</ion-col>
+        <ion-col col-1>
+		 <button ion-button  (click)="increase(element.productName, i)">
+            <ion-icon name="add" item-start></ion-icon>
 		</button>
+
+        {{element.quantity}}
+
+	    <button ion-button  (click)="decrease(element.productName, i)">
+            <ion-icon name="remove" item-start></ion-icon>
+		</button>
+
+		<button ion-button  (click)="removeFromCart(element.productName, i)">
+            <ion-icon name="trash" item-start></ion-icon>
+		</button>
+		</ion-col>
+		 </ion-row>
       </ion-item>
+
     </ion-list>
   </div>
   <!--/ion-content-->
