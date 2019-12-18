@@ -11,7 +11,7 @@ import { Injectable } from '@angular/core';
 export class ShoppingcartProvider {
 
   productInfoStr: any;
-  productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
+  //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'', amount:'' };
   shoppingCart = [];
   
   constructor(public http: HttpClient) {
@@ -19,9 +19,9 @@ export class ShoppingcartProvider {
   }
   
   addProduct(productInfo) {
-      var shoppingCart = [];
+      //var productLine =  {a:''};
       console.log('>> ShoppingcartProvider.showProduct');
-      shoppingCart.push(productInfo);
+      productInfo.quantity = 1;
       this.shoppingCart.push(productInfo);
       console.log('>> cart content: ' + JSON.stringify(this.shoppingCart));
   }

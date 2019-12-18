@@ -26,8 +26,7 @@ export class HomePage {
 
   loadingIndicator: any;
 
-  productInfo = { createdAt:'', updatedAt:'', ISBN:'', order:'', exerciseId:'', targetArea:'',
-				pauseInSec:'', setCount:'', repeatsInSet:'', objectId:'' };
+  productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
 
   constructor(public navCtrl: NavController, 
               private barcodeScanner: BarcodeScanner,
@@ -92,7 +91,7 @@ export class HomePage {
 
   onProductSelected(productName, index) {
 	console.log('>> home.onProductSelected: ' + productName + ' index: ' + index);
-	this.productInfo = this.searchResult[index];
+	/*this.productInfo = this.searchResult[index];
 	this.productNumber = this.searchResult[index].ISBN;
 	this.productName = this.searchResult[index].productName;
 	this.price = this.searchResult[index].price;
@@ -101,8 +100,8 @@ export class HomePage {
 	  this.inProductionInfo = "(Poistunut tuote)";
 	} else {
 	  this.inProductionInfo = "";
-	}
-	//this.showProduct(this.searchResult[index]);
+	}*/
+	this.showProduct(this.searchResult[index]);
   }
 
   showProduct(productInfo) {
@@ -120,7 +119,6 @@ export class HomePage {
   }
 
 	addToShoppingCart() {
-		//console.log('>> home.addToShoppingCart: ' + JSON.stringify(this.shoppingCart));
         this.shoppingCart.addProduct(this.productInfo);
 	}
 

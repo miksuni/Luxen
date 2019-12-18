@@ -17,9 +17,16 @@
   <!--ion-content-->
   <div class="ion-list-viewport">
     <ion-list class="product_list">
-      <ion-item text-wrap *ngFor="let element of cartContent let i = index" (click)="onProductSelected(element.productName, i)" >      
-        <p>{{element.productName}}</p>
-      </ion-item>
+      <ion-item-sliding *ngFor="let element of cartContent let i = index" (click)="onProductSelected(element.productName, i)" >   
+        <ion-item>   
+          {{element.productName}} {{element.price}} {{element.quantity}}
+        </ion-item>
+        <ion-item-options>
+          <button>
+            <ion-icon name="trash"></ion-icon>
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-list>
   </div>
   <!--/ion-content-->
