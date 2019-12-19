@@ -13,27 +13,47 @@ export class ShoppingcartProvider {
   productInfoStr: any;
   //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'', amount:'' };
   shoppingCart = [];
+  productsInCart = 0;
   
   constructor(public http: HttpClient) {
     console.log('Hello ShoppingcartProvider Provider');
   }
   
   addProduct(productInfo) {
-      //var productLine =  {a:''};
-      console.log('>> ShoppingcartProvider.showProduct');
+      console.log('>> ShoppingcartProvider.addProduct');
       productInfo.quantity = 1;
       this.shoppingCart.push(productInfo);
+      this.productsInCart++;
       console.log('>> cart content: ' + JSON.stringify(this.shoppingCart));
   }
   
-  removeProduct(index) {
-      if (index >= 0 && index < this.shoppingCart.length) {
-          this.shoppingCart.splice(index, 1);
+  removeProduct(i) {
+      console.log('>> ShoppingcartProvider.removeProduct');
+      if (i >= 0 && i < this.shoppingCart.length) {
+          this.productsInCart -= this.shoppingCart[i].quantity;
+          this.shoppingCart.splice(i, 1);
       }
       return this.shoppingCart;
   }
+
+  increase(i) {
+    console.log('>> ShoppingcartProvider.increase');
+    this.shoppingCart[i].quantity++;
+    this.productsInCart++;
+  }
+
+  decrease(i) {
+      console.log('ShoppingcartProvider.decrease');
+      this.productsInCart--;
+      if (this.shoppingCart[i].quantity > 1) {
+        this.shoppingCart[i].quantity--;
+      } else {
+        this.shoppingCart.splice(i, 1);
+      }
+  }
   
   getProducts() {
+      console.log('>> ShoppingcartProvider.getProducts');
       return this.shoppingCart;
   }
 }

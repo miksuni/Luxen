@@ -18,6 +18,8 @@ export class ShoppingCartPage {
     
   //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   cartContent = [];
+  productsInCart = 0;
+  totalSum = 0;
     
   constructor(public navCtrl: NavController, public navParams: NavParams, private shoppingCart: ShoppingcartProvider) {
   }
@@ -25,28 +27,28 @@ export class ShoppingCartPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShoppingCartPage');
     this.cartContent = this.shoppingCart.getProducts();
+    this.productsInCart = this.shoppingCart.productsInCart;
   }
   
   onProductSelected(productName, i) {
     console.log('onProductSelected: ' + productName + ", index: " + i);
   }
   
-  removeFromCart(productName, i) {
+  removeProduct(productName, i) {
     console.log('removeFromCart: ' + productName + ", index: " + i);
-    this.cartContent.splice(i, 1);
+    this.shoppingCart.removeProduct(i);
+    this.productsInCart = this.shoppingCart.productsInCart;
   }
   
   increase(productName, i) {
       console.log('increase: ' + productName + ", index: " + i);
-      this.cartContent[i].quantity++;
+      this.shoppingCart.increase(i);
+      this.productsInCart = this.shoppingCart.productsInCart;
   }
   
   decrease(productName, i) {
       console.log('decrease: ' + productName + ", index: " + i);
-      if (this.cartContent[i].quantity > 1) {
-        this.cartContent[i].quantity--;
-      } else {
-        this.cartContent.splice(i, 1);
-      }
+      this.shoppingCart.decrease(i);
+      this.productsInCart = this.shoppingCart.productsInCart;
   }
 }
