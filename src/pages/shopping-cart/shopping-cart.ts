@@ -24,7 +24,6 @@ export class ShoppingCartPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShoppingCartPage');
-    //cartContent = 
     this.cartContent = this.shoppingCart.getProducts();
   }
   
@@ -39,10 +38,15 @@ export class ShoppingCartPage {
   
   increase(productName, i) {
       console.log('increase: ' + productName + ", index: " + i);
-      this.cartContent[i]
+      this.cartContent[i].quantity++;
   }
   
   decrease(productName, i) {
       console.log('decrease: ' + productName + ", index: " + i);
+      if (this.cartContent[i].quantity > 1) {
+        this.cartContent[i].quantity--;
+      } else {
+        this.cartContent.splice(i, 1);
+      }
   }
 }
