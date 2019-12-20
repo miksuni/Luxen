@@ -27,7 +27,7 @@ export class ShoppingCartPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShoppingCartPage');
     this.cartContent = this.shoppingCart.getProducts();
-    this.productsInCart = this.shoppingCart.productsInCart;
+    this.update();
   }
   
   onProductSelected(productName, i) {
@@ -37,18 +37,23 @@ export class ShoppingCartPage {
   removeProduct(productName, i) {
     console.log('removeFromCart: ' + productName + ", index: " + i);
     this.shoppingCart.removeProduct(i);
-    this.productsInCart = this.shoppingCart.productsInCart;
+    this.update();
   }
   
   increase(productName, i) {
       console.log('increase: ' + productName + ", index: " + i);
       this.shoppingCart.increase(i);
-      this.productsInCart = this.shoppingCart.productsInCart;
+      this.update();
   }
   
   decrease(productName, i) {
       console.log('decrease: ' + productName + ", index: " + i);
       this.shoppingCart.decrease(i);
-      this.productsInCart = this.shoppingCart.productsInCart;
+      this.update();
+  }
+
+  update() {
+    this.productsInCart = this.shoppingCart.productsInCart;
+    this.totalSum = this.shoppingCart.totalSum;
   }
 }
