@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { ShopPage } from '../pages/shop/shop';
 import { ProductUpdatePage } from '../pages/productUpdate/productUpdate';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -21,6 +22,7 @@ import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
     MyApp,
     HomePage,
     ListPage,
+    ShopPage,
     ProductUpdatePage
   ],
   imports: [
@@ -35,6 +37,7 @@ import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
     MyApp,
     HomePage,
     ListPage,
+    ShopPage,
     ProductUpdatePage
   ],
   providers: [
