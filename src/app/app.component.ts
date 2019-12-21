@@ -14,7 +14,7 @@ import { ProductUpdatePage } from '../pages/productUpdate/productUpdate';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = ShopPage;
 
   pages: Array<{icon: string, title: string, component: any}>;
 

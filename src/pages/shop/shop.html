@@ -15,11 +15,18 @@
 
 
 <ion-content padding>
-<table class="table_2">
-    <colgroup>
-      <col width="217px">
-      <col width="217px">
-    </colgroup>
+
+<ion-grid>
+	<ion-row>
+		<ion-col size="12">
+			<ion-item *ngFor="let item of cartContent">
+				{{item.productName}}
+			</ion-item>
+		</ion-col>
+	</ion-row>
+</ion-grid>
+
+  <table class="table_2">
     <tr>
       <td>
         <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
@@ -29,6 +36,7 @@
       </td>
     </tr>
   </table>
+
 
   <!--ion-content-->
   <div class="ion-list-viewport">

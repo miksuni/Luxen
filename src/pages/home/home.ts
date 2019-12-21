@@ -91,16 +91,6 @@ export class HomePage {
 
   onProductSelected(productName, index) {
 	console.log('>> home.onProductSelected: ' + productName + ' index: ' + index);
-	/*this.productInfo = this.searchResult[index];
-	this.productNumber = this.searchResult[index].ISBN;
-	this.productName = this.searchResult[index].productName;
-	this.price = this.searchResult[index].price;
-	this.amountInStock = this.searchResult[index].amountInStock;
-	if (!this.searchResult[index].availableFromPublisher) {
-	  this.inProductionInfo = "(Poistunut tuote)";
-	} else {
-	  this.inProductionInfo = "";
-	}*/
 	this.showProduct(this.searchResult[index]);
   }
 
