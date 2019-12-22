@@ -23,6 +23,7 @@ export class ShoppingcartProvider {
   addProduct(productInfo) {
       console.log('>> ShoppingcartProvider.addProduct');
       productInfo.quantity = 1;
+      productInfo.total = productInfo.price;
       this.shoppingCart.push(productInfo);
       this.productsInCart++;
       this.totalSum += productInfo.price;
@@ -42,6 +43,7 @@ export class ShoppingcartProvider {
   increase(i) {
     console.log('>> ShoppingcartProvider.increase');
     this.shoppingCart[i].quantity++;
+    this.shoppingCart[i].total += this.shoppingCart[i].price;
     this.productsInCart++;
     this.totalSum += this.shoppingCart[i].price;
   }
@@ -52,6 +54,7 @@ export class ShoppingcartProvider {
       this.totalSum -= this.shoppingCart[i].price;
       if (this.shoppingCart[i].quantity > 1) {
         this.shoppingCart[i].quantity--;
+        this.shoppingCart[i].total -= this.shoppingCart[i].price;
       } else {
         this.shoppingCart.splice(i, 1);
       }

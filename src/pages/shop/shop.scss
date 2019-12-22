@@ -1,5 +1,16 @@
 page-shop {
 
+	.align-right {
+		text-align: right;
+		padding: 10px 10px 0px 10px;
+	}
+
+	.cart {
+	    border: 2px solid #aaaaaa;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
 	.ion-list-viewport {
     	border: 2px solid #dddddd;
     	text-align: left;
@@ -12,7 +23,7 @@ page-shop {
 
 	.product_line_button {
 		height:20px;
-		padding: 0px 0px 0px 0px;
+		padding: 5px 5px 5px 5px;
 	}
 
 	.product_line {
@@ -23,5 +34,14 @@ page-shop {
     	border: 1px solid #dddddd;
     	text-align: left;
     	padding: 0px 5px 0px 5px;
+	}
+
+	.th_narrow_centered {
+		text-align: left;
+		width:25px;
+	}
+
+	.counter_cell {
+		text-align: center;
 	}
 }

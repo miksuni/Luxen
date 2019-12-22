@@ -15,80 +15,45 @@
 
 
 <ion-content padding>
-  <div>
-    Ostoskorissa tuotteita: {{productsInCart}}, yhteensä {{totalSum}} euroa
-  </div>
+  <table style="width:100%">
+    <tr><td class="align-right">
+    <h5>Ostoskorissa tuotteita: {{productsInCart}}, yhteensä {{totalSum}} euroa</h5>
+    </td></tr>
+  </table>
 
-<table style="width:100%">
-  <tr>
-    <th>Nimi</th>
-    <th>Hinta</th>
-    <th></th>
-    <th>Määrä</th>
-  </tr>
-  <tr  *ngFor="let item of cartContent let i = index">
-    <td>{{item.productName}}</td>
-    <td>{{item.price}}</td>
-    <td>
-      <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
-        <ion-icon name="add" item-start></ion-icon>
-      </button>
-    </td>
-    <td>{{item.quantity}}</td>
-    <td>
-      <button ion-button class="product_line_button" (click)="decrease(item.productName, i)">
-        <ion-icon name="remove" item-start></ion-icon>
-      </button>
-    </td>
-    <td>
-      <button ion-button class="product_line_button" (click)="removeProduct(item.productName, i)">
-        <ion-icon name="trash" item-start></ion-icon>
-      </button>
-    </td>
-  </tr>
-</table>
+  <table class="cart" style="width:100%">
+    <tr>
+      <th>Nimi</th>
+      <th class="th_narrow_centered">Hinta</th>
+      <th class="th_narrow_centered"></th>
+      <th class="th_narrow_centered">Määrä</th>
+      <th class="th_narrow_centered"></th>
+      <th class="th_narrow_centered">Yht.</th>
+      <th class="th_narrow_centered">Poista</th>
+    </tr>
+    <tr  *ngFor="let item of cartContent let i = index">
+      <td>{{item.productName}}</td>
+      <td>{{item.price}}</td>
+      <td class="counter_cell">
+        <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
+          <ion-icon name="add" item-start></ion-icon>
+        </button>
+      </td>
+      <td class="counter_cell">{{item.quantity}}</td>
+      <td class="counter_cell">
+        <button ion-button class="product_line_button" (click)="decrease(item.productName, i)">
+          <ion-icon name="remove" item-start></ion-icon>
+        </button>
+      </td>
+      <td>{{item.total}}</td>
+      <td class="counter_cell">
+        <button ion-button class="product_line_button" (click)="removeProduct(item.productName, i)">
+          <ion-icon name="trash" item-start></ion-icon>
+        </button>
+      </td>
+    </tr>
+  </table>
 
-<!--
-<ion-grid>
-  <ion-row>
-    <ion-item *ngFor="let item of cartContent let i = index">
-      <ion-col col-4>
-        {{item.productName}}
-      </ion-col>
-      <ion-col col-1>
-        <button>Test</button>
-      </ion-col>
-      <ion-col col-1>
-
-
-      </ion-col>
-    </ion-item>
-  </ion-row>
-</ion-grid>
-
-  <div class="ion-list-viewport">
-    <ion-list class="product_list">
-      <ion-item *ngFor="let element of cartContent let i = index">
-        <ion-row class="product_line"> 
-          <ion-col col-4>{{element.productName}}</ion-col>
-          <ion-col col-1>{{element.price}}e</ion-col>
-          <ion-col col-1>
-            <button ion-button class="product_line_button" (click)="increase(element.productName, i)">
-              <ion-icon name="add" item-start></ion-icon>
-            </button>
-            {{element.quantity}}
-            <button ion-button class="product_line_button" (click)="decrease(element.productName, i)">
-              <ion-icon name="remove" item-start></ion-icon>
-            </button>
-            <button ion-button class="product_line_button" (click)="removeProduct(element.productName, i)">
-              <ion-icon name="trash" item-start></ion-icon>
-            </button>
-          </ion-col>
-        </ion-row>
-      </ion-item>
-    </ion-list>
-  </div>
--->
   <table class="table_2">
     <tr>
       <td>
@@ -100,8 +65,16 @@
     </tr>
   </table>
 
+  <table class="cart">
+    <tr  *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
+      <td>
+        {{element.productName}}
+      </td>
+    </tr>
+  </table>
 
   <!--ion-content-->
+  <!--
   <div class="ion-list-viewport">
     <ion-list class="product_list">
       <ion-item text-wrap *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >      
@@ -109,6 +82,7 @@
       </ion-item>
     </ion-list>
   </div>
+  -->
   <!--/ion-content-->
   <!--button ion-button secondary menuToggle>Toggle Menu</button-->
 </ion-content>
