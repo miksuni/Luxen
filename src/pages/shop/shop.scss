@@ -1,3 +1,27 @@
 page-shop {
 
+	.ion-list-viewport {
+    	border: 2px solid #dddddd;
+    	text-align: left;
+    	padding: 0px 0px 0px 0px;
+	}
+
+	.product_name_cell {
+		width:200px;
+	}
+
+	.product_line_button {
+		height:20px;
+		padding: 0px 0px 0px 0px;
+	}
+
+	.product_line {
+		height:20px
+	}
+
+	td, th {
+    	border: 1px solid #dddddd;
+    	text-align: left;
+    	padding: 0px 5px 0px 5px;
+	}
 }
