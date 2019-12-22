@@ -1,5 +1,25 @@
 page-shop {
 
+	.column_1 {
+  		float: left;
+  		width: 80%;
+  		padding: 10px;
+	}
+
+	.column_2 {
+  		float: left;
+  		width: 20%;
+  		padding: 10px;
+	}
+
+	.icon_padding {
+		margin-right: 10px;
+	}
+
+	.payment_button {
+		width:150px;
+	}
+
 	.align-right {
 		text-align: right;
 		padding: 10px 10px 0px 10px;

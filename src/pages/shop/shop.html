@@ -15,6 +15,9 @@
 
 
 <ion-content padding>
+<div class="row">
+  <div class="column_1">
+
   <table style="width:100%">
     <tr><td class="align-right">
     <h5>Ostoskorissa tuotteita: {{productsInCart}}, yhteensä {{totalSum}} euroa</h5>
@@ -24,6 +27,7 @@
   <table class="cart" style="width:100%">
     <tr>
       <th>Nimi</th>
+      <th class="th_narrow_centered">Varastosaldo</th>
       <th class="th_narrow_centered">Hinta</th>
       <th class="th_narrow_centered"></th>
       <th class="th_narrow_centered">Määrä</th>
@@ -33,6 +37,7 @@
     </tr>
     <tr  *ngFor="let item of cartContent let i = index">
       <td>{{item.productName}}</td>
+      <td class="counter_cell">{{item.amountInStock}}</td>
       <td>{{item.price}}</td>
       <td class="counter_cell">
         <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
@@ -63,16 +68,28 @@
         <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
       </td>
     </tr>
-  </table>
-
-  <table class="cart">
     <tr  *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
       <td>
         {{element.productName}}
       </td>
+      <td>
+        {{element.ISBN}}
+      </td>
     </tr>
   </table>
 
+</div>
+<div class="column_2" style="background-color:#bbb;">
+    <h2>Maksaminen</h2>
+    <button ion-button class="payment_button" (click)="removeProduct(item.productName, i)">
+        <ion-icon name="card" item-start> Korttimaksu</ion-icon>
+    </button>
+    <button ion-button class="payment_button" (click)="removeProduct(item.productName, i)">
+        <ion-icon name="cash" item-start> Käteinen</ion-icon>
+    </button>
+</div>
+</div>
+</ion-content>
   <!--ion-content-->
   <!--
   <div class="ion-list-viewport">
@@ -85,4 +102,4 @@
   -->
   <!--/ion-content-->
   <!--button ion-button secondary menuToggle>Toggle Menu</button-->
-</ion-content>
+
