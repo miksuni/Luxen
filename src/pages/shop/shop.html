@@ -81,10 +81,19 @@
 
 <div class="column_2" style="background-color:#bbb;">
     <h2>Maksaminen</h2>
-    <button ion-button class="payment_button" (click)="cardPayment()">
+    <button ion-button class="payment_button" id="card_button" disabled="disabled" (click)="cardPayment()">
         <ion-icon name="card" item-start> Korttimaksu</ion-icon>
     </button>
-    <button ion-button class="payment_button" (click)="cashPayment()">
+
+    <div id="card_payment_guide">
+      Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
+      <p>
+      <button ion-button class="payment_button" id="confirm_cash_button" (click)="confirmCardPayment()">
+        <ion-icon name="card" item-start> Vahvista</ion-icon>
+      </button>
+    </div>
+
+    <button ion-button class="payment_button" id="cash_button" disabled="disabled" (click)="cashPayment()">
         <ion-icon name="cash" item-start> Käteinen</ion-icon>
     </button>
 

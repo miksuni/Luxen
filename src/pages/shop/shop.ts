@@ -41,6 +41,8 @@ export class ShopPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShopPage');
+    document.getElementById("cashback_fields").style.visibility = "hidden";
+    document.getElementById("card_payment_guide").style.visibility = "hidden";
     this.productList.getProductInfo();
     this.cartContent = this.shoppingCart.getProducts();
     this.update();
@@ -135,15 +137,29 @@ export class ShopPage {
   cardPayment() {
     console.log('cardPayment');
     document.getElementById("cashback_fields").style.visibility = "hidden";
+    document.getElementById("card_payment_guide").style.visibility = "visible";
+
+    
   }
 
   cashPayment() {
     console.log('cashPayment');
     document.getElementById("cashback_fields").style.visibility = "visible";
+    document.getElementById("card_payment_guide").style.visibility = "hidden";
   }
 
   update() {
+    console.log('update');
     this.productsInCart = this.shoppingCart.productsInCart;
     this.totalSum = this.shoppingCart.totalSum;
+    if (this.totalSum > 0) {
+      document.getElementById("card_button").disabled=false;
+      document.getElementById("cash_button").disabled=false;
+    } else {
+      document.getElementById("card_button").disabled=true;
+      document.getElementById("cash_button").disabled=true;
+      document.getElementById("cashback_fields").style.visibility = "hidden";
+      document.getElementById("card_payment_guide").style.visibility = "hidden";
+    }
   }
 }
