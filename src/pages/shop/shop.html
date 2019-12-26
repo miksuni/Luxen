@@ -81,19 +81,18 @@
 
 <div class="column_2" style="background-color:#bbb;">
     <h2>Maksaminen</h2>
-    <button ion-button class="payment_button" id="card_button" disabled="disabled" (click)="cardPayment()">
+    <button ion-button class="payment_button" id="card_button" (click)="cardPayment()">
         <ion-icon name="card" item-start> Korttimaksu</ion-icon>
     </button>
 
     <div id="card_payment_guide">
       Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
-      <p>
       <button ion-button class="payment_button" id="confirm_cash_button" (click)="confirmCardPayment()">
         <ion-icon name="card" item-start> Vahvista</ion-icon>
       </button>
     </div>
 
-    <button ion-button class="payment_button" id="cash_button" disabled="disabled" (click)="cashPayment()">
+    <button ion-button class="payment_button" id="cash_button" (click)="cashPayment()">
         <ion-icon name="cash" item-start> Käteinen</ion-icon>
     </button>
 
@@ -121,6 +120,16 @@
         </tr>
       </table>
     </div>
+
+
+  <table class="receipt" style="width:100%">
+    <tr  *ngFor="let item of cartContent let i = index">
+      <td>{{item.productName}}</td>
+      <td>{{item.price}}</td>
+      <td>{{item.quantity}}</td>
+      <td>{{item.total}}</td>
+    </tr>
+  </table>
 
 </div>
 </div>
