@@ -77,16 +77,42 @@
       </td>
     </tr>
   </table>
-
 </div>
+
 <div class="column_2" style="background-color:#bbb;">
     <h2>Maksaminen</h2>
-    <button ion-button class="payment_button" (click)="removeProduct(item.productName, i)">
+    <button ion-button class="payment_button" (click)="cardPayment()">
         <ion-icon name="card" item-start> Korttimaksu</ion-icon>
     </button>
-    <button ion-button class="payment_button" (click)="removeProduct(item.productName, i)">
+    <button ion-button class="payment_button" (click)="cashPayment()">
         <ion-icon name="cash" item-start> Käteinen</ion-icon>
     </button>
+
+    <div id="cashback_fields">
+      <table class="table_3">
+        <tr>
+          <td>
+            Maksettu:
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <ion-input class="product_data_input" [(ngModel)]="givenAmount" (ionChange)="onGivenAmountUpdated()" name="productName"></ion-input>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Takaisin:
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{cashBack}}
+          </td>
+        </tr>
+      </table>
+    </div>
+
 </div>
 </div>
 </ion-content>

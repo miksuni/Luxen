@@ -33,6 +33,9 @@ export class ShopPage {
   productsInCart = 0;
   totalSum = 0;
 
+  givenAmount = 0;
+  cashBack = 0;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public productList: ProductList, private shoppingCart: ShoppingcartProvider) {
   }
 
@@ -106,22 +109,37 @@ export class ShopPage {
       }
   }
 
+  onGivenAmountUpdated() {
+    console.log('>> shop.onGivenAmountUpdated');
+    this.cashBack = this.givenAmount - this.totalSum;
+  }
+
   removeProduct(productName, i) {
     console.log('removeFromCart: ' + productName + ", index: " + i);
     this.shoppingCart.removeProduct(i);
     this.update();
   }
-  
+
   increase(productName, i) {
       console.log('increase: ' + productName + ", index: " + i);
       this.shoppingCart.increase(i);
       this.update();
   }
-  
+
   decrease(productName, i) {
       console.log('decrease: ' + productName + ", index: " + i);
       this.shoppingCart.decrease(i);
       this.update();
+  }
+
+  cardPayment() {
+    console.log('cardPayment');
+    document.getElementById("cashback_fields").style.visibility = "hidden";
+  }
+
+  cashPayment() {
+    console.log('cashPayment');
+    document.getElementById("cashback_fields").style.visibility = "visible";
   }
 
   update() {
