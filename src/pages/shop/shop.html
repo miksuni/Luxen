@@ -16,134 +16,133 @@
 
 <ion-content padding>
 <div class="row">
+
+  <!-- Vasen sarake: Ostoskori-->
   <div class="column_1">
 
-  <table style="width:100%">
-    <tr><td class="align-right">
-    <h5>Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa</h5>
-    </td></tr>
-  </table>
+    <table style="width:100%">
+      <tr><td class="align-right">
+      <h5>Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa</h5>
+      </td></tr>
+    </table>
 
-  <table class="cart" style="width:100%">
-    <tr>
-      <th>Nimi</th>
-      <th class="th_narrow_centered">Varastosaldo</th>
-      <th class="th_narrow_centered">Hinta</th>
-      <th class="th_narrow_centered"></th>
-      <th class="th_narrow_centered">Määrä</th>
-      <th class="th_narrow_centered"></th>
-      <th class="th_narrow_centered">Yht.</th>
-      <th class="th_narrow_centered">Poista</th>
-    </tr>
-    <tr  *ngFor="let item of cartContent let i = index">
-      <td>{{item.productName}}</td>
-      <td class="counter_cell">{{item.amountInStock}}</td>
-      <td>{{item.priceAsString}}</td>
-      <td class="counter_cell">
-        <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
-          <ion-icon name="add" item-start></ion-icon>
-        </button>
-      </td>
-      <td class="counter_cell">{{item.quantity}}</td>
-      <td class="counter_cell">
-        <button ion-button class="product_line_button" (click)="decrease(item.productName, i)">
-          <ion-icon name="remove" item-start></ion-icon>
-        </button>
-      </td>
-      <td>{{item.totalAsString}}</td>
-      <td class="counter_cell">
-        <button ion-button class="product_line_button" (click)="removeProduct(item.productName, i)">
-          <ion-icon name="trash" item-start></ion-icon>
-        </button>
-      </td>
-    </tr>
-  </table>
+    <!-- Ostoskori päänäkymä-->
+    <table class="cart" style="width:100%">
+      <tr>
+        <th>Nimi</th>
+        <th class="th_narrow_centered">Varastosaldo</th>
+        <th class="th_narrow_centered">Hinta</th>
+        <th class="th_narrow_centered"></th>
+        <th class="th_narrow_centered">Määrä</th>
+        <th class="th_narrow_centered"></th>
+        <th class="th_narrow_centered">Yht.</th>
+        <th class="th_narrow_centered">Poista</th>
+      </tr>
+      <tr  *ngFor="let item of cartContent let i = index">
+        <td>{{item.productName}}</td>
+        <td class="counter_cell">{{item.amountInStock}}</td>
+        <td>{{item.priceAsString}}</td>
+        <td class="counter_cell">
+          <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
+            <ion-icon name="add" item-start></ion-icon>
+          </button>
+        </td>
+        <td class="counter_cell">{{item.quantity}}</td>
+        <td class="counter_cell">
+          <button ion-button class="product_line_button" (click)="decrease(item.productName, i)">
+            <ion-icon name="remove" item-start></ion-icon>
+          </button>
+        </td>
+        <td>{{item.totalAsString}}</td>
+        <td class="counter_cell">
+          <button ion-button class="product_line_button" (click)="removeProduct(item.productName, i)">
+            <ion-icon name="trash" item-start></ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
 
-  <table class="table_2">
-    <tr>
-      <td>
-        <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
-      </td>
-      <td>
-        <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
-      </td>
-    </tr>
-    <tr  *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
-      <td>
-        {{element.productName}}
-      </td>
-      <td>
-        {{element.ISBN}}
-      </td>
-    </tr>
-  </table>
-</div>
+    <!-- Tuotteen syöttökentät-->
+    <table class="table_2">
+      <tr>
+        <td>
+          <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+        </td>
+        <td>
+          <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+        </td>
+      </tr>
+      <tr  *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
+        <td>
+          {{element.productName}}
+        </td>
+        <td>
+          {{element.ISBN}}
+        </td>
+      </tr>
+    </table>
+  </div>
 
-<div class="column_2" style="background-color:#bbb;">
+  <!-- Oikea sarake: Tuotteen maksu-->
+  <div class="column_2" style="background-color:#bbb;">
     <h2>Maksaminen</h2>
-    <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
+      <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
         <ion-icon name="card" item-start> Korttimaksu</ion-icon>
-    </button>
-
-    <div id="card_payment_guide">
-      Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
-      <button ion-button class="payment_button" id="confirm_cash_button" (click)="confirmCardPayment()">
-        <ion-icon name="card" item-start> Vahvista</ion-icon>
       </button>
-    </div>
 
-    <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
+      <div id="card_payment_guide">
+        Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
+        <button ion-button class="payment_button" id="confirm_card_button" (click)="confirmCardPayment()">
+          <ion-icon name="card" item-start> Vahvista</ion-icon>
+        </button>
+      </div>
+
+      <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
         <ion-icon name="cash" item-start> Käteinen</ion-icon>
-    </button>
+      </button>
 
-    <div id="cashback_fields">
-      <table class="table_3">
-        <tr>
-          <td>
-            Maksettu:
-          </td>
-        </tr>
-        <tr>
-          <td>
+      <div id="cash_payment_guide">
+        <button ion-button class="payment_button" id="confirm_cash_button" (click)="confirmCashPayment()">
+          <ion-icon name="cash" item-start> Suorita</ion-icon>
+        </button>
+      </div>
+
+      <div id="cashback_fields">
+        <table class="table_3">
+          <tr><td>Maksettu:</td></tr>
+          <tr><td>
             <ion-input class="product_data_input" [(ngModel)]="givenAmount" (ionChange)="onGivenAmountUpdated()" name="productName"></ion-input>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Takaisin:
-          </td>
-        </tr>
-        <tr>
-          <td>
-            {{cashBack}}
-          </td>
-        </tr>
-      </table>
-    </div>
+          </td></tr>
+          <tr><td>Takaisin:</td></tr>
+          <tr><td>{{cashBack}}</td></tr>
+        </table>
+      </div>
 
+      <p>
+      Kuitti:
+      <p>
 
-  <table class="receipt" style="width:100%">
-    <tr>
-      <th>Tuote</th>
-      <th>Hinta</th>
-      <th>Määrä</th>
-      <th>Yht.</th>
-    </tr>
-    <tr  *ngFor="let item of cartContent let i = index">
-      <td>{{item.productName}}</td>
-      <td>{{item.priceAsString}}</td>
-      <td>{{item.quantity}}</td>
-      <td>{{item.totalAsString}}</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <th>{{totalSumAsString}}</th>
-    </tr>
-  </table>
-
-</div>
+      <table class="receipt" style="width:100%">
+      <tr>
+        <th>Tuote</th>
+        <th>Hinta</th>
+        <th>Määrä</th>
+        <th>Yht.</th>
+      </tr>
+      <tr  *ngFor="let item of cartContent let i = index">
+        <td>{{item.productName}}</td>
+        <td>{{item.priceAsString}}</td>
+        <td>{{item.quantity}}</td>
+        <td>{{item.totalAsString}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>{{totalSumAsString}}</th>
+      </tr>
+    </table>
+  </div>
 </div>
 </ion-content>
   <!--ion-content-->

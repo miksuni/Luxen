@@ -47,6 +47,7 @@ export class ShopPage {
     console.log('ionViewDidLoad ShopPage');
     document.getElementById("cashback_fields").style.visibility = "hidden";
     document.getElementById("card_payment_guide").style.visibility = "hidden";
+    //document.getElementById("cash_payment_guide").style.visibility = "hidden";
     this.productList.getProductInfo();
     this.cartContent = this.shoppingCart.getProducts();
     this.update();
@@ -143,6 +144,7 @@ export class ShopPage {
     console.log('cardPayment');
     document.getElementById("cashback_fields").style.visibility = "hidden";
     document.getElementById("card_payment_guide").style.visibility = "visible";
+    document.getElementById("cash_payment_guide").style.visibility = "hidden";
   }
 
   confirmCardPayment() {
@@ -151,8 +153,9 @@ export class ShopPage {
 
   cashPayment() {
     console.log('cashPayment');
-    document.getElementById("cashback_fields").style.visibility = "visible";
     document.getElementById("card_payment_guide").style.visibility = "hidden";
+    document.getElementById("cash_payment_guide").style.visibility = "visible";
+    document.getElementById("cashback_fields").style.visibility = "visible";
   }
 
   checkIfCardPaymentEnabled() {
@@ -178,6 +181,7 @@ export class ShopPage {
       this.cashPaymentEnabled = false;
       document.getElementById("cashback_fields").style.visibility = "hidden";
       document.getElementById("card_payment_guide").style.visibility = "hidden";
+      //document.getElementById("cash_payment_guide").style.visibility = "hidden";
     }
   }
 }
