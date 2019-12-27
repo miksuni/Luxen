@@ -24,6 +24,7 @@ export class ShoppingcartProvider {
       console.log('>> ShoppingcartProvider.addProduct');
       productInfo.quantity = 1;
       productInfo.total = productInfo.price;
+      productInfo.totalAsString = productInfo.total.toFixed(2);
       productInfo.priceAsString = productInfo.price.toFixed(2);
       this.shoppingCart.push(productInfo);
       this.productsInCart++;
@@ -45,6 +46,7 @@ export class ShoppingcartProvider {
     console.log('>> ShoppingcartProvider.increase');
     this.shoppingCart[i].quantity++;
     this.shoppingCart[i].total += this.shoppingCart[i].price;
+    this.shoppingCart[i].totalAsString = this.shoppingCart[i].total.toFixed(2);
     this.productsInCart++;
     this.totalSum += this.shoppingCart[i].price;
   }
@@ -56,6 +58,7 @@ export class ShoppingcartProvider {
       if (this.shoppingCart[i].quantity > 1) {
         this.shoppingCart[i].quantity--;
         this.shoppingCart[i].total -= this.shoppingCart[i].price;
+        this.shoppingCart[i].totalAsString = this.shoppingCart[i].total.toFixed(2);
       } else {
         this.shoppingCart.splice(i, 1);
       }
