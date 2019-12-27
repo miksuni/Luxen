@@ -121,12 +121,12 @@
     <table class="confirm_buttons" style="width:100%" bordercolor="#bbb">
       <tr bordercolor="#bbb">
         <td bordercolor="#bbb">
-          <button ion-button class="confirm_button" id="confirm_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="confirmCardPayment()">
+          <button ion-button class="confirm_button" id="confirm_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="confirmPayment()">
             <ion-icon name="checkbox" item-start> Vahvista</ion-icon>
           </button>
         </td>
         <td bordercolor="#bbb">
-          <button ion-button class="cancel_button" id="cancel_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="confirmCashPayment()">
+          <button ion-button class="cancel_button" id="cancel_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="cancelPurchase()">
             <ion-icon name="close" item-start> Peruuta</ion-icon>
           </button>
         </td>
@@ -134,51 +134,30 @@
     </table>
 
 
-
-
-
-  
-    
-
-
-
-
-
-
-      
-
-    
-
-      <div id="cashback_fields">
-        <table class="table_3">
-
-        </table>
-      </div>
-
-      <p>
-      Kuitti:
-      <p>
-
+    <!-- receipt -->
+    <div id="receipt_view">
+      <p>Kuitti:<p>
       <table class="receipt" style="width:100%">
-      <tr>
-        <th>Tuote</th>
-        <th>Hinta</th>
-        <th>Määrä</th>
-        <th>Yht.</th>
-      </tr>
-      <tr  *ngFor="let item of cartContent let i = index">
-        <td>{{item.productName}}</td>
-        <td>{{item.priceAsString}}</td>
-        <td>{{item.quantity}}</td>
-        <td>{{item.totalAsString}}</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <th>{{totalSumAsString}}</th>
-      </tr>
-    </table>
+        <tr>
+          <th>Tuote</th>
+          <th>Hinta</th>
+          <th>Määrä</th>
+          <th>Yht.</th>
+        </tr>
+        <tr  *ngFor="let item of receiptContent let i = index">
+          <td>{{item.productName}}</td>
+          <td>{{item.priceAsString}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.totalAsString}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <th>{{totalSumAsString}}</th>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
 </ion-content>
