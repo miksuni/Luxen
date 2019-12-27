@@ -24,6 +24,7 @@ export class ShoppingcartProvider {
       console.log('>> ShoppingcartProvider.addProduct');
       productInfo.quantity = 1;
       productInfo.total = productInfo.price;
+      productInfo.priceAsString = productInfo.price.toFixed(2);
       this.shoppingCart.push(productInfo);
       this.productsInCart++;
       this.totalSum += productInfo.price;

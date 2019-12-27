@@ -31,7 +31,8 @@ export class ShopPage {
   
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   productsInCart = 0;
-  totalSum = 0;
+  totalSum: number = 0;
+  //totalSum = 0;
 
   givenAmount = 0;
   cashBack = 0;
@@ -92,7 +93,7 @@ export class ShopPage {
 
   addToShoppingCart(productInfo) {
       this.shoppingCart.addProduct(productInfo);
-      productInfo.price = productInfo.price.toFixed(2);
+      //productInfo.price = productInfo.price.toFixed(2);
       this.update();
       //this.cartContent = this.shoppingCart.getProducts();
   }
@@ -154,7 +155,7 @@ export class ShopPage {
   update() {
     console.log('update');
     this.productsInCart = this.shoppingCart.productsInCart;
-    this.totalSum = this.shoppingCart.totalSum;
+    this.totalSum = this.shoppingCart.totalSum.toFixed(2);
     if (this.totalSum > 0) {
       //document.getElementById("card_button").disabled=false;
       //document.getElementById("cash_button").disabled=false;

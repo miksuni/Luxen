@@ -20,7 +20,7 @@
 
   <table style="width:100%">
     <tr><td class="align-right">
-    <h5>Ostoskorissa tuotteita: {{productsInCart}}, yhteensä {{totalSum}} euroa</h5>
+    <h5>Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSum}} euroa</h5>
     </td></tr>
   </table>
 
@@ -38,7 +38,7 @@
     <tr  *ngFor="let item of cartContent let i = index">
       <td>{{item.productName}}</td>
       <td class="counter_cell">{{item.amountInStock}}</td>
-      <td>{{item.price}}</td>
+      <td>{{item.priceAsString}}</td>
       <td class="counter_cell">
         <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
           <ion-icon name="add" item-start></ion-icon>
@@ -125,7 +125,7 @@
   <table class="receipt" style="width:100%">
     <tr  *ngFor="let item of cartContent let i = index">
       <td>{{item.productName}}</td>
-      <td>{{item.price}}</td>
+      <td>{{item.priceAsString}}</td>
       <td>{{item.quantity}}</td>
       <td>{{item.total}}</td>
     </tr>
