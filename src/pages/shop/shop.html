@@ -86,35 +86,72 @@
   <!-- Oikea sarake: Tuotteen maksu-->
   <div class="column_2" style="background-color:#bbb;">
     <h2>Maksaminen</h2>
-      <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
-        <ion-icon name="card" item-start> Korttimaksu</ion-icon>
-      </button>
+    <table style="width:100%">
+      <tr>
+        <td>
+          <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
+            <ion-icon name="card" item-start> Korttimaksu</ion-icon>
+          </button>
+        </td>
+        <td>
+          <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
+            <ion-icon name="cash" item-start> Käteinen</ion-icon>
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div id="card_payment_guide">
+            Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
+          </div>
+        </td>
+        <td>
+          <div id="cash_payment_guide">
+            <tr><td>Maksettu:</td></tr>
+            <tr><td>
+              <ion-input class="product_data_input" [(ngModel)]="givenAmount" (ionChange)="onGivenAmountUpdated()" name="productName"></ion-input>
+            </td></tr>
+            <tr><td>Takaisin:</td></tr>
+            <tr><td>{{cashBack}}</td></tr>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <p>
+    <table class="confirm_buttons" style="width:100%" bordercolor="#bbb">
+      <tr bordercolor="#bbb">
+        <td bordercolor="#bbb">
+          <button ion-button class="confirm_button" id="confirm_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="confirmCardPayment()">
+            <ion-icon name="checkbox" item-start> Vahvista</ion-icon>
+          </button>
+        </td>
+        <td bordercolor="#bbb">
+          <button ion-button class="cancel_button" id="cancel_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="confirmCashPayment()">
+            <ion-icon name="close" item-start> Peruuta</ion-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
 
-      <div id="card_payment_guide">
-        Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
-        <button ion-button class="payment_button" id="confirm_card_button" (click)="confirmCardPayment()">
-          <ion-icon name="card" item-start> Vahvista</ion-icon>
-        </button>
-      </div>
 
-      <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
-        <ion-icon name="cash" item-start> Käteinen</ion-icon>
-      </button>
 
-      <div id="cash_payment_guide">
-        <button ion-button class="payment_button" id="confirm_cash_button" (click)="confirmCashPayment()">
-          <ion-icon name="cash" item-start> Suorita</ion-icon>
-        </button>
-      </div>
+
+
+  
+    
+
+
+
+
+
+
+      
+
+    
 
       <div id="cashback_fields">
         <table class="table_3">
-          <tr><td>Maksettu:</td></tr>
-          <tr><td>
-            <ion-input class="product_data_input" [(ngModel)]="givenAmount" (ionChange)="onGivenAmountUpdated()" name="productName"></ion-input>
-          </td></tr>
-          <tr><td>Takaisin:</td></tr>
-          <tr><td>{{cashBack}}</td></tr>
+
         </table>
       </div>
 

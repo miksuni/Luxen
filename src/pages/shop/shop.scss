@@ -16,8 +16,20 @@ page-shop {
 		margin-right: 10px;
 	}
 
-	.payment_button {
+    .payment_button {
+    	width:150px;
+    }
+
+	.confirm_button {
+    	display: table;
+    	margin: 0 auto;
 		width:150px;
+	}
+
+	.cancel_button {
+    	display: table;
+    	margin: 0 auto;
+		width:80px;
 	}
 
 	.align-right {
@@ -64,5 +76,4 @@ page-shop {
 	.counter_cell {
 		text-align: center;
 	}
-
 }

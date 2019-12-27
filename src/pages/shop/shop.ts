@@ -39,6 +39,7 @@ export class ShopPage {
 
   cardPaymentEnabled: boolean = false;
   cashPaymentEnabled: boolean = false;
+  confirmButtonsEnabled: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public productList: ProductList, private shoppingCart: ShoppingcartProvider) {
   }
@@ -47,7 +48,7 @@ export class ShopPage {
     console.log('ionViewDidLoad ShopPage');
     document.getElementById("cashback_fields").style.visibility = "hidden";
     document.getElementById("card_payment_guide").style.visibility = "hidden";
-    //document.getElementById("cash_payment_guide").style.visibility = "hidden";
+    document.getElementById("cash_payment_guide").style.visibility = "hidden";
     this.productList.getProductInfo();
     this.cartContent = this.shoppingCart.getProducts();
     this.update();
@@ -145,6 +146,7 @@ export class ShopPage {
     document.getElementById("cashback_fields").style.visibility = "hidden";
     document.getElementById("card_payment_guide").style.visibility = "visible";
     document.getElementById("cash_payment_guide").style.visibility = "hidden";
+    this.confirmButtonsEnabled = true;
   }
 
   confirmCardPayment() {
@@ -156,6 +158,7 @@ export class ShopPage {
     document.getElementById("card_payment_guide").style.visibility = "hidden";
     document.getElementById("cash_payment_guide").style.visibility = "visible";
     document.getElementById("cashback_fields").style.visibility = "visible";
+    this.confirmButtonsEnabled = true;
   }
 
   checkIfCardPaymentEnabled() {
@@ -166,6 +169,11 @@ export class ShopPage {
   checkIfCashPaymentEnabled() {
     console.log('checkIfCashPaymentEnabled');
     return !this.cardPaymentEnabled;
+  }
+
+  checkIfConfirmButtonsEnabled() {
+    console.log('checkIfConfirmButtonsEnabled');
+    return !this.confirmButtonsEnabled;
   }
 
   update() {
@@ -179,9 +187,10 @@ export class ShopPage {
     } else {
       this.cardPaymentEnabled = false;
       this.cashPaymentEnabled = false;
+      this.confirmButtonsEnabled = false;
       document.getElementById("cashback_fields").style.visibility = "hidden";
       document.getElementById("card_payment_guide").style.visibility = "hidden";
-      //document.getElementById("cash_payment_guide").style.visibility = "hidden";
+      document.getElementById("cash_payment_guide").style.visibility = "hidden";
     }
   }
 }
