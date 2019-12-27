@@ -42,6 +42,13 @@ export class ShoppingcartProvider {
       return this.shoppingCart;
   }
 
+  clearAll() {
+    console.log('>> ShoppingcartProvider.clearAll');
+    this.shoppingCart.splice(0,this.shoppingCart.length);
+    this.productsInCart = 0;
+    this.totalSum = 0;
+  }
+
   increase(i) {
     console.log('>> ShoppingcartProvider.increase');
     this.shoppingCart[i].quantity++;

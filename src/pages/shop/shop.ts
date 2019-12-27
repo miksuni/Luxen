@@ -146,7 +146,9 @@ export class ShopPage {
   confirmPayment() {
     console.log('confirmPayment');
     this.receiptContent = Array.from(this.cartContent);
-    this.cartContent.splice(0,this.cartContent.length);
+    //this.cartContent.splice(0,this.cartContent.length);
+    this.shoppingCart.clearAll();
+    this.update();
     document.getElementById("receipt_view").style.visibility = "visible";
     this.cardPaymentEnabled = false;
     this.cashPaymentEnabled = false;
@@ -154,8 +156,10 @@ export class ShopPage {
   }
 
   cancelPurchase() {
-    this.cartContent.splice(0,this.cartContent.length);
-    
+    console.log('cancelPurchase');
+    document.getElementById("receipt_view").style.visibility = "hidden";
+    this.shoppingCart.clearAll();
+    this.update();
   }
 
   cashPayment() {
