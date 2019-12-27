@@ -81,7 +81,7 @@
 
 <div class="column_2" style="background-color:#bbb;">
     <h2>Maksaminen</h2>
-    <button ion-button class="payment_button" id="card_button" (click)="cardPayment()">
+    <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
         <ion-icon name="card" item-start> Korttimaksu</ion-icon>
     </button>
 
@@ -92,7 +92,7 @@
       </button>
     </div>
 
-    <button ion-button class="payment_button" id="cash_button" (click)="cashPayment()">
+    <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
         <ion-icon name="cash" item-start> Käteinen</ion-icon>
     </button>
 

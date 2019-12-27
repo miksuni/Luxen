@@ -37,6 +37,9 @@ export class ShopPage {
   givenAmount = 0;
   cashBack = 0;
 
+  cardPaymentEnabled: boolean = false;
+  cashPaymentEnabled: boolean = false;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public productList: ProductList, private shoppingCart: ShoppingcartProvider) {
   }
 
@@ -152,17 +155,27 @@ export class ShopPage {
     document.getElementById("card_payment_guide").style.visibility = "hidden";
   }
 
+  checkIfCardPaymentEnabled() {
+    console.log('checkIfCardPaymentEnabled');
+    return !this.cardPaymentEnabled;
+  }
+
+  checkIfCashPaymentEnabled() {
+    console.log('checkIfCashPaymentEnabled');
+    return !this.cardPaymentEnabled;
+  }
+
   update() {
     console.log('update');
     this.productsInCart = this.shoppingCart.productsInCart;
     this.totalSum = this.shoppingCart.totalSum;
     this.totalSumAsString = this.shoppingCart.totalSum.toFixed(2);
     if (this.totalSum > 0) {
-      //document.getElementById("card_button").disabled=false;
-      //document.getElementById("cash_button").disabled=false;
+      this.cardPaymentEnabled = true;
+      this.cashPaymentEnabled = true;
     } else {
-      //document.getElementById("card_button").disabled=true;
-      //document.getElementById("cash_button").disabled=true;
+      this.cardPaymentEnabled = false;
+      this.cashPaymentEnabled = false;
       document.getElementById("cashback_fields").style.visibility = "hidden";
       document.getElementById("card_payment_guide").style.visibility = "hidden";
     }
