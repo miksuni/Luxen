@@ -34,6 +34,7 @@ export class ShopPage {
   productsInCart = 0;
   totalSum: number = 0;
   totalSumAsString: string = "";
+  receiptTotalSumAsString: string = "";
 
   givenAmount = 0;
   cashBack = 0;
@@ -65,6 +66,7 @@ export class ShopPage {
   
   onProductNumberUpdated() {
       console.log('>> shop.onProductNumberUpdated: ' + this.productNumberInitials);
+      document.getElementById("receipt_view").style.visibility = "hidden";
       if (this.productNumberInitials.length > 0) {
           var found = this.productList.getProductProgressivelyByNumber(this.productNumberInitials);
           this.searchResult = found;
@@ -80,6 +82,7 @@ export class ShopPage {
 
   onProductNameUpdated() {
       console.log('>> shop.onProductNameUpdated: ' + this.productNameInitials);
+      document.getElementById("receipt_view").style.visibility = "hidden";
       var found = this.productList.getProductByName(this.productNameInitials);
       this.searchResult = found;
       console.log('>> found: ' + found.length);
@@ -146,7 +149,7 @@ export class ShopPage {
   confirmPayment() {
     console.log('confirmPayment');
     this.receiptContent = Array.from(this.cartContent);
-    //this.cartContent.splice(0,this.cartContent.length);
+    this.receiptTotalSumAsString = this.totalSumAsString;
     this.shoppingCart.clearAll();
     this.update();
     document.getElementById("receipt_view").style.visibility = "visible";
