@@ -69,11 +69,26 @@ export class ProductUpdatePage {
   }
 
   addProduct() {
-     console.log('>> productUpdate.addProduct');
+    console.log('>> productUpdate.addProduct');
+    this.presentLoading();
+    this.productInfo.productName = this.productNameInitials;
+    this.productInfo.ISBN = this.productNumberInitials;
+    this.productInfo.productCode = this.productCode;
+    this.productInfo.price = this.price;
+    this.productInfo.amountInStock = this.amountInStock;
+    this.productInfo.availableFromPublisher = this.inProduction ? "true" : "false";
+    console.log('>> productUpdate.product to be added: '  + JSON.stringify(this.productInfo));
+    this.productList.addProduct(this.productInfo);
+    setTimeout( () => {
+      console.log('>> timeout ends');
+      this.productList.getProductInfo();
+      this.finishLoading();
+    }, 3000);
   }
 
   removeProduct() {
      console.log('>> productUpdate.removeProduct');
+     this.productList.removeProduct(this.productInfo);
   }
 
   cancel() {
@@ -86,7 +101,7 @@ export class ProductUpdatePage {
     this.searchResult = found;
     //console.log('>> found: ' + found.length);
     //console.log('>> json: ' + JSON.stringify(found));
-    this.clear();
+    //this.clear();
     if (this.searchResult.length == 1) {
       console.log('>> found item: ' + found[0].productName);
       this.showProduct(found[0]);
@@ -99,7 +114,7 @@ export class ProductUpdatePage {
     this.searchResult = found;
     //console.log('>> found: ' + found.length);
     //console.log('>> json: ' + JSON.stringify(found));
-    this.clear();
+    //this.clear();
     if (found.length == 1) {
       console.log('>> found item: ' + found[0].productName);
       this.showProduct(found[0]);
@@ -112,6 +127,7 @@ export class ProductUpdatePage {
 
   onProductSelected(productName, index) {
     console.log('>> productUpdate.onProductSelected: ' + productName + ' index: ' + index + ' obj: ' + this.searchResult[index].objectId);
+    this.clear();
     //this.productName = productName;
     this.objectId = this.searchResult[index].objectId;
     this.productNumber = this.searchResult[index].ISBN;
@@ -188,6 +204,7 @@ export class ProductUpdatePage {
   }
 
   clear() {
+    console.log('>> productUpdate.clear');
     this.productNumber = "";
     this.productName = "";
     this.price = "";

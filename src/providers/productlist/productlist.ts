@@ -107,4 +107,24 @@ export class ProductList {
 			console.log(err);
 		});
 	}
+
+	addProduct(updatedInfo) {
+		console.log('>> ProductList.addProduct');
+		this.restProvider.addProduct(updatedInfo).then((result:any) => {
+			console.log(">> product added");
+			//this.getProductInfo();
+		}, (err) => {
+			console.log(err);
+		});
+	}
+
+	removeProduct(updatedInfo) {
+		console.log('>> ProductList.removeProduct');
+		this.restProvider.removeProduct(updatedInfo).then((result:any) => {
+			console.log(">> product removed");
+			//this.getProductInfo();
+		}, (err) => {
+			console.log(err);
+		});
+	}
 }

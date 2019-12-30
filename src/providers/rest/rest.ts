@@ -67,4 +67,21 @@ export class RestProvider {
 			});
 		});
 	}
+
+	removeProduct(data) {
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Content-Type':  'application/json',
+				'X-Parse-Application-Id': '365_ghg_867_fhj'
+			})
+		};
+		return new Promise((resolve, reject) => {
+			this.http.post(this.herokuUrl + '/removeproduct', JSON.stringify(data), httpOptions)
+				.subscribe(res => {
+				resolve(res);
+			}, (err) => {
+				reject(err);
+			});
+		});
+	}
 }
