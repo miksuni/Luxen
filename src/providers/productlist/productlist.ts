@@ -102,7 +102,6 @@ export class ProductList {
 		console.log('>> ProductList.updateProductInfo');
 		this.restProvider.saveProduct(updatedInfo).then((result:any) => {
 			console.log(">> product info saved");
-			//this.getProductInfo();
 		}, (err) => {
 			console.log(err);
 		});
@@ -112,7 +111,6 @@ export class ProductList {
 		console.log('>> ProductList.addProduct');
 		this.restProvider.addProduct(updatedInfo).then((result:any) => {
 			console.log(">> product added");
-			//this.getProductInfo();
 		}, (err) => {
 			console.log(err);
 		});
@@ -122,7 +120,6 @@ export class ProductList {
 		console.log('>> ProductList.removeProduct');
 		this.restProvider.removeProduct(updatedInfo).then((result:any) => {
 			console.log(">> product removed");
-			//this.getProductInfo();
 		}, (err) => {
 			console.log(err);
 		});

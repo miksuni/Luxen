@@ -87,8 +87,16 @@ export class ProductUpdatePage {
   }
 
   removeProduct() {
-     console.log('>> productUpdate.removeProduct');
-     this.productList.removeProduct(this.productInfo);
+    console.log('>> productUpdate.removeProduct');
+    this.presentLoading();
+    this.productInfo.objectId = this.objectId;
+    console.log('>> productUpdate.product to be removed: '  + JSON.stringify(this.productInfo));
+    this.productList.removeProduct(this.productInfo);
+    setTimeout( () => {
+      console.log('>> timeout ends');
+      this.productList.getProductInfo();
+      this.finishLoading();
+    }, 3000);
   }
 
   cancel() {
