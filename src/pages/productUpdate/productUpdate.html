@@ -12,18 +12,43 @@
   <table class="table_1" border="1">
     <tr>
       <td>
-        Tuotenumero:
+        Nimi:
       </td>
       <td>
-        &nbsp;{{productNumber}}
+        &nbsp;
+        <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+        <div id="product_name_list">
+          <ion-list class="product_list">
+            <ion-item text-wrap *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >      
+              {{element.productName}}
+            </ion-item>
+          </ion-list>
+        </div>
       </td>
     </tr>
     <tr>
       <td>
-        Nimi:
+        Tuotenumero:
       </td>
       <td>
-        &nbsp;{{productName}}
+        &nbsp;
+        <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+        <div id="product_number_list">
+          <ion-list class="product_list">
+            <ion-item text-wrap *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >      
+              {{element.ISBN}}
+            </ion-item>
+          </ion-list>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Tuotekoodi:
+      </td>
+      <td>
+        &nbsp;
+        <ion-input type="number" class="product_data_input" [(ngModel)]="productCode" placeholder="Tuotekoodi" (ionChange)="onProductCodeUpdated()" name="productCode"></ion-input>
       </td>
     </tr>
     <tr>
@@ -32,8 +57,6 @@
       </td>
       <td>
         &nbsp;<input class="input_narrow" [(ngModel)]="price">
-        <button ion-button round button color="danger" (click)="reducePrice()">-</button>
-        <button ion-button round button color="secondary" (click)="increasePrice()">+</button>
       </td>
     </tr>
     <tr>
@@ -41,9 +64,10 @@
         Varastosaldo:
       </td>
       <td>
-        &nbsp;<input class="input_narrow" [(ngModel)]="amountInStock">
-        <button ion-button round button color="danger" (click)="reduceAmount()">-</button>
-        <button ion-button round button color="secondary" (click)="increaseAmount()">+</button>
+        &nbsp;
+        <button ion-button round button (click)="reduceAmount()">-</button>
+        <input class="input_narrow" [(ngModel)]="amountInStock">
+        <button ion-button round button (click)="increaseAmount()">+</button>
       </td>
     </tr>
     <tr>
@@ -73,18 +97,21 @@
         <button ion-button round full color="secondary" (click)="saveProduct()">Tallenna</button>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button round full (click)="addProduct()">Lisää tuote</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round full (click)="removeProduct()">Poista tuote</button>
+      </ion-col>
+      <ion-col>
+        <button ion-button round full color="danger" (click)="cancel()">Peruuta</button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
   <p>
-  <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
-  <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+  
   <!--ion-content-->
-  <div class="ion-list-viewport">
-    <ion-list class="product_list">
-      <ion-item text-wrap *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >      
-        <p>{{element.productName}}</p>
-      </ion-item>
-    </ion-list>
-  </div>
   <!--/ion-content-->
   <!--button ion-button secondary menuToggle>Toggle Menu</button-->
 </ion-content>

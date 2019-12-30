@@ -14,6 +14,7 @@ export class ProductUpdatePage {
 
   productNumber: string = "";
   productName: string = "";
+  productCode: string = "";
   price: string = "";
   amountInStock: string = "";
   inProduction: boolean = false;
@@ -67,6 +68,18 @@ export class ProductUpdatePage {
     });
   }
 
+  addProduct() {
+     console.log('>> productUpdate.addProduct');
+  }
+
+  removeProduct() {
+     console.log('>> productUpdate.removeProduct');
+  }
+
+  cancel() {
+     console.log('>> productUpdate.cancel');
+  }
+
   onProductNumberUpdated() {
     console.log('>> productUpdate.onProductNumberUpdated: ' + this.productNumberInitials);
     var found = this.productList.getProductProgressivelyByNumber(this.productNumberInitials);
@@ -93,15 +106,24 @@ export class ProductUpdatePage {
     }
   }
 
+  onProductCodeUpdated() {
+    console.log('>> productUpdate.onProductCodeUpdated: ' + this.productCode);
+  }
+
   onProductSelected(productName, index) {
     console.log('>> productUpdate.onProductSelected: ' + productName + ' index: ' + index + ' obj: ' + this.searchResult[index].objectId);
     //this.productName = productName;
     this.objectId = this.searchResult[index].objectId;
     this.productNumber = this.searchResult[index].ISBN;
     this.productName = this.searchResult[index].productName;
+    this.productCode = this.searchResult[index].productCode;
+    this.productNameInitials = this.searchResult[index].productName;
     this.price = this.searchResult[index].price;
     this.amountInStock = this.searchResult[index].amountInStock;
     this.inProduction = this.searchResult[index].availableFromPublisher;
+    //document.getElementById("product_number_list").style.visibility = "hidden";
+    //document.getElementById("product_name_list").style.visibility = "hidden";
+    this.searchResult.splice(0,this.searchResult.length)
   }
 
   showProduct(productInfo) {
@@ -115,6 +137,7 @@ export class ProductUpdatePage {
       console.log('>> ' + JSON.stringify(productInfo));
   }
 
+/*
   increasePrice() {
     console.log('>> productUpdate.increasePrice, current price ' + this.price);
     var tmpStr = this.price.toString();
@@ -136,6 +159,7 @@ export class ProductUpdatePage {
       }
     }
   }
+  */
 
   increaseAmount() {
     console.log('>> productUpdate.increaseAmount, current amountInStock ' + this.amountInStock);
