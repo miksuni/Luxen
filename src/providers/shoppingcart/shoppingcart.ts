@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { RestProvider } from '../../providers/rest/rest';
 
 /*
   Generated class for the ShoppingcartProvider provider.
@@ -16,7 +17,7 @@ export class ShoppingcartProvider {
   productsInCart = 0;
   totalSum = 0;
   
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public restProvider: RestProvider) {
     console.log('Hello ShoppingcartProvider Provider');
   }
   
@@ -74,5 +75,14 @@ export class ShoppingcartProvider {
   getProducts() {
       console.log('>> ShoppingcartProvider.getProducts');
       return this.shoppingCart;
+  }
+
+  connectToPT() {
+    console.log('>> ShoppingcartProvider.purhase');
+    this.restProvider.connectToPT().then((result:any) => {
+      console.log(">> product(s) purchased");
+    }, (err) => {
+      console.log(err);
+    });
   }
 }

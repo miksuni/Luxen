@@ -146,6 +146,11 @@ export class ShopPage {
     this.confirmButtonsEnabled = true;
   }
 
+  connectToPT() {
+    console.log('connectToPT');
+    this.shoppingCart.connectToPT();
+  }
+
   confirmPayment() {
     console.log('confirmPayment');
     this.receiptContent = Array.from(this.cartContent);
