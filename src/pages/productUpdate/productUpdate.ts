@@ -71,6 +71,7 @@ export class ProductUpdatePage {
   addProduct() {
     console.log('>> productUpdate.addProduct');
     this.presentLoading();
+    this.productInfo.objectId = "";
     this.productInfo.productName = this.productNameInitials;
     this.productInfo.ISBN = this.productNumberInitials;
     this.productInfo.productCode = this.productCode;

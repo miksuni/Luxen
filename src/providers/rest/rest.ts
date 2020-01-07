@@ -16,6 +16,23 @@ export class RestProvider {
 	constructor(public http: HttpClient) {
 		console.log('Hello RestProvider Provider');
 	}
+	
+    cashiers(data) {
+	    const httpOptions = {
+	        headers: new HttpHeaders({
+	            'Content-Type':  'application/json',
+	            'X-Parse-Application-Id': '365_ghg_867_fhj'
+	        })
+	    };
+	    return new Promise((resolve, reject) => {
+	        this.http.post(this.herokuUrl + '/cashiers', '{}', httpOptions)
+	            .subscribe(res => {
+	            resolve(res);
+	        }, (err) => {
+	            reject(err);
+	        });
+	    });
+    }
 
 	productInfo(data) {
 		const httpOptions = {

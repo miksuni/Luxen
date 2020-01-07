@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ProductList } from '../../providers/productlist/productlist';
 import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart';
+import { RestProvider } from '../../providers/rest/rest';
 
 /**
  * Generated class for the ShopPage page.
@@ -30,6 +31,7 @@ export class ShopPage {
   receiptContent = [];
   searchResult: any;
   
+  cashiers: any;
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   productsInCart = 0;
   totalSum: number = 0;
@@ -43,7 +45,7 @@ export class ShopPage {
   cashPaymentEnabled: boolean = false;
   confirmButtonsEnabled: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public productList: ProductList, private shoppingCart: ShoppingcartProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public productList: ProductList, private shoppingCart: ShoppingcartProvider, public restProvider: RestProvider) {
   }
 
   ionViewDidLoad() {
@@ -53,6 +55,7 @@ export class ShopPage {
     document.getElementById("receipt_view").style.visibility = "hidden";
     this.productList.getProductInfo();
     this.cartContent = this.shoppingCart.getProducts();
+    this.getCashiers();
     this.update();
   }
   
@@ -62,7 +65,27 @@ export class ShopPage {
       this.price = "";
       this.amountInStock = "";
       this.inProductionInfo = "";
-    }
+  }
+  
+  getCashiers() {
+      console.log('>> home.getCashiers');
+      this.restProvider.cashiers("").then((result:any) => {
+          console.log('>> result received');
+          this.cashiers = JSON.parse(result.result);
+          console.log('cashiers: ' + JSON.stringify(this.cashiers));
+      }, (err) => {
+          console.log(err);
+      });
+  }
+  
+  onCashierChange($event){
+      console.log('>> onCashierChange');
+      console.log($event);
+  }
+  
+  /*onCashierSelected(cashier, index) {
+      console.log('>> shop.onCashierSelected: ' + cashier + ' index: ' + index);
+  }*/
   
   onProductNumberUpdated() {
       console.log('>> shop.onProductNumberUpdated: ' + this.productNumberInitials);

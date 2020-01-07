@@ -86,6 +86,20 @@
 
   <!-- Oikea sarake: Tuotteen maksu-->
   <div class="column_2" style="background-color:#bbb;">
+  	<div style="background-color:#aaa;">
+  	<!--button ion-button id="cashier_button" (click)="getCashiers()">
+      Kassat
+    </button-->
+
+
+<ion-item>
+  <ion-label>Kassa:</ion-label>
+  <ion-select (ionChange)="onCashierChange($event)">
+    <ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
+  </ion-select>
+</ion-item>
+
+  	</div>
     <h2>Maksaminen</h2>
     <button ion-button id="connect_pt_button" (click)="connectToPT()">
       Yhdistä maksupäätteeseen
