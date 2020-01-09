@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ProductList } from '../../providers/productlist/productlist';
 import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart';
 import { RestProvider } from '../../providers/rest/rest';
+import { AlertController } from 'ionic-angular';
 
 /**
  * Generated class for the ShopPage page.
@@ -31,6 +32,7 @@ export class ShopPage {
   receiptContent = [];
   searchResult: any;
   
+  sites = [{id:'Lahti'}];
   cashiers: any;
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   productsInCart = 0;
@@ -44,8 +46,15 @@ export class ShopPage {
   cardPaymentEnabled: boolean = false;
   cashPaymentEnabled: boolean = false;
   confirmButtonsEnabled: boolean = false;
+  
+  cashier = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public productList: ProductList, private shoppingCart: ShoppingcartProvider, public restProvider: RestProvider) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public productList: ProductList,
+              private shoppingCart: ShoppingcartProvider,
+              public restProvider: RestProvider,
+              private alertController: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -79,13 +88,18 @@ export class ShopPage {
   }
   
   onCashierChange($event){
-      console.log('>> onCashierChange');
-      console.log($event);
+      console.log('>> onCashierChange: ' + $event);
+      this.cashier = $event;
+      this.shoppingCart.setCashier(this.cashier);
   }
   
-  /*onCashierSelected(cashier, index) {
-      console.log('>> shop.onCashierSelected: ' + cashier + ' index: ' + index);
-  }*/
+  onProductInputClicked() {
+      console.log('>> shop.onProductInputClicked:');
+      if (this.cashier.length == 0) {
+          this.presentPrompt();
+          return;
+      }  
+  }
   
   onProductNumberUpdated() {
       console.log('>> shop.onProductNumberUpdated: ' + this.productNumberInitials);
@@ -166,6 +180,7 @@ export class ShopPage {
     console.log('cardPayment');
     document.getElementById("card_payment_guide").style.visibility = "visible";
     document.getElementById("cash_payment_guide").style.visibility = "hidden";
+    this.setPaymentMethod("Maksukortti");
     this.confirmButtonsEnabled = true;
   }
 
@@ -178,6 +193,7 @@ export class ShopPage {
     console.log('confirmPayment');
     this.receiptContent = Array.from(this.cartContent);
     this.receiptTotalSumAsString = this.totalSumAsString;
+    this.shoppingCart.saveReceipt();
     this.shoppingCart.clearAll();
     this.update();
     document.getElementById("receipt_view").style.visibility = "visible";
@@ -197,6 +213,7 @@ export class ShopPage {
     console.log('cashPayment');
     document.getElementById("card_payment_guide").style.visibility = "hidden";
     document.getElementById("cash_payment_guide").style.visibility = "visible";
+    this.setPaymentMethod("Käteinen");
     this.confirmButtonsEnabled = true;
   }
 
@@ -232,4 +249,26 @@ export class ShopPage {
       document.getElementById("cash_payment_guide").style.visibility = "hidden";
     }
   }
+  
+  setPaymentMethod(paymentMethod) {
+      var paymentMethods = [];
+      paymentMethods[0] = paymentMethod;
+      paymentMethods[1] = "";
+      this.shoppingCart.setPaymentMethods(paymentMethods);
+  }
+  
+  presentPrompt() {
+      let alert = this.alertController.create({
+        title: 'Aseta kassa ensin',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: () => {
+              console.log('Confirm Ok');
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
 }

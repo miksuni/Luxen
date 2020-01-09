@@ -67,10 +67,10 @@
     <table class="table_2">
       <tr>
         <td>
-          <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+          <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onProductInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
         </td>
         <td>
-          <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+          <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onProductInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
         </td>
       </tr>
       <tr  *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
@@ -86,18 +86,17 @@
 
   <!-- Oikea sarake: Tuotteen maksu-->
   <div class="column_2" style="background-color:#bbb;">
-  	<div style="background-color:#aaa;">
+  	<div style="background-color:#bbb;">
   	<!--button ion-button id="cashier_button" (click)="getCashiers()">
       Kassat
     </button-->
 
-
-<ion-item>
-  <ion-label>Kassa:</ion-label>
-  <ion-select (ionChange)="onCashierChange($event)">
-    <ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
-  </ion-select>
-</ion-item>
+	<ion-item>
+  		<ion-label>Kassa:</ion-label>
+  		<ion-select (ionChange)="onCashierChange($event)">
+   			<ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
+  		</ion-select>
+	</ion-item>
 
   	</div>
     <h2>Maksaminen</h2>

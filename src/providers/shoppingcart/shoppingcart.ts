@@ -13,12 +13,29 @@ export class ShoppingcartProvider {
 
   productInfoStr: any;
   //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'', amount:'' };
+  receipt = { receiptNr:0, cashier:'', totalSum:0, paymentMethod1:'', paymentMethod2:'' };
   shoppingCart = [];
   productsInCart = 0;
   totalSum = 0;
+  cashier = "";
+  paymentMethod1: "";
+  paymentMethod2: "";
   
   constructor(public http: HttpClient, public restProvider: RestProvider) {
     console.log('Hello ShoppingcartProvider Provider');
+  }
+  
+  setCashier(cashier) {
+      console.log('>> ShoppingcartProvider.setCashier: ' + cashier);
+      this.cashier = cashier;
+      this.receipt.cashier = cashier;
+  }
+  
+  setPaymentMethods(paymentMethods) {
+      this.paymentMethod1 = paymentMethods[0];
+      this.paymentMethod2 = paymentMethods[1];
+      this.receipt.paymentMethod1 = this.paymentMethod1;
+      this.receipt.paymentMethod2 = this.paymentMethod2;
   }
   
   addProduct(productInfo) {
@@ -30,6 +47,7 @@ export class ShoppingcartProvider {
       this.shoppingCart.push(productInfo);
       this.productsInCart++;
       this.totalSum += productInfo.price;
+      this.receipt.totalSum = this.totalSum;
       console.log('>> cart content: ' + JSON.stringify(this.shoppingCart));
   }
   
@@ -77,7 +95,12 @@ export class ShoppingcartProvider {
       return this.shoppingCart;
   }
 
-
+  saveReceipt() {
+      console.log('>> ShoppingcartProvider.saveReceipt');
+      console.log('receipt: '+ JSON.stringify(this.receipt));
+      this.receipt.receiptNr = 1;
+      this.restProvider.sendRequest("saveReceipt", this.receipt);
+  }
 
   // JSON data must be encoded in ASCII which also means character and byte
   // length will match.
@@ -86,7 +109,6 @@ export class ShoppingcartProvider {
           return '\\u' + ('0000' + x.charCodeAt(0).toString(16)).substr(-4);
       });
   }
-
 
   connectToPT() {
     console.log('>> ShoppingcartProvider.purhase');
