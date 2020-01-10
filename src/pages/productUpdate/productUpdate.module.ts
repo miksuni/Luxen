@@ -4,7 +4,7 @@ import { ProductUpdatePage } from './productUpdate';
 
 @NgModule({
   declarations: [
-    ProductUpdatePage,
+    //ProductUpdatePage,
   ],
   imports: [
     IonicPageModule.forChild(ProductUpdatePage),
