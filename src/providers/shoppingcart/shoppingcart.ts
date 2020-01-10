@@ -11,10 +11,23 @@ import { RestProvider } from '../../providers/rest/rest';
 @Injectable()
 export class ShoppingcartProvider {
 
-  productInfoStr: any;
-  //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'', amount:'' };
-  receipt = { receiptNr:0, cashier:'', totalSum:0, paymentMethod1:'', paymentMethod2:'' };
+  receipt = { receiptNr:0,
+              cashier:'',
+              totalSum:0,
+              paymentMethod1:'',
+              paymentMethod2:'' };
+  /*shoppingcart = [{ objectId:'',
+                   ISBN:'',
+                   productName:'',
+                   price:'',
+                   amountInStock:'',
+                   productCode:'',
+                   availableFromPublisher:'',
+                   amount:'',
+                   quantity: 0,
+                   total: 0 }];*/
   shoppingCart = [];
+  purchase = { productList:[], total:{} };
   productsInCart = 0;
   totalSum = 0;
   cashier = "";
@@ -97,9 +110,12 @@ export class ShoppingcartProvider {
 
   saveReceipt() {
       console.log('>> ShoppingcartProvider.saveReceipt');
+      console.log('shoppingCart: '+ JSON.stringify(this.shoppingCart));
       console.log('receipt: '+ JSON.stringify(this.receipt));
       this.receipt.receiptNr = 1;
-      this.restProvider.sendRequest("saveReceipt", this.receipt);
+      this.purchase.productList = this.shoppingCart;
+      this.purchase.total = this.receipt;
+      this.restProvider.sendRequest("saveReceipt", this.purchase);
   }
 
   // JSON data must be encoded in ASCII which also means character and byte
