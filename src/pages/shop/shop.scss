@@ -17,16 +17,20 @@ page-shop {
 	}
 
     .payment_button {
-    	width:150px;
+        font-size: 70%;
+        font-size: 70%; 
+    	width:100px;
     }
 
 	.confirm_button {
+	    font-size: 70%;
     	display: table;
     	margin: 0 auto;
-		width:150px;
+		width:100px;
 	}
 
 	.cancel_button {
+	    font-size: 70%;
     	display: table;
     	margin: 0 auto;
 		width:80px;
@@ -38,6 +42,7 @@ page-shop {
 	}
 
 	.cart {
+	    font-size: 70%;
 	    border: 2px solid #aaaaaa;
 		margin-top: 20px;
 		margin-bottom: 20px;
@@ -54,6 +59,7 @@ page-shop {
 	}
 
 	.product_line_button {
+	    font-size: 70%;
 		height:20px;
 		padding: 5px 5px 5px 5px;
 	}
@@ -75,5 +81,14 @@ page-shop {
 
 	.counter_cell {
 		text-align: center;
+	}
+	
+	.ion_item_prop {
+	    font-size: 70%;
+	}
+	
+	.ion_item_prop_h {
+	    font-size: 70%;
+	    width:100px;
 	}
 }

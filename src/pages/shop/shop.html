@@ -10,6 +10,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+      <ion-buttons end>
+        <button class="cart_button" (click)="goToShoppingCart()">
+          Kassalle&nbsp;
+          <ion-icon name="basket"></ion-icon>
+        </button>
+      </ion-buttons>
     <ion-title>Julkaisumyynti</ion-title>
   </ion-navbar>
 </ion-header>
@@ -23,7 +29,7 @@
 
     <table style="width:100%">
       <tr><td class="align-right">
-      <h5>Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa</h5>
+      <h6>Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa</h6>
       </td></tr>
     </table>
 
@@ -92,17 +98,24 @@
     </button-->
 
 	<ion-item>
-  		<ion-label>Kassa:</ion-label>
-  		<ion-select (ionChange)="onCashierChange($event)">
+  		<ion-label class="ion_item_prop">Kassa:</ion-label>
+  		<ion-select class="ion_item_prop" (ionChange)="onCashierChange($event)">
    			<ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
   		</ion-select>
 	</ion-item>
 
   	</div>
-    <h2>Maksaminen</h2>
-    <button ion-button id="connect_pt_button" (click)="connectToPT()">
+  	
+  	<!--
+    <h6>Maksaminen</h6>
+    -->
+    
+    <!--
+    <button class="ion_item_prop" ion-button id="connect_pt_button" (click)="connectToPT()">
       Yhdistä maksupäätteeseen
     </button><p>
+    -->
+    
     <table style="width:100%">
       <tr>
         <td>
@@ -110,6 +123,8 @@
             <ion-icon name="card" item-start> Korttimaksu</ion-icon>
           </button>
         </td>
+      </tr>
+      <tr>
         <td>
           <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
             <ion-icon name="cash" item-start> Käteinen</ion-icon>

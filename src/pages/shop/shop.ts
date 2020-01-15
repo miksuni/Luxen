@@ -42,6 +42,9 @@ export class ShopPage {
 
   givenAmount = 0;
   cashBack = 0;
+  
+  moneyBackAsStr = "";
+  moneyBackAsFloat: number = 0.0;
 
   cardPaymentEnabled: boolean = false;
   cashPaymentEnabled: boolean = false;
@@ -96,7 +99,7 @@ export class ShopPage {
   onProductInputClicked() {
       console.log('>> shop.onProductInputClicked:');
       if (this.cashier.length == 0) {
-          this.presentPrompt();
+          this.presentPromptSelectCashier();
           return;
       }  
   }
@@ -178,8 +181,9 @@ export class ShopPage {
 
   cardPayment() {
     console.log('cardPayment');
-    document.getElementById("card_payment_guide").style.visibility = "visible";
-    document.getElementById("cash_payment_guide").style.visibility = "hidden";
+    //document.getElementById("card_payment_guide").style.visibility = "visible";
+    //document.getElementById("cash_payment_guide").style.visibility = "hidden";
+    this.presentPromptPaymentCardInstructions();
     this.setPaymentMethod("Maksukortti");
     this.confirmButtonsEnabled = true;
   }
@@ -211,8 +215,12 @@ export class ShopPage {
 
   cashPayment() {
     console.log('cashPayment');
-    document.getElementById("card_payment_guide").style.visibility = "hidden";
-    document.getElementById("cash_payment_guide").style.visibility = "visible";
+    //document.getElementById("card_payment_guide").style.visibility = "hidden";
+    //document.getElementById("cash_payment_guide").style.visibility = "visible";
+    this.showPrompt();
+    //this.presentAlertPrompt();
+    console.log('--Saved clicked, data: ' + this.moneyBackAsStr);
+    console.log('--Saved clicked, data: ' + this.moneyBackAsFloat.toString());
     this.setPaymentMethod("Käteinen");
     this.confirmButtonsEnabled = true;
   }
@@ -257,7 +265,7 @@ export class ShopPage {
       this.shoppingCart.setPaymentMethods(paymentMethods);
   }
   
-  presentPrompt() {
+  presentPromptSelectCashier() {
       let alert = this.alertController.create({
         title: 'Aseta kassa ensin',
         buttons: [
@@ -270,5 +278,150 @@ export class ShopPage {
         ]
       });
       alert.present();
+    }
+  
+  presentPromptPaymentCardInstructions() {
+      let alert = this.alertController.create({
+        title: 'Syötä summa ' + this.totalSum + ' maksupäätteeseen',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: () => {
+              console.log('Confirm Ok');
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+  
+  async presentAlertPrompt() {
+      const alert = await this.alertController.create({
+        //header: 'Prompt!',
+        inputs: [
+          {
+            name: 'name1',
+            type: 'text',
+            placeholder: 'Placeholder 1'
+          },
+          {
+            name: 'name2',
+            type: 'text',
+            id: 'name2-id',
+            value: 'hello',
+            placeholder: 'Placeholder 2'
+          },
+          {
+            name: 'name3',
+            value: 'http://ionicframework.com',
+            type: 'url',
+            placeholder: 'Favorite site ever'
+          },
+          // input date with min & max
+          {
+            name: 'name4',
+            type: 'date',
+            min: '2017-03-01',
+            max: '2018-01-12'
+          },
+          // input date without min nor max
+          {
+            name: 'name5',
+            type: 'date'
+          },
+          {
+            name: 'name6',
+            type: 'number',
+            min: -5,
+            max: 10
+          },
+          {
+            name: 'name7',
+            type: 'number'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              console.log('Confirm Cancel');
+            }
+          }, {
+            text: 'Ok',
+            handler: () => {
+              console.log('Confirm Ok');
+            }
+          }
+        ]
+      });
+
+      await alert.present();
+    }
+  
+  showPrompt() {
+      const prompt = this.alertController.create({
+        title: 'Syötä summa: ',
+        message: "Asiakkaan antama summa",
+        inputs: [
+          {
+            name: 'Money',
+            type: 'number',
+            placeholder: '20'
+          }
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            handler: data => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Save',
+            handler: data => {
+              //this.moneyBackAsFloat = parseFloat(JSON.stringify(data.Money));
+              //this.moneyBackAsStr = JSON.stringify(data.Money);
+              //this.moneyBackAsFloat = parseFloat(this.moneyBackAsStr);
+              //console.log('Saved clicked, data: ' + this.moneyBackAsStr);
+              this.moneyBackAsFloat = data.Money;
+              console.log('Saved clicked, data: ' + this.moneyBackAsFloat.toString());
+              //this.showPrompt2(parseFloat(JSON.stringify(data.Money)) /* - this.totalSum*/);
+              //this.showPrompt2(6.0);
+              this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
+
+  showPrompt2(moneyback) {
+      const prompt = this.alertController.create({
+        //title: 'Takaisin',
+        message: "Ole hyvä ja duunaa takas mani: " + moneyback.toString(),
+        inputs: [
+          {
+            name: 'Money',
+            placeholder: '20'
+          }
+        ],
+        buttons: [
+          /*{
+            text: 'Cancel',
+            handler: data => {
+              console.log('Cancel clicked');
+            }
+          },*/
+          {
+            text: 'OK',
+            handler: data => {
+              console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
+            }
+          }
+        ]
+      });
+      prompt.present();
     }
 }
