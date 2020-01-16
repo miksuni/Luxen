@@ -10,12 +10,6 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-      <ion-buttons end>
-        <button class="cart_button" (click)="goToShoppingCart()">
-          Kassalle&nbsp;
-          <ion-icon name="basket"></ion-icon>
-        </button>
-      </ion-buttons>
     <ion-title>Julkaisumyynti</ion-title>
   </ion-navbar>
 </ion-header>
@@ -24,14 +18,24 @@
 <ion-content padding>
 <div class="row">
 
+  <table style="width:100%">
+    <tr>
+      <td>
+        Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa
+      </td>
+      <td>
+      	<ion-item>
+  		  <ion-label class="ion_item_prop">Kassa:</ion-label>
+  		  <ion-select class="ion_item_prop" (ionChange)="onCashierChange($event)">
+   			<ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
+  		  </ion-select>
+	    </ion-item>
+      </td>
+    </tr>
+  </table>
+
   <!-- Vasen sarake: Ostoskori-->
   <div class="column_1">
-
-    <table style="width:100%">
-      <tr><td class="align-right">
-      <h6>Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa</h6>
-      </td></tr>
-    </table>
 
     <!-- Ostoskori päänäkymä-->
     <table class="cart" style="width:100%">
@@ -97,13 +101,6 @@
       Kassat
     </button-->
 
-	<ion-item>
-  		<ion-label class="ion_item_prop">Kassa:</ion-label>
-  		<ion-select class="ion_item_prop" (ionChange)="onCashierChange($event)">
-   			<ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
-  		</ion-select>
-	</ion-item>
-
   	</div>
   	
   	<!--
@@ -131,40 +128,8 @@
           </button>
         </td>
       </tr>
-      <tr>
-        <td>
-          <div id="card_payment_guide">
-            Näppäile summa {{totalSum}} kortinlukijaan. Kun maksu on hyväksytty, paina Vahvista.
-          </div>
-        </td>
-        <td>
-          <div id="cash_payment_guide">
-            <tr><td>Maksettu:</td></tr>
-            <tr><td>
-              <ion-input class="product_data_input" [(ngModel)]="givenAmount" (ionChange)="onGivenAmountUpdated()" name="productName"></ion-input>
-            </td></tr>
-            <tr><td>Takaisin:</td></tr>
-            <tr><td>{{cashBack}}</td></tr>
-          </div>
-        </td>
-      </tr>
     </table>
     <p>
-    <table class="confirm_buttons" style="width:100%" bordercolor="#bbb">
-      <tr bordercolor="#bbb">
-        <td bordercolor="#bbb">
-          <button ion-button class="confirm_button" id="confirm_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="confirmPayment()">
-            <ion-icon name="checkbox" item-start> Vahvista</ion-icon>
-          </button>
-        </td>
-        <td bordercolor="#bbb">
-          <button ion-button class="cancel_button" id="cancel_payment_button" [disabled]="checkIfConfirmButtonsEnabled()" (click)="cancelPurchase()">
-            <ion-icon name="close" item-start> Peruuta</ion-icon>
-          </button>
-        </td>
-      </tr>
-    </table>
-
 
     <!-- receipt -->
     <div id="receipt_view">

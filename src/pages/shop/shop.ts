@@ -48,7 +48,6 @@ export class ShopPage {
 
   cardPaymentEnabled: boolean = false;
   cashPaymentEnabled: boolean = false;
-  confirmButtonsEnabled: boolean = false;
   
   cashier = "";
 
@@ -62,8 +61,6 @@ export class ShopPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ShopPage');
-    document.getElementById("card_payment_guide").style.visibility = "hidden";
-    document.getElementById("cash_payment_guide").style.visibility = "hidden";
     document.getElementById("receipt_view").style.visibility = "hidden";
     this.productList.getProductInfo();
     this.cartContent = this.shoppingCart.getProducts();
@@ -179,13 +176,18 @@ export class ShopPage {
       this.update();
   }
 
+  cashPayment() {
+      console.log('cashPayment');
+      this.showPrompt();
+      console.log('Saved clicked, data: ' + this.moneyBackAsStr);
+      console.log('Saved clicked, data: ' + this.moneyBackAsFloat.toString());
+      this.setPaymentMethod("Käteinen");
+  }
+  
   cardPayment() {
     console.log('cardPayment');
-    //document.getElementById("card_payment_guide").style.visibility = "visible";
-    //document.getElementById("cash_payment_guide").style.visibility = "hidden";
     this.presentPromptPaymentCardInstructions();
     this.setPaymentMethod("Maksukortti");
-    this.confirmButtonsEnabled = true;
   }
 
   connectToPT() {
@@ -203,7 +205,6 @@ export class ShopPage {
     document.getElementById("receipt_view").style.visibility = "visible";
     this.cardPaymentEnabled = false;
     this.cashPaymentEnabled = false;
-    this.confirmButtonsEnabled = false;
   }
 
   cancelPurchase() {
@@ -211,18 +212,6 @@ export class ShopPage {
     document.getElementById("receipt_view").style.visibility = "hidden";
     this.shoppingCart.clearAll();
     this.update();
-  }
-
-  cashPayment() {
-    console.log('cashPayment');
-    //document.getElementById("card_payment_guide").style.visibility = "hidden";
-    //document.getElementById("cash_payment_guide").style.visibility = "visible";
-    this.showPrompt();
-    //this.presentAlertPrompt();
-    console.log('--Saved clicked, data: ' + this.moneyBackAsStr);
-    console.log('--Saved clicked, data: ' + this.moneyBackAsFloat.toString());
-    this.setPaymentMethod("Käteinen");
-    this.confirmButtonsEnabled = true;
   }
 
   checkIfCardPaymentEnabled() {
@@ -233,11 +222,6 @@ export class ShopPage {
   checkIfCashPaymentEnabled() {
     console.log('checkIfCashPaymentEnabled');
     return !this.cardPaymentEnabled;
-  }
-
-  checkIfConfirmButtonsEnabled() {
-    console.log('checkIfConfirmButtonsEnabled');
-    return !this.confirmButtonsEnabled;
   }
 
   update() {
@@ -251,10 +235,6 @@ export class ShopPage {
     } else {
       this.cardPaymentEnabled = false;
       this.cashPaymentEnabled = false;
-      this.confirmButtonsEnabled = false;
-      //document.getElementById("cashback_fields").style.visibility = "hidden";
-      document.getElementById("card_payment_guide").style.visibility = "hidden";
-      document.getElementById("cash_payment_guide").style.visibility = "hidden";
     }
   }
   
@@ -295,71 +275,6 @@ export class ShopPage {
       alert.present();
     }
   
-  async presentAlertPrompt() {
-      const alert = await this.alertController.create({
-        //header: 'Prompt!',
-        inputs: [
-          {
-            name: 'name1',
-            type: 'text',
-            placeholder: 'Placeholder 1'
-          },
-          {
-            name: 'name2',
-            type: 'text',
-            id: 'name2-id',
-            value: 'hello',
-            placeholder: 'Placeholder 2'
-          },
-          {
-            name: 'name3',
-            value: 'http://ionicframework.com',
-            type: 'url',
-            placeholder: 'Favorite site ever'
-          },
-          // input date with min & max
-          {
-            name: 'name4',
-            type: 'date',
-            min: '2017-03-01',
-            max: '2018-01-12'
-          },
-          // input date without min nor max
-          {
-            name: 'name5',
-            type: 'date'
-          },
-          {
-            name: 'name6',
-            type: 'number',
-            min: -5,
-            max: 10
-          },
-          {
-            name: 'name7',
-            type: 'number'
-          }
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: () => {
-              console.log('Confirm Cancel');
-            }
-          }, {
-            text: 'Ok',
-            handler: () => {
-              console.log('Confirm Ok');
-            }
-          }
-        ]
-      });
-
-      await alert.present();
-    }
-  
   showPrompt() {
       const prompt = this.alertController.create({
         title: 'Syötä summa: ',
@@ -381,14 +296,8 @@ export class ShopPage {
           {
             text: 'Save',
             handler: data => {
-              //this.moneyBackAsFloat = parseFloat(JSON.stringify(data.Money));
-              //this.moneyBackAsStr = JSON.stringify(data.Money);
-              //this.moneyBackAsFloat = parseFloat(this.moneyBackAsStr);
-              //console.log('Saved clicked, data: ' + this.moneyBackAsStr);
               this.moneyBackAsFloat = data.Money;
               console.log('Saved clicked, data: ' + this.moneyBackAsFloat.toString());
-              //this.showPrompt2(parseFloat(JSON.stringify(data.Money)) /* - this.totalSum*/);
-              //this.showPrompt2(6.0);
               this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
             }
           }
