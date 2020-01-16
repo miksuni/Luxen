@@ -43,8 +43,7 @@ export class ShopPage {
   givenAmount = 0;
   cashBack = 0;
   
-  moneyBackAsStr = "";
-  moneyBackAsFloat: number = 0.0;
+  moneyGiven: number = 0.0;
 
   cardPaymentEnabled: boolean = false;
   cashPaymentEnabled: boolean = false;
@@ -179,8 +178,7 @@ export class ShopPage {
   cashPayment() {
       console.log('cashPayment');
       this.showPrompt();
-      console.log('Saved clicked, data: ' + this.moneyBackAsStr);
-      console.log('Saved clicked, data: ' + this.moneyBackAsFloat.toString());
+      console.log('Saved clicked, data: ' + this.moneyGiven.toString());
       this.setPaymentMethod("Käteinen");
   }
   
@@ -277,56 +275,77 @@ export class ShopPage {
   
   showPrompt() {
       const prompt = this.alertController.create({
-        title: 'Syötä summa: ',
+        title: 'Käteinen',
         message: "Asiakkaan antama summa",
         inputs: [
           {
             name: 'Money',
             type: 'number',
-            placeholder: '20'
+            //placeholder: ''
           }
         ],
         buttons: [
           {
-            text: 'Cancel',
+            text: 'Kirjoitettu summa',
             handler: data => {
-              console.log('Cancel clicked');
-            }
+              this.moneyGiven = data.Money;
+              console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+              this.showPrompt2(this.moneyGiven - this.totalSum);
+            },
           },
           {
-            text: 'Save',
-            handler: data => {
-              this.moneyBackAsFloat = data.Money;
-              console.log('Saved clicked, data: ' + this.moneyBackAsFloat.toString());
-              this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
-            }
-          }
-        ]
+              text: '10 e',
+              handler: data => {
+                this.moneyGiven = data.Money;
+                console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+                this.showPrompt2(10 - this.totalSum);
+              },
+           },
+           {
+               text: '20 e',
+               handler: data => {
+                 this.moneyGiven = data.Money;
+                 console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+                 this.showPrompt2(20 - this.totalSum);
+               },
+            },
+            {
+                text: '50 e',
+                handler: data => {
+                  this.moneyGiven = data.Money;
+                  console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+                  this.showPrompt2(50 - this.totalSum);
+                },
+             },
+             {
+                 text: 'Tasaraha',
+                 handler: data => {
+                   this.moneyGiven = data.Money;
+                   console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+                   //this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
+                   this.confirmPayment();
+                 },
+              },
+              {
+                  text: 'Peruuta',
+                  handler: data => {
+                    console.log('Cancel clicked');
+                  }
+              },
+          ]
       });
       prompt.present();
     }
 
   showPrompt2(moneyback) {
       const prompt = this.alertController.create({
-        //title: 'Takaisin',
-        message: "Ole hyvä ja duunaa takas mani: " + moneyback.toString(),
-        inputs: [
-          {
-            name: 'Money',
-            placeholder: '20'
-          }
-        ],
+        title: 'Takaisin ' + moneyback.toString() + ' e',
         buttons: [
-          /*{
-            text: 'Cancel',
-            handler: data => {
-              console.log('Cancel clicked');
-            }
-          },*/
           {
             text: 'OK',
             handler: data => {
-              console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
+              //console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
+              this.confirmPayment();
             }
           }
         ]
