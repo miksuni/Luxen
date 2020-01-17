@@ -4,6 +4,7 @@ import { ProductList } from '../../providers/productlist/productlist';
 import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart';
 import { RestProvider } from '../../providers/rest/rest';
 import { AlertController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the ShopPage page.
@@ -19,14 +20,14 @@ import { AlertController } from 'ionic-angular';
 })
 export class ShopPage {
     
-  productObject: string ="";
-  productNumber: string = "";
-  productName: string = "";
+  //productObject: string ="";
+  //productNumber: string = "";
+  //productName: string = "";
   productNumberInitials: string = "";
   productNameInitials: string = "";
-  price: string = "";
-  amountInStock: string = "";
-  inProductionInfo: string = "";
+  //price: string = "";
+  //amountInStock: string = "";
+  //inProductionInfo: string = "";
     
   cartContent = [];
   receiptContent = [];
@@ -49,13 +50,16 @@ export class ShopPage {
   cashPaymentEnabled: boolean = false;
   
   cashier = "";
+  
+  loadingIndicator: any;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public productList: ProductList,
               private shoppingCart: ShoppingcartProvider,
               public restProvider: RestProvider,
-              private alertController: AlertController) {
+              private alertController: AlertController,
+              public loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
@@ -68,11 +72,11 @@ export class ShopPage {
   }
   
   clear() {
-      this.productNumber = "";
+      /*this.productNumber = "";
       this.productName = "";
       this.price = "";
       this.amountInStock = "";
-      this.inProductionInfo = "";
+      this.inProductionInfo = "";*/
   }
   
   getCashiers() {
@@ -140,16 +144,16 @@ export class ShopPage {
   showProduct(productInfo) {
       console.log('>> shop.showProduct: ' + JSON.stringify(productInfo));
       this.addToShoppingCart(productInfo);
-      this.productInfo = productInfo;
-      this.productNumber = productInfo.ISBN;
-      this.productName = productInfo.productName;
-      this.price = productInfo.price;
-      this.amountInStock = productInfo.amountInStock;
-      if (!productInfo.availableFromPublisher) {
+      //this.productInfo = productInfo;
+      //this.productNumber = productInfo.ISBN;
+      //this.productName = productInfo.productName;
+      //this.price = productInfo.price;
+      //this.amountInStock = productInfo.amountInStock;
+      /*if (!productInfo.availableFromPublisher) {
           this.inProductionInfo = "(Poistunut tuote)";
       } else {
           this.inProductionInfo = "";
-      }
+      }*/
   }
 
   onGivenAmountUpdated() {
@@ -184,8 +188,8 @@ export class ShopPage {
   
   cardPayment() {
     console.log('cardPayment');
-    this.presentPromptPaymentCardInstructions();
     this.setPaymentMethod("Maksukortti");
+    this.presentPromptPaymentCardInstructions();
   }
 
   connectToPT() {
@@ -195,6 +199,7 @@ export class ShopPage {
 
   confirmPayment() {
     console.log('confirmPayment');
+    this.presentLoading("Talletetaan...");
     this.receiptContent = Array.from(this.cartContent);
     this.receiptTotalSumAsString = this.totalSumAsString;
     this.shoppingCart.saveReceipt();
@@ -203,6 +208,15 @@ export class ShopPage {
     document.getElementById("receipt_view").style.visibility = "visible";
     this.cardPaymentEnabled = false;
     this.cashPaymentEnabled = false;
+    setTimeout( () => {
+        this.finishLoading();
+        this.presentLoading("Haetaan tuotteet...");
+        setTimeout( () => {
+            this.productList.getProductInfo();
+            this.finishLoading();
+        }, 2000);
+        this.finishLoading();
+    }, 2000);
   }
 
   cancelPurchase() {
@@ -265,7 +279,8 @@ export class ShopPage {
           {
             text: 'Ok',
             handler: () => {
-              console.log('Confirm Ok');
+              console.log('Confirm card payment Ok');
+              this.confirmPayment();
             }
           }
         ]
@@ -352,4 +367,16 @@ export class ShopPage {
       });
       prompt.present();
     }
+  
+  presentLoading(text) {
+      this.loadingIndicator = this.loadingCtrl.create({
+        content: text
+        //duration: 3000;
+      });
+      this.loadingIndicator.present();
+    }
+
+  finishLoading() {
+      this.loadingIndicator.dismiss();
+  }
 }

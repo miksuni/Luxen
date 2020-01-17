@@ -31,10 +31,20 @@ export class ProductUpdatePage {
   //productInfoStr: any;
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
 
-  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public productList: ProductList, public httpClient: HttpClient, public restProvider: RestProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController,
+              private barcodeScanner: BarcodeScanner,
+              public productList: ProductList,
+              public httpClient: HttpClient,
+              public restProvider: RestProvider,
+              public loadingCtrl: LoadingController) {
     console.log('>> productUpdate.constructor');
   }
 
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ProductUpdate');
+    this.productList.getProductInfo();
+  }
+  
   saveProducts() {
     console.log('>> home.saveProducts');
   }
