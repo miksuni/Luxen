@@ -66,6 +66,7 @@ export class ShopPage {
     console.log('ionViewDidLoad ShopPage');
     document.getElementById("receipt_view").style.visibility = "hidden";
     this.productList.getProductInfo();
+    this.shoppingCart.clearAll();
     this.cartContent = this.shoppingCart.getProducts();
     this.getCashiers();
     this.update();
@@ -144,16 +145,6 @@ export class ShopPage {
   showProduct(productInfo) {
       console.log('>> shop.showProduct: ' + JSON.stringify(productInfo));
       this.addToShoppingCart(productInfo);
-      //this.productInfo = productInfo;
-      //this.productNumber = productInfo.ISBN;
-      //this.productName = productInfo.productName;
-      //this.price = productInfo.price;
-      //this.amountInStock = productInfo.amountInStock;
-      /*if (!productInfo.availableFromPublisher) {
-          this.inProductionInfo = "(Poistunut tuote)";
-      } else {
-          this.inProductionInfo = "";
-      }*/
   }
 
   onGivenAmountUpdated() {
@@ -167,18 +158,26 @@ export class ShopPage {
     this.update();
   }
 
-  increase(productName, i) {
-      console.log('increase: ' + productName + ", index: " + i);
-      this.shoppingCart.increase(i);
-      this.update();
+  increase(item, i) {
+      console.log('increaseItem: ' + item.productName + ", index: " + i);
+      if (item.quantity >= item.amountInStock) {
+          this.presentPromptNotEnoughInStock(i, item.amountInStock);
+      } else {
+          this.shoppingCart.increase(i);
+          this.update();
+      }
   }
-
-  decrease(productName, i) {
-      console.log('decrease: ' + productName + ", index: " + i);
-      this.shoppingCart.decrease(i);
-      this.update();
+  
+  decrease(item, i) {
+      console.log('decreaseItem: ' + item.productName + ", index: " + i);
+      if (item.quantity < 2) {
+          this.presentPromptRemoveProduct(i);
+      } else {
+          this.shoppingCart.decrease(i);
+          this.update();
+      }
   }
-
+  
   cashPayment() {
       console.log('cashPayment');
       this.showPrompt();
@@ -227,12 +226,12 @@ export class ShopPage {
   }
 
   checkIfCardPaymentEnabled() {
-    console.log('checkIfCardPaymentEnabled');
+    //console.log('checkIfCardPaymentEnabled');
     return !this.cardPaymentEnabled;
   }
 
   checkIfCashPaymentEnabled() {
-    console.log('checkIfCashPaymentEnabled');
+    //console.log('checkIfCashPaymentEnabled');
     return !this.cardPaymentEnabled;
   }
 
@@ -267,6 +266,51 @@ export class ShopPage {
               console.log('Confirm Ok');
             }
           }
+        ]
+      });
+      alert.present();
+    }
+  
+  presentPromptNotEnoughInStock(i, amountInStock) {
+      let alert = this.alertController.create({
+          title: 'Tarkista saatavuus',
+          message: "Varastosaldon mukaan tuotetta on vain " + amountInStock + " kpl",
+          buttons: [
+            {
+              text: 'Vahvista osto',
+              handler: () => {
+                console.log('Confirm Ok');
+                this.shoppingCart.increase(i);
+              }
+            },
+            {
+                text: 'Peruuta',
+                    handler: () => {
+                        console.log('Cancel');
+                    }
+             }
+          ]
+      });
+      alert.present();
+  }
+  
+  presentPromptRemoveProduct(i) {
+      let alert = this.alertController.create({
+        title: 'Poistetaanko tuote ostoskorista?',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: () => {
+              console.log('Confirm Ok');
+              this.shoppingCart.decrease(i);
+            }
+          },
+          {
+              text: 'Peruuta',
+              handler: () => {
+                console.log('Cancel');
+              }
+            }
         ]
       });
       alert.present();

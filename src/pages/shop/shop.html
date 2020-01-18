@@ -49,18 +49,18 @@
         <th class="th_narrow_centered">Yht.</th>
         <th class="th_narrow_centered">Poista</th>
       </tr>
-      <tr  *ngFor="let item of cartContent let i = index">
+      <tr *ngFor="let item of cartContent let i = index">
         <td>{{item.productName}}</td>
         <td class="counter_cell">{{item.amountInStock}}</td>
         <td>{{item.priceAsString}}</td>
         <td class="counter_cell">
-          <button ion-button class="product_line_button" (click)="increase(item.productName, i)">
+          <button ion-button class="product_line_button" (click)="increase(item, i)">
             <ion-icon name="add" item-start></ion-icon>
           </button>
         </td>
         <td class="counter_cell">{{item.quantity}}</td>
         <td class="counter_cell">
-          <button ion-button class="product_line_button" (click)="decrease(item.productName, i)">
+          <button ion-button class="product_line_button" (click)="decrease(item, i)">
             <ion-icon name="remove" item-start></ion-icon>
           </button>
         </td>
@@ -77,17 +77,17 @@
     <table class="table_2">
       <tr>
         <td>
-          <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onProductInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+          <ion-input [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onProductInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
         </td>
         <td>
-          <ion-input type="number" class="product_data_input" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onProductInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+          <ion-input type="number" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onProductInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
         </td>
       </tr>
-      <tr  *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
-        <td>
+      <tr *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
+        <td class="product_data_input">
           {{element.productName}}
         </td>
-        <td>
+        <td class="product_data_input">
           {{element.ISBN}}
         </td>
       </tr>
@@ -113,7 +113,7 @@
     </button><p>
     -->
     
-    <table style="width:100%">
+    <table class="payment_button_panel" style="width:100%">
       <tr>
         <td>
           <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">

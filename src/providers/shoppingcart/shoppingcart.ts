@@ -23,7 +23,6 @@ export class ShoppingcartProvider {
                    amountInStock:'',
                    productCode:'',
                    availableFromPublisher:'',
-                   amount:'',
                    quantity: 0,
                    total: 0 }];*/
   shoppingCart = [];

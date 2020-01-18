@@ -10,6 +10,8 @@ page-shop {
   		float: left;
   		width: 25%;
   		padding: 10px;
+  		margin-top: 20px;
+		margin-bottom: 10px;
 	}
 
 	.icon_padding {
@@ -48,6 +50,9 @@ page-shop {
 		margin-bottom: 10px;
 	}
 
+	.payment_button_panel {
+	}
+	
 	.ion-list-viewport {
     	border: 2px solid #dddddd;
     	text-align: left;
@@ -66,6 +71,10 @@ page-shop {
 
 	.product_line {
 		height:20px
+	}
+	
+	.product_data_input {
+		padding: 5px 5px 5px 5px;
 	}
 
 	td, th {
