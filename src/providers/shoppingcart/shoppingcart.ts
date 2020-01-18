@@ -79,6 +79,10 @@ export class ShoppingcartProvider {
     this.productsInCart = 0;
     this.totalSum = 0;
   }
+  
+  hasContent() {
+      return this.shoppingCart.length > 0;
+  }
 
   increase(i) {
     console.log('>> ShoppingcartProvider.increase');

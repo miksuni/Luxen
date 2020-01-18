@@ -2,8 +2,9 @@ page-shop {
 
     .shopping_cart_summary {
         margin-left: 10px;
+        border: 1px solid #dddddd;
     }
-
+    
 	.column_1 {
   		float: left;
   		width: 75%;
@@ -19,7 +20,7 @@ page-shop {
 	}
 	
 	.column_2 {
-  		float: left;
+  		float: right;
   		width: 25%;
   		padding: 10px;
   		margin-top: 20px;
@@ -56,6 +57,7 @@ page-shop {
 	}
 
 	.payment_button_panel {
+		border: collapse;
 	}
 	
 	.ion-list-viewport {

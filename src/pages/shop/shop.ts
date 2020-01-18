@@ -91,14 +91,29 @@ export class ShopPage {
       });
   }
   
-  onCashierChange($event){
-      console.log('>> onCashierChange: ' + $event);
-      this.cashier = $event;
-      this.shoppingCart.setCashier(this.cashier);
+  // Works only wiht ion-select
+  //onCashierChange($event){
+  //    console.log('>> onCashierChange: ' + $event);
+  //    this.cashier = $event;
+  //    this.shoppingCart.setCashier(this.cashier);
+  //}
+  
+  onLogout() {
+      console.log('>> shop.onLogout');
+      if (this.shoppingCart.hasContent()) {
+          this.presentPromptItemsInShoppingCart();
+      } else {
+          var e = document.getElementById("current_cashier") as HTMLSelectElement;
+          e.selectedIndex = 0;
+      }
   }
   
   onProductInputClicked() {
       console.log('>> shop.onProductInputClicked:');
+      var e = document.getElementById("current_cashier") as HTMLSelectElement;
+      //var value = e.options[e.selectedIndex].value;
+      this.cashier = e.options[e.selectedIndex].text;
+      console.log("cashier: " + e.options[e.selectedIndex].text);
       if (this.cashier.length == 0) {
           this.presentPromptSelectCashier();
           return;
@@ -138,8 +153,17 @@ export class ShopPage {
     }
 
   addToShoppingCart(productInfo) {
-      this.shoppingCart.addProduct(productInfo);
-      this.update();
+      console.log('>> shop.addToShoppingCart');
+      var e = document.getElementById("current_cashier") as HTMLSelectElement;
+      //var value = e.options[e.selectedIndex].value;
+      this.cashier = e.options[e.selectedIndex].text;
+      if (this.cashier.length == 0) {
+          this.presentPromptSelectCashier();
+          return;
+      }  else {
+          this.shoppingCart.addProduct(productInfo);
+          this.update();
+      }
   }
   
   showProduct(productInfo) {
@@ -411,6 +435,32 @@ export class ShopPage {
       });
       prompt.present();
     }
+  
+  presentPromptItemsInShoppingCart() {
+      let alert = this.alertController.create({
+          title: 'Haluatko kirjautua ulos?',
+          message: "Ostoskorissa on tuotteita! Ne poistetaan ostoskorista jos kirjaudut ulos." +
+          		"(Ostoskori ei tyhjene jos vain haluat vaihtaa käyttäjää.)",
+          buttons: [
+            {
+              text: 'Kirjaudu ulos',
+              handler: () => {
+                console.log('Confirm Ok');
+                var e = document.getElementById("current_cashier") as HTMLSelectElement;
+                e.selectedIndex = 0;
+                this.shoppingCart.clearAll();
+              }
+            },
+            {
+                text: 'Peruuta',
+                    handler: () => {
+                        console.log('Cancel');
+                    }
+             }
+          ]
+      });
+      alert.present();
+  }
   
   presentLoading(text) {
       this.loadingIndicator = this.loadingCtrl.create({
