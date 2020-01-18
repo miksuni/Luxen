@@ -20,15 +20,9 @@ import { LoadingController } from 'ionic-angular';
 })
 export class ShopPage {
     
-  //productObject: string ="";
-  //productNumber: string = "";
-  //productName: string = "";
   productNumberInitials: string = "";
   productNameInitials: string = "";
-  //price: string = "";
-  //amountInStock: string = "";
-  //inProductionInfo: string = "";
-    
+
   cartContent = [];
   receiptContent = [];
   searchResult: any;
@@ -108,7 +102,6 @@ export class ShopPage {
       console.log("cashier: " + e.options[e.selectedIndex].text);
       if (this.cashier.length == 0) {
           this.presentPromptSelectCashier();
-          return;
       }  
   }
   
@@ -120,10 +113,6 @@ export class ShopPage {
           this.searchResult = found;
           console.log('>> found: ' + found.length);
           console.log('>> json: ' + JSON.stringify(found));
-          /*if (this.searchResult.length == 1) {
-              console.log('>> found item: ' + found[0].productName);
-              this.showProduct(found[0]);
-          }*/
       }
   }
 
@@ -138,27 +127,30 @@ export class ShopPage {
   
   onProductSelected(productName, index) {
       console.log('>> shop.onProductSelected: ' + productName + ' index: ' + index);
-      this.showProduct(this.searchResult[index]);
+      this.checkConditions(this.searchResult[index]);
       this.searchResult.splice(0,this.searchResult.length)
     }
 
   addToShoppingCart(productInfo) {
       console.log('>> shop.addToShoppingCart');
-      var e = document.getElementById("current_cashier") as HTMLSelectElement;
-      //var value = e.options[e.selectedIndex].value;
-      this.cashier = e.options[e.selectedIndex].text;
-      if (this.cashier.length == 0) {
-          this.presentPromptSelectCashier();
-          return;
-      }  else {
+      if (productInfo.amountInStock < 1) {
+          this.presentPromptNoItemsInStock(productInfo);
+      } else {
           this.shoppingCart.addProduct(productInfo);
           this.update();
       }
   }
   
-  showProduct(productInfo) {
-      console.log('>> shop.showProduct: ' + JSON.stringify(productInfo));
-      this.addToShoppingCart(productInfo);
+  checkConditions(productInfo) {
+      console.log('>> shop.checkConditions: ' + JSON.stringify(productInfo));
+      var e = document.getElementById("current_cashier") as HTMLSelectElement;
+      //var value = e.options[e.selectedIndex].value;
+      this.cashier = e.options[e.selectedIndex].text;
+      if (this.cashier.length == 0) {
+          this.presentPromptSelectCashier();
+      }  else {
+          this.addToShoppingCart(productInfo);
+      }
   }
 
   onGivenAmountUpdated() {
@@ -439,6 +431,30 @@ export class ShopPage {
                 var e = document.getElementById("current_cashier") as HTMLSelectElement;
                 e.selectedIndex = 0;
                 this.shoppingCart.clearAll();
+              }
+            },
+            {
+                text: 'Peruuta',
+                    handler: () => {
+                        console.log('Cancel');
+                    }
+             }
+          ]
+      });
+      alert.present();
+  }
+  
+  presentPromptNoItemsInStock(productInfo) {
+      let alert = this.alertController.create({
+          title: 'Tarkista tuotteen saatavuus',
+          message: "Varastokirjanpidon mukaan tuote on loppu",
+          buttons: [
+            {
+              text: 'Laita silti ostoskoriin',
+              handler: () => {
+                console.log('Confirm Ok');
+                this.shoppingCart.addProduct(productInfo);
+                this.update();
               }
             },
             {
