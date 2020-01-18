@@ -1,11 +1,23 @@
 page-shop {
 
+    .shopping_cart_summary {
+        margin-left: 10px;
+    }
+
 	.column_1 {
   		float: left;
   		width: 75%;
   		padding: 10px;
 	}
 
+	.cart {
+	    font-size: 70%;
+        border: 2px solid #aaaaaa;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		background-color: #ccaaaa;
+	}
+	
 	.column_2 {
   		float: left;
   		width: 25%;
@@ -41,13 +53,6 @@ page-shop {
 	.align-right {
 		text-align: right;
 		padding: 10px 10px 0px 10px;
-	}
-
-	.cart {
-	    font-size: 70%;
-	    border: 0px solid #aaaaaa;
-		margin-top: 10px;
-		margin-bottom: 10px;
 	}
 
 	.payment_button_panel {
