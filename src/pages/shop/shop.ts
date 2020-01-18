@@ -72,14 +72,6 @@ export class ShopPage {
     this.update();
   }
   
-  clear() {
-      /*this.productNumber = "";
-      this.productName = "";
-      this.price = "";
-      this.amountInStock = "";
-      this.inProductionInfo = "";*/
-  }
-  
   getCashiers() {
       console.log('>> home.getCashiers');
       this.restProvider.cashiers("").then((result:any) => {
@@ -128,11 +120,10 @@ export class ShopPage {
           this.searchResult = found;
           console.log('>> found: ' + found.length);
           console.log('>> json: ' + JSON.stringify(found));
-          this.clear();
-          if (this.searchResult.length == 1) {
+          /*if (this.searchResult.length == 1) {
               console.log('>> found item: ' + found[0].productName);
               this.showProduct(found[0]);
-          }
+          }*/
       }
   }
 
@@ -143,7 +134,6 @@ export class ShopPage {
       this.searchResult = found;
       console.log('>> found: ' + found.length);
       console.log('>> json: ' + JSON.stringify(found));
-      this.clear();
   }
   
   onProductSelected(productName, index) {
