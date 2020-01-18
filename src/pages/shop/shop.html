@@ -116,6 +116,33 @@
         </td>
       </tr>
     </table>
+    
+          <!-- receipt -->
+    <div id="receipt_view">
+      <p>Kuitti:<p>
+      <table class="receipt" style="width:100%">
+        <tr>
+          <th>Tuote</th>
+          <th>Hinta</th>
+          <th>Määrä</th>
+          <th>Yht.</th>
+        </tr>
+        <tr  *ngFor="let item of receiptContent let i = index">
+          <td>{{item.productName}}</td>
+          <td>{{item.priceAsString}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.totalAsString}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <th>{{receiptTotalSumAsString}}</th>
+        </tr>
+      </table>
+    </div>
+    
+    
   </div>
 
   <!-- Oikea sarake: Tuotteen maksu-->
@@ -146,30 +173,6 @@
     <p>
   </div>
   
-      <!-- receipt -->
-    <div id="receipt_view">
-      <p>Kuitti:<p>
-      <table class="receipt" style="width:100%">
-        <tr>
-          <th>Tuote</th>
-          <th>Hinta</th>
-          <th>Määrä</th>
-          <th>Yht.</th>
-        </tr>
-        <tr  *ngFor="let item of receiptContent let i = index">
-          <td>{{item.productName}}</td>
-          <td>{{item.priceAsString}}</td>
-          <td>{{item.quantity}}</td>
-          <td>{{item.totalAsString}}</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <th>{{receiptTotalSumAsString}}</th>
-        </tr>
-      </table>
-    </div>
     
 </div>
 </ion-content>
