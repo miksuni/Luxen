@@ -186,6 +186,7 @@ export class ShopPage {
   
   cashPayment() {
       console.log('cashPayment');
+      this.shoppingCart.setCashier(this.cashier);
       this.showPrompt();
       console.log('Saved clicked, data: ' + this.moneyGiven.toString());
       this.setPaymentMethod("Käteinen");
@@ -193,6 +194,7 @@ export class ShopPage {
   
   cardPayment() {
     console.log('cardPayment');
+    this.shoppingCart.setCashier(this.cashier);
     this.setPaymentMethod("Maksukortti");
     this.presentPromptPaymentCardInstructions();
   }
@@ -200,6 +202,11 @@ export class ShopPage {
   connectToPT() {
     console.log('connectToPT');
     this.shoppingCart.connectToPT();
+  }
+  
+  sendEmail() {
+      console.log('sendEmail');
+      this.restProvider.sendRequest('send_email',[]);
   }
 
   confirmPayment() {

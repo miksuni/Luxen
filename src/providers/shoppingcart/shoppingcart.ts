@@ -44,6 +44,7 @@ export class ShoppingcartProvider {
   }
   
   setPaymentMethods(paymentMethods) {
+      console.log('setPaymentMethod');
       this.paymentMethod1 = paymentMethods[0];
       this.paymentMethod2 = paymentMethods[1];
       this.receipt.paymentMethod1 = this.paymentMethod1;
@@ -70,6 +71,7 @@ export class ShoppingcartProvider {
           this.totalSum -= (this.shoppingCart[i].price * this.shoppingCart[i].quantity);
           this.shoppingCart.splice(i, 1);
       }
+      this.receipt.totalSum = this.totalSum;
       return this.shoppingCart;
   }
 
@@ -91,12 +93,16 @@ export class ShoppingcartProvider {
     this.shoppingCart[i].totalAsString = this.shoppingCart[i].total.toFixed(2);
     this.productsInCart++;
     this.totalSum += this.shoppingCart[i].price;
+    this.receipt.totalSum = this.totalSum;
+    console.log('>> total 1: ' + this.shoppingCart[i].total);
+    console.log('>> total 2: ' + this.totalSum);
   }
 
   decrease(i) {
       console.log('ShoppingcartProvider.decrease');
       this.productsInCart--;
       this.totalSum -= this.shoppingCart[i].price;
+      this.receipt.totalSum = this.totalSum;
       if (this.shoppingCart[i].quantity > 1) {
         this.shoppingCart[i].quantity--;
         this.shoppingCart[i].total -= this.shoppingCart[i].price;
