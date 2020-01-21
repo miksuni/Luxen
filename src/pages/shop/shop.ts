@@ -29,6 +29,7 @@ export class ShopPage {
   
   sites = [{id:'Lahti'}];
   cashiers: any;
+  orderList = { products:[] };
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   productsInCart = 0;
   totalSum: number = 0;
@@ -91,6 +92,11 @@ export class ShopPage {
       } else {
           var e = document.getElementById("current_cashier") as HTMLSelectElement;
           e.selectedIndex = 0;
+      }
+      this.orderList.products = this.productList.getProductsBelowCount(2);
+      if (this.orderList.products.length > 0) {
+          console.log('>> number of items to be ordered: ' + this.orderList.products.length);
+          this.restProvider.sendRequest('send_email', this.orderList);
       }
   }
   

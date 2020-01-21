@@ -72,7 +72,6 @@ export class ProductList {
 		if (letters.length == 0) {
 			return this.nullProduct;
 		}
-		console.log('>> ProductList.getProductByName');
 		var results = [];
 		//console.log('>> LEN ' + this.productInfo.length);
 		for (var i = 0; i < this.productInfo.length; i++) {
@@ -94,6 +93,17 @@ export class ProductList {
 		//return this.nullProduct;
 	}
 
+	getProductsBelowCount(count) {
+	    console.log('>> productList.getProductsBelowCount');
+	    var results = [];
+	    for (var i = 0; i < this.productInfo.length; i++) {
+	        if (this.productInfo[i].amountInStock < count && this.productInfo[i].availableFromPublisher) {
+	            results.push(this.productInfo[i]);
+	        }
+	    }
+	    return results;
+	}
+	
 	getProductCount() {
 		//return this.productList.length;
 	}
