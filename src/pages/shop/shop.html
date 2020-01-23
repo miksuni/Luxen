@@ -18,20 +18,125 @@
 <ion-content padding>
 <div class="row">
 
+  <table class="table_main_frame">
+  	<tr>
+  	  <td class="table_main_header">
+        Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa
+      </td>
+      <td style="text-align: center" td width = "150px">
+	    Kassa:
+	    <select id="current_cashier">
+	      <option></option>
+	      <option *ngFor="let cashier of cashiers">{{cashier.firstName}}</option>
+	    </select>
+      </td>
+      <td style="text-align: center" td width = "50px">
+        <button ion-button class="product_line_button" (click)="onLogout()">
+            Kirjaudu ulos
+         </button>
+  	  </td>
+  	</tr>
+  	<tr>
+  	  <td class="table_left_column">
+	    <table class="table_shopping_cart" style="width:100%">
+	      <tr>
+	        <th>Nimi</th>
+	        <th class="th_narrow_centered">Saldo</th>
+	        <th class="th_narrow_centered">Hinta</th>
+	        <th class="th_narrow_centered"></th>
+	        <th class="th_narrow_centered">Määrä</th>
+	        <th class="th_narrow_centered"></th>
+	        <th class="th_narrow_centered">Yht.</th>
+	        <th class="th_narrow_centered">Poista</th>
+	      </tr>
+	      <tr *ngFor="let item of cartContent let i = index">
+	        <td>{{item.productName}}</td>
+	        <td class="counter_cell">{{item.amountInStock}}</td>
+	        <td>{{item.priceAsString}}</td>
+	        <td class="counter_cell">
+	          <button ion-button class="product_line_button" (click)="increase(item, i)">
+	            <ion-icon name="add" item-start></ion-icon>
+	          </button>
+	        </td>
+	        <td class="counter_cell">{{item.quantity}}</td>
+	        <td class="counter_cell">
+	          <button ion-button class="product_line_button" (click)="decrease(item, i)">
+	            <ion-icon name="remove" item-start></ion-icon>
+	          </button>
+	        </td>
+	        <td>{{item.totalAsString}}</td>
+	        <td class="counter_cell">
+	          <button ion-button class="product_line_button" (click)="removeProduct(item.productName, i)">
+	            <ion-icon name="trash" item-start></ion-icon>
+	          </button>
+	        </td>
+	      </tr>
+	    </table>
+  	    <tr>
+  	      <td class="table_product_input_fields">
+  	         <table class="table_2">
+		      <tr>
+		        <td>
+		          <ion-input [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+		        </td>
+		        <td>
+		          <ion-input type="number" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+		        </td>
+		        <td width = "80px">
+		          <ion-input placeholder="Hinta" [disabled] = "true"></ion-input>
+		        </td>
+		        <td width = "80px">
+		          <ion-input placeholder="Saldo" [disabled] = "true"></ion-input>
+		        </td>
+		      </tr>
+		      <tr *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
+		        <td class="product_data_input">
+		          {{element.productName}}
+		        </td>
+		        <td class="product_data_input">
+		          {{element.ISBN}}
+		        </td>
+		        <td class="product_data_input">
+		          {{element.price}}
+		        </td>
+		        <td class="product_data_input">
+		          {{element.amountInStock}}
+		        </td>
+		      </tr>
+		    </table>
+  	      </td>
+  	    </tr>
+  	  </td>
+  	  <td class="table_right_column" colspan="2">
+
+	      <table class="payment_button_panel" style="width:100%">
+	        <tr>
+	          <td style="text-align: center">
+	            <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
+	              <ion-icon name="card" item-start> Korttimaksu</ion-icon>
+   	            </button>
+	          </td>
+	        </tr>
+	        <tr>
+	          <td style="text-align: center">
+	            <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
+	              <ion-icon name="cash" item-start> Käteinen</ion-icon>
+	            </button>
+	          </td>
+	        </tr>
+	      </table>
+
+  	  </td>
+  	</tr>
+  </table>
+
+  <!--
   <table class= "shopping_cart_summary" style="width:100%">
     <tr>
       <td>
         Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa
       </td>
       <td style="text-align: center" td width = "150px">
-        <!--
-      	<ion-item>
-  		  <ion-label class="ion_item_prop">Kassa:</ion-label>
-  		  <ion-select class="ion_item_prop" (ionChange)="onCashierChange($event)">
-   			<ion-option *ngFor="let cashier of cashiers">{{cashier.firstName}}</ion-option>
-  		  </ion-select>
-	    </ion-item>
-	    -->
 	    Kassa:
 	    <select id="current_cashier">
 	      <option></option>
@@ -45,11 +150,12 @@
       </td>
     </tr>
   </table>
+  -->
 
   <!-- Vasen sarake: Ostoskori-->
   <div class="column_1">
 
-    <!-- Ostoskori päänäkymä-->
+    <!-- Ostoskori päänäkymä
     <table class="cart" style="width:100%">
       <tr>
         <th>Nimi</th>
@@ -84,15 +190,16 @@
         </td>
       </tr>
     </table>
-
+    -->
     <!-- Tuotteen syöttökentät-->
+    <!--
     <table class="table_2">
       <tr>
         <td>
-          <ion-input [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onProductInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+          <ion-input [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
         </td>
         <td>
-          <ion-input type="number" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onProductInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+          <ion-input type="number" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
         </td>
         <td width = "80px">
           <ion-input placeholder="Hinta" [disabled] = "true"></ion-input>
@@ -116,7 +223,7 @@
         </td>
       </tr>
     </table>
-    
+    -->
           <!-- receipt -->
     <div id="receipt_view">
       <p>Viimeisin kuitti:<p>
@@ -143,16 +250,30 @@
     </div>
     
     
-  </div>
-
-  <!-- Oikea sarake: Tuotteen maksu-->
-  <div class="column_2">
-
+	<div class="chat_box">
+	<b>Mikko:</b>
+    As you can see, once there's enough text in this box, the box will grow scroll bars... that's why we call it a scroll box!
+    <p><p><b>Joku:</b>
+    You could also place an image into the scroll box.
+	</div>
+	<div class="chat_input_box">
+	<ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
+	</div>
+    <button ion-button class="product_line_button" (click)="saveChat()">
+       <ion-icon name="send" item-start></ion-icon>
+    </button>
+    
     <!--
     <button class="ion_item_prop" ion-button id="connect_pt_button" (click)="connectToPT()">
       Yhdistä maksupäätteeseen
     </button><p>
     -->
+    
+  </div>
+
+  <!-- Oikea sarake: Tuotteen maksu
+  <div class="column_2">
+
     <button class="ion_item_prop" ion-button id="send_email_button" (click)="sendEmail()">
       Lähetä testimaili
     </button><p>
@@ -175,7 +296,7 @@
     </table>
     <p>
   </div>
-  
+  -->
     
 </div>
 </ion-content>

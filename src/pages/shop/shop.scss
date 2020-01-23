@@ -1,5 +1,42 @@
 page-shop {
 
+	.table_main_frame {
+	    width: 100%;
+		margin-bottom: 10px;
+	}
+
+	.table_main_header {
+		border: 1px solid #dddddd;
+	}
+
+	.table_left_column {
+	}
+
+	.table_shopping_cart {
+	    font-size: 70%;
+        border: 2px solid #aaaaaa;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		background-color: #ccaaaa;
+	}
+
+	.table_product_input_fields{
+	    border: 1px solid #dddddd;
+	}
+
+	.table_right_column {
+		vertical-align: top;
+	}
+
+	.table_payment_buttons {
+	}
+
+	.table_receipt_view {
+	}
+
+	.chat_view {
+	}
+
     .shopping_cart_summary {
         margin-left: 10px;
         border: 1px solid #dddddd;
@@ -22,6 +59,23 @@ page-shop {
 	.receipt {
 	    font-size: 70%;
 	}
+	
+	.chat_box {
+		height:120px;
+		width:360px;
+		font-size: 70%;
+		border:1px solid #ccc;
+		overflow:auto;
+	}
+	
+	.chat_input_box {
+		height:30px;
+		width:300px;
+		font-size: 70%;
+		border:1px solid #ccc;
+		overflow:auto;
+	}
+	
 	.column_2 {
   		float: right;
   		width: 25%;
@@ -60,6 +114,8 @@ page-shop {
 	}
 
 	.payment_button_panel {
+	    align:top;
+		width:100%;
 		border: collapse;
 	}
 	
@@ -67,10 +123,6 @@ page-shop {
     	border: 2px solid #dddddd;
     	text-align: left;
     	padding: 0px 0px 0px 0px;
-	}
-
-	.product_name_cell {
-		width:200px;
 	}
 
 	.product_line_button {
@@ -94,7 +146,8 @@ page-shop {
 	}
 
 	.th_narrow_centered {
-		text-align: left;
+		padding: 0px 5px 0px 5px;
+		text-align: center;
 		width:25px;
 	}
 

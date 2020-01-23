@@ -30,6 +30,8 @@ export class ShopPage {
   sites = [{id:'Lahti'}];
   cashiers: any;
   orderList = { products:[] };
+  chat = {from:'', message:''};
+  chatMessage: string = "";
   productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   productsInCart = 0;
   totalSum: number = 0;
@@ -93,15 +95,15 @@ export class ShopPage {
           var e = document.getElementById("current_cashier") as HTMLSelectElement;
           e.selectedIndex = 0;
       }
-      this.orderList.products = this.productList.getProductsBelowCount(2);
+      /*this.orderList.products = this.productList.getProductsBelowCount(2);
       if (this.orderList.products.length > 0) {
           console.log('>> number of items to be ordered: ' + this.orderList.products.length);
           this.restProvider.sendRequest('send_email', this.orderList);
-      }
+      }*/
   }
   
-  onProductInputClicked() {
-      console.log('>> shop.onProductInputClicked:');
+  onInputClicked() {
+      console.log('>> shop.onInputClicked:');
       var e = document.getElementById("current_cashier") as HTMLSelectElement;
       //var value = e.options[e.selectedIndex].value;
       this.cashier = e.options[e.selectedIndex].text;
@@ -273,6 +275,16 @@ export class ShopPage {
       paymentMethods[0] = paymentMethod;
       paymentMethods[1] = "";
       this.shoppingCart.setPaymentMethods(paymentMethods);
+  }
+  
+  saveChat() {
+      console.log('saveChat');
+      if (this.chatMessage.length > 0) {
+          this.chat.message = this.chatMessage;
+          this.chat.from = this.cashier;
+          console.log('>> chat:' + JSON.stringify(this.chat));
+          this.restProvider.sendRequest('addchat', this.chat);
+      }
   }
   
   presentPromptSelectCashier() {
