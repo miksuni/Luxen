@@ -10,6 +10,7 @@ page-shop {
 	}
 
 	.table_left_column {
+		vertical-align: top;
 	}
 
 	.table_shopping_cart {
@@ -62,7 +63,7 @@ page-shop {
 	
 	.chat_box {
 		height:120px;
-		width:360px;
+		width:200px;
 		font-size: 70%;
 		border:1px solid #ccc;
 		overflow:auto;
@@ -70,7 +71,8 @@ page-shop {
 	
 	.chat_input_box {
 		height:30px;
-		width:300px;
+		//width:160px;
+		width: 100%;
 		font-size: 70%;
 		border:1px solid #ccc;
 		overflow:auto;

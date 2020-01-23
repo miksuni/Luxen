@@ -108,24 +108,61 @@
   	    </tr>
   	  </td>
   	  <td class="table_right_column" colspan="2">
-
-	      <table class="payment_button_panel" style="width:100%">
-	        <tr>
-	          <td style="text-align: center">
-	            <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
-	              <ion-icon name="card" item-start> Korttimaksu</ion-icon>
-   	            </button>
-	          </td>
-	        </tr>
-	        <tr>
-	          <td style="text-align: center">
-	            <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
-	              <ion-icon name="cash" item-start> Käteinen</ion-icon>
-	            </button>
-	          </td>
-	        </tr>
-	      </table>
-
+	    <table class="payment_button_panel" style="width:100%">
+	      <tr>
+	        <td style="text-align: center">
+	          <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
+	            <ion-icon name="card" item-start> Korttimaksu</ion-icon>
+   	          </button>
+	        </td>
+	      </tr>
+	      <tr>
+	        <td style="text-align: center">
+	          <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
+	            <ion-icon name="cash" item-start> Käteinen</ion-icon>
+	          </button>
+	        </td>
+	      </tr>
+	      <tr>
+	        <div id="receipt_view">
+      		  <p>Viimeisin kuitti:<p>
+      		  <table class="receipt" style="width:100%">
+		        <tr>
+		          <th>Tuote</th>
+		          <th>Hinta</th>
+		          <th>Määrä</th>
+                  <th>Yht.</th>
+		        </tr>
+		        <tr  *ngFor="let item of receiptContent let i = index">
+		          <td>{{item.productName}}</td>
+		          <td>{{item.priceAsString}}</td>
+		          <td>{{item.quantity}}</td>
+		          <td>{{item.totalAsString}}</td>
+		        </tr>
+                <tr>
+		          <td></td>
+		          <td></td>
+		          <td></td>
+		          <th>{{receiptTotalSumAsString}}</th>
+		        </tr>
+		      </table>
+		    </div>
+	      </tr>
+	      <tr>
+	      	<div class="chat_box">
+			  <b>Mikko:</b>
+    		  As you can see, once there's enough text in this box, the box will grow scroll bars... that's why we call it a scroll box!
+    		  <p><p><b>Joku:</b>
+    		  You could also place an image into the scroll box.
+			</div>
+			<div class="chat_input_box">
+			  <ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
+			</div>
+    		<button ion-button class="product_line_button" (click)="saveChat()">
+       			<ion-icon name="send" item-start></ion-icon>
+    		</button>
+	      </tr>
+	    </table>
   	  </td>
   	</tr>
   </table>
@@ -153,7 +190,7 @@
   -->
 
   <!-- Vasen sarake: Ostoskori-->
-  <div class="column_1">
+  <!--  div class="column_1"-->
 
     <!-- Ostoskori päänäkymä
     <table class="cart" style="width:100%">
@@ -225,6 +262,7 @@
     </table>
     -->
           <!-- receipt -->
+    <!--
     <div id="receipt_view">
       <p>Viimeisin kuitti:<p>
       <table class="receipt" style="width:100%">
@@ -248,8 +286,8 @@
         </tr>
       </table>
     </div>
-    
-    
+    -->
+    <!--
 	<div class="chat_box">
 	<b>Mikko:</b>
     As you can see, once there's enough text in this box, the box will grow scroll bars... that's why we call it a scroll box!
@@ -262,15 +300,16 @@
     <button ion-button class="product_line_button" (click)="saveChat()">
        <ion-icon name="send" item-start></ion-icon>
     </button>
+    -->
     
     <!--
     <button class="ion_item_prop" ion-button id="connect_pt_button" (click)="connectToPT()">
       Yhdistä maksupäätteeseen
     </button><p>
     -->
-    
+  <!--
   </div>
-
+  -->
   <!-- Oikea sarake: Tuotteen maksu
   <div class="column_2">
 
