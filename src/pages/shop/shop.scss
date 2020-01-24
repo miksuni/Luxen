@@ -29,13 +29,18 @@ page-shop {
 		vertical-align: top;
 	}
 
-	.table_payment_buttons {
-	}
-
-	.table_receipt_view {
+	.payment_button_panel {
+	    margin-top: 20px;
 	}
 
 	.chat_view {
+	    margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.table_receipt_view {
+		margin-top: 20px;
+		margin-left: 10px;
 	}
 
     .shopping_cart_summary {
@@ -150,7 +155,11 @@ page-shop {
 	.product_data_input {
 		padding: 5px 5px 5px 5px;
 	}
-
+	
+	.chat_lines {
+		padding: 1px 5px 1px 5px;
+	}
+	
 	.table_shopping_cart td, th {
     	border: 1px solid #dddddd;
     	text-align: left;

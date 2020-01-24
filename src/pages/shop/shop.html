@@ -119,7 +119,7 @@
   	  <!-- *** RIGHT PANEL *** -->
   	  <td class="table_right_column" colspan="2">
   	  
-  	    <!-- PAYMENT BUTTONS -->
+  	    <!-- PAYMENT BUTTONS start -->
 	    <table class="payment_button_panel" style="width:100%">
 	      <tr>
 	        <td style="text-align: center">
@@ -135,9 +135,46 @@
 	          </button>
 	        </td>
 	      </tr>
+	      <!-- PAYMENT BUTTONS end --> 
+
+	      <!-- CHAT start -->
 	      <tr>
-	      
-	        <!-- RECEIPT  -->
+	        <td>
+	          <table class="chat_view">
+	            <tr>
+	              <td colspan="2">
+    		        <table>
+    		          <div class="chat_box">
+    		            <tr  *ngFor="let entry of chatMessages let i = index">
+    		              <td class="chat_lines">
+    		                <div id="{{ 'chat' + i }}">
+    		                  <b>{{entry.from}}:</b> {{entry.message}}
+    		                </div>
+    		              </td>
+    		            </tr>
+    		          </div>
+    		        </table>
+			      </td>
+			    </tr>
+			    <tr>
+			      <td>
+			        <div class="chat_input_box">
+			          <ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
+			        </div>
+			  	  </td>
+			  	  <td>
+    		        <button ion-button class="send_button" (click)="saveChat()">
+       			      <ion-icon name="send" item-start></ion-icon>
+    		        </button>
+    		      </td>
+    		    </tr>
+    		  </table>
+    		</td>
+	      </tr>
+	      <!-- CHAT end -->
+    
+	      <!-- RECEIPT start -->
+	      <tr>
 	        <div id="receipt_view">
       		  <p>Viimeisin kuitti:<p>
       		  <table class="receipt" style="width:100%">
@@ -162,47 +199,8 @@
 		      </table>
 		    </div>
 	      </tr>
-	      <tr>
-	        <td>
-
-	          <!-- CHAT  -->
-	          <table>
-	            <tr>
-	              <td colspan="2">
-    		        <table>
-    		          <div class="chat_box">
-    		          <tr  *ngFor="let entry of chatMessages let i = index">
-    		            <td>
-    		              <div id="{{ 'chat' + i }}">
-    		                <b>{{entry.from}}:</b> {{entry.message}}
-    		              </div>
-    		            </td>
-    		          </tr>
-    		          </div>
-    		        </table>
-			      </td>
-			    </tr>
-			    <tr>
-			      <td>
-			        <div class="chat_input_box">
-			          <ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
-			        </div>
-			  	  </td>
-			  	  <td>
-    		        <button ion-button class="send_button" (click)="saveChat()">
-       			      <ion-icon name="send" item-start></ion-icon>
-    		        </button>
-    		        <button ion-button class="send_button" (click)="getChat()">
-       			      <ion-icon name="chatboxes" item-start></ion-icon>
-    		        </button>
-    		        <button ion-button class="send_button" (click)="scrollToEnd()">
-       			      <ion-icon name="arrow-down" item-start></ion-icon>
-    		        </button>
-    		      </td>
-    		    </tr>
-    		  </table>
-    		</td>
-	      </tr>
+	      <!-- RECEIPT end -->
+	      
 	    </table>
   	  </td>
   	</tr>

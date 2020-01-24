@@ -76,7 +76,7 @@ export class ShopPage {
       this.restProvider.cashiers("").then((result:any) => {
           console.log('>> result received');
           this.cashiers = JSON.parse(result.result);
-          console.log('cashiers: ' + JSON.stringify(this.cashiers));
+          //console.log('cashiers: ' + JSON.stringify(this.cashiers));
       }, (err) => {
           console.log(err);
       });
@@ -285,13 +285,9 @@ export class ShopPage {
           this.chat.message = this.chatMessage;
           this.chat.from = this.cashier;
           var entry = {from: "", message: ""};
-          console.log('chat: ' + JSON.stringify(entry));
           entry.from = this.chat.from;
           entry.message = this.chat.message;
-          console.log('chat: ' + JSON.stringify(entry));
           this.chatMessages.push(entry);
-          console.log('>> home.saveChat, count: ' + (this.chatMessages.length - 1).toString());
-          console.log('>> chat:' + JSON.stringify(this.chat));
           this.restProvider.sendRequest('addchat', this.chat);
           setTimeout( () => {
               this.presentLoading("Haetaan...");
@@ -306,8 +302,8 @@ export class ShopPage {
       this.restProvider.sendRequest("chat",[]).then((result:any) => {
           console.log('>> result received');
           this.chatMessages = JSON.parse(result.result);
-          console.log('chat messages: ' + JSON.stringify(this.chatMessages));
-          console.log('count: ' + this.chatMessages.length);
+          //console.log('chat messages: ' + JSON.stringify(this.chatMessages));
+          //console.log('count: ' + this.chatMessages.length);
           setTimeout( () => {
               this.presentLoading("Haetaan...");
               this.scrollToEnd();
@@ -319,7 +315,7 @@ export class ShopPage {
   }
   
   scrollToEnd() {
-      console.log('>> home.scrollToEnd ' + "chat" + (this.chatMessages.length - 1).toString());
+      console.log('>> home.scrollToEnd ');
       var element = document.getElementById("chat" + (this.chatMessages.length - 1).toString());
       element.scrollIntoView({block: "end"});
   }
