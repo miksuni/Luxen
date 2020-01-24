@@ -15,7 +15,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding class="shop">
 <div class="row">
 
   <table class="table_main_frame">
@@ -23,11 +23,11 @@
   	
   	  <!-- HEADER -->
   	  <td class="table_main_header">
-        Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa
+         Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa
       </td>
-      <td style="text-align: center" td width = "150px">
+      <td class="cashier_field" style="text-align: center">
 	    Kassa:
-	    <select id="current_cashier">
+	    <select id="current_cashier" class="cashier_button">
 	      <option></option>
 	      <option *ngFor="let cashier of cashiers">{{cashier.firstName}}</option>
 	    </select>
@@ -176,8 +176,12 @@
 	      <!-- RECEIPT start -->
 	      <tr>
 	        <div id="receipt_view">
-      		  <p>Viimeisin kuitti:<p>
       		  <table class="receipt" style="width:100%">
+      		    <tr>
+      		      <td colspan="4">
+      		      Viimeisin kuitti:
+      		      </td>
+      		    </tr>
 		        <tr>
 		          <th>Tuote</th>
 		          <th>Hinta</th>

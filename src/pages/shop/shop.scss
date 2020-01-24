@@ -1,5 +1,9 @@
 page-shop {
 
+	.shop {
+		background-color: #765d69;
+	}
+
 	.table_main_frame {
 	    width: 100%;
 		margin-bottom: 10px;
@@ -7,6 +11,16 @@ page-shop {
 
 	.table_main_header {
 		border: 1px solid #dddddd;
+		background-color: #f1828d;
+		padding: 0px 5px 0px 5px;
+	}
+
+	.cashier_field {
+		width: 150px;
+	}
+
+	.cashier_button {
+		background-color: #8fb9a8;
 	}
 
 	.table_left_column {
@@ -18,11 +32,19 @@ page-shop {
         border: 2px solid #aaaaaa;
 		margin-top: 10px;
 		margin-bottom: 10px;
-		background-color: #ccaaaa;
+		background-color: #fefad4;
 	}
 
+	.table_shopping_cart td, th {
+    	border: 1px solid #dddddd;
+    	//text-align: left;
+    	padding: 0px 5px 0px 5px;
+	}
+	
 	.table_product_input_fields{
 	    border: 1px solid #dddddd;
+	    background-color: #fefad4;
+	    font-size: 80%;
 	}
 
 	.table_right_column {
@@ -31,6 +53,7 @@ page-shop {
 
 	.payment_button_panel {
 	    margin-top: 20px;
+	    //background-color: #eeeeee;
 	}
 
 	.chat_view {
@@ -38,20 +61,33 @@ page-shop {
 		margin-left: 10px;
 	}
 
-	.table_receipt_view {
-		margin-top: 20px;
-		margin-left: 10px;
+	.chat_box {
+		height:120px;
+		width: 100%;
+		//min-width: 100px;
+        //width: 200px;
+        word-wrap: break-word;
+        //max-width: 200px;
+		font-size: 70%;
+		border:1px solid #ccc;
+		overflow:auto;
+		background-color: #8fb9a8;
+	}
+	
+	.chat_input_box {
+		height:30px;
+		//width:160px;
+		width: 100%;
+		font-size: 70%;
+		border:1px solid #ccc;
+		overflow:auto;
+		background-color: #8fb9a8;
 	}
 
-    .shopping_cart_summary {
-        margin-left: 10px;
-        border: 1px solid #dddddd;
-    }
-    
-	.column_1 {
-  		float: left;
-  		width: 75%;
-  		padding: 10px;
+	.receipt {
+		margin-top: 20px;
+		margin-left: 10px;
+		background-color: #fefad4;
 	}
 
 	.cart {
@@ -66,35 +102,6 @@ page-shop {
 	    font-size: 70%;
 	}
 	
-	.chat_box {
-		height:120px;
-		width: 100%;
-		//min-width: 100px;
-        //width: 200px;
-        word-wrap: break-word;
-        //max-width: 200px;
-		font-size: 70%;
-		border:1px solid #ccc;
-		overflow:auto;
-	}
-	
-	.chat_input_box {
-		height:30px;
-		//width:160px;
-		width: 100%;
-		font-size: 70%;
-		border:1px solid #ccc;
-		overflow:auto;
-	}
-	
-	.column_2 {
-  		float: right;
-  		width: 25%;
-  		padding: 10px;
-  		margin-top: 20px;
-		margin-bottom: 10px;
-	}
-
 	.icon_padding {
 		margin-right: 10px;
 	}
@@ -159,13 +166,7 @@ page-shop {
 	.chat_lines {
 		padding: 1px 5px 1px 5px;
 	}
-	
-	.table_shopping_cart td, th {
-    	border: 1px solid #dddddd;
-    	text-align: left;
-    	padding: 0px 5px 0px 5px;
-	}
-	
+		
 	.table_product_input_fields td, th {
     	border: 1px solid #dddddd;
     	text-align: left;
