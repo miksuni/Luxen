@@ -141,7 +141,13 @@ page-shop {
 		padding: 5px 5px 5px 5px;
 	}
 
-	td, th {
+	.table_shopping_cart td, th {
+    	border: 1px solid #dddddd;
+    	text-align: left;
+    	padding: 0px 5px 0px 5px;
+	}
+	
+	.table_product_input_fields td, th {
     	border: 1px solid #dddddd;
     	text-align: left;
     	padding: 0px 5px 0px 5px;
