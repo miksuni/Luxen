@@ -31,8 +31,9 @@ export class ShopPage {
   cashiers: any;
   orderList = { products:[] };
   chat = {from:'', message:''};
+  chatMessages: any;
   chatMessage: string = "";
-  productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
+  //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
   productsInCart = 0;
   totalSum: number = 0;
   totalSumAsString: string = "";
@@ -49,7 +50,7 @@ export class ShopPage {
   cashier = "";
   
   loadingIndicator: any;
-
+  
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public productList: ProductList,
@@ -66,6 +67,7 @@ export class ShopPage {
     this.shoppingCart.clearAll();
     this.cartContent = this.shoppingCart.getProducts();
     this.getCashiers();
+    this.getChat();
     this.update();
   }
   
@@ -282,9 +284,36 @@ export class ShopPage {
       if (this.chatMessage.length > 0) {
           this.chat.message = this.chatMessage;
           this.chat.from = this.cashier;
+          var chat = this.chat;
+          this.chatMessages.push(chat);
+          //this.scrollToEnd();
+          console.log('>> home.saveChat, count: ' + (this.chatMessages.length - 1).toString());
           console.log('>> chat:' + JSON.stringify(this.chat));
           this.restProvider.sendRequest('addchat', this.chat);
       }
+  }
+  
+  getChat() {
+      console.log('>> home.getChat');
+      this.restProvider.sendRequest("chat",[]).then((result:any) => {
+          console.log('>> result received');
+          this.chatMessages = JSON.parse(result.result);
+          console.log('chat messages: ' + JSON.stringify(this.chatMessages));
+          console.log('count: ' + this.chatMessages.length);
+          setTimeout( () => {
+              this.presentLoading("Haetaan...");
+              this.scrollToEnd();
+              this.finishLoading();
+          }, 1000);
+      }, (err) => {
+          console.log(err);
+      });
+  }
+  
+  scrollToEnd() {
+      console.log('>> home.scrollToEnd ' + "chat" + (this.chatMessages.length - 1).toString());
+      var element = document.getElementById("chat" + (this.chatMessages.length - 1).toString());
+      element.scrollIntoView({block: "end"});
   }
   
   presentPromptSelectCashier() {

@@ -169,12 +169,17 @@
 	          <table>
 	            <tr>
 	              <td colspan="2">
-        	      	<div class="chat_box">
-			          <b>Mikko:</b>
-    		          As you can see, once there's enough text in this box, the box will grow scroll bars... that's why we call it a scroll box!
-    		          <p><p><b>Joku:</b>
-    		           You could also place an image into the scroll box.
-			        </div> 
+    		        <table>
+    		          <div class="chat_box">
+    		          <tr  *ngFor="let entry of chatMessages let i = index">
+    		            <td>
+    		              <div id="{{ 'chat' + i }}">
+    		                <b>{{entry.from}}:</b> {{entry.message}}
+    		              </div>
+    		            </td>
+    		          </tr>
+    		          </div>
+    		        </table>
 			      </td>
 			    </tr>
 			    <tr>
@@ -186,6 +191,12 @@
 			  	  <td>
     		        <button ion-button class="send_button" (click)="saveChat()">
        			      <ion-icon name="send" item-start></ion-icon>
+    		        </button>
+    		        <button ion-button class="send_button" (click)="getChat()">
+       			      <ion-icon name="chatboxes" item-start></ion-icon>
+    		        </button>
+    		        <button ion-button class="send_button" (click)="scrollToEnd()">
+       			      <ion-icon name="arrow-down" item-start></ion-icon>
     		        </button>
     		      </td>
     		    </tr>
