@@ -163,20 +163,34 @@
 		    </div>
 	      </tr>
 	      <tr>
-	      
-	        <!-- CHAT  -->
-	      	<div class="chat_box">
-			  <b>Mikko:</b>
-    		  As you can see, once there's enough text in this box, the box will grow scroll bars... that's why we call it a scroll box!
-    		  <p><p><b>Joku:</b>
-    		  You could also place an image into the scroll box.
-			</div>
-			<div class="chat_input_box">
-			  <ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
-			</div>
-    		<button ion-button class="product_line_button" (click)="saveChat()">
-       			<ion-icon name="send" item-start></ion-icon>
-    		</button>
+	        <td>
+
+	          <!-- CHAT  -->
+	          <table>
+	            <tr>
+	              <td colspan="2">
+        	      	<div class="chat_box">
+			          <b>Mikko:</b>
+    		          As you can see, once there's enough text in this box, the box will grow scroll bars... that's why we call it a scroll box!
+    		          <p><p><b>Joku:</b>
+    		           You could also place an image into the scroll box.
+			        </div> 
+			      </td>
+			    </tr>
+			    <tr>
+			      <td>
+			        <div class="chat_input_box">
+			          <ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
+			        </div>
+			  	  </td>
+			  	  <td>
+    		        <button ion-button class="send_button" (click)="saveChat()">
+       			      <ion-icon name="send" item-start></ion-icon>
+    		        </button>
+    		      </td>
+    		    </tr>
+    		  </table>
+    		</td>
 	      </tr>
 	    </table>
   	  </td>

@@ -63,7 +63,8 @@ page-shop {
 	
 	.chat_box {
 		height:120px;
-		width:200px;
+		//width:200px;
+		width: 100%;
 		font-size: 70%;
 		border:1px solid #ccc;
 		overflow:auto;
@@ -135,6 +136,12 @@ page-shop {
 
 	.product_line {
 		height:20px
+	}
+	
+	.send_button {
+	    font-size: 80%;
+		height:25px;
+		padding: 5px 5px 5px 5px;
 	}
 	
 	.product_data_input {
