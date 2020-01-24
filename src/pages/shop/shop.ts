@@ -284,12 +284,20 @@ export class ShopPage {
       if (this.chatMessage.length > 0) {
           this.chat.message = this.chatMessage;
           this.chat.from = this.cashier;
-          var chat = this.chat;
-          this.chatMessages.push(chat);
-          //this.scrollToEnd();
+          var entry = {from: "", message: ""};
+          console.log('chat: ' + JSON.stringify(entry));
+          entry.from = this.chat.from;
+          entry.message = this.chat.message;
+          console.log('chat: ' + JSON.stringify(entry));
+          this.chatMessages.push(entry);
           console.log('>> home.saveChat, count: ' + (this.chatMessages.length - 1).toString());
           console.log('>> chat:' + JSON.stringify(this.chat));
           this.restProvider.sendRequest('addchat', this.chat);
+          setTimeout( () => {
+              this.presentLoading("Haetaan...");
+              this.scrollToEnd();
+              this.finishLoading();
+          }, 1000);
       }
   }
   
