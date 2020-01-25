@@ -214,7 +214,7 @@ export class ShopPage {
       console.log('giftCardPayment');
       this.shoppingCart.setCashier(this.cashier);
       //this.setPaymentMethod("Lahjakortti");
-      //this.presentPromptPaymentCardInstructions();
+      this.showCombinationPrompt();
   }
  
   connectToPT() {
@@ -475,6 +475,35 @@ export class ShopPage {
       prompt.present();
     }
 
+  showCombinationPrompt() {
+      const prompt = this.alertController.create({
+        title: 'Maksuyhdistelmä',
+        message: "Asiakkaan antama summa",
+        inputs: [
+          {
+            name: 'Money',
+            type: 'number',
+            placeholder: 'Käteinen'
+          },
+          {
+              name: 'Card',
+              type: 'number',
+              placeholder: 'Pankkikortti'
+          }
+        ],
+        buttons: [
+              {
+                  text: 'Peruuta',
+                  handler: data => {
+                    console.log('Cancel clicked');
+                  }
+              },
+          ]
+      });
+      prompt.present();
+    }
+  
+  
   showPrompt2(moneyback) {
       const prompt = this.alertController.create({
         title: 'Takaisin ' + moneyback.toString() + ' e',

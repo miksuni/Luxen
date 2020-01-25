@@ -81,8 +81,8 @@
   	    <tr>
   	    
   	      <!-- PRODUCT INPUT FIELDS -->
-  	      <td class="table_product_input_fields">
-  	         <table class="table_2">
+  	      <td>
+  	         <table class="table_product_input_fields">
 		      <tr>
 		        <td>
 		          <ion-input [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
@@ -98,16 +98,16 @@
 		        </td>
 		      </tr>
 		      <tr *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
-		        <td class="product_data_input">
+		        <td>
 		          {{element.productName}}
 		        </td>
-		        <td class="product_data_input">
+		        <td>
 		          {{element.ISBN}}
 		        </td>
-		        <td class="product_data_input">
+		        <td>
 		          {{element.price}}
 		        </td>
-		        <td class="product_data_input">
+		        <td>
 		          {{element.amountInStock}}
 		        </td>
 		      </tr>
