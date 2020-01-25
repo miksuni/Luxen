@@ -1,13 +1,18 @@
 page-shop {
 
 	.shop {
-		background-color: #765d69;
+		//background-color: #765d69;
 	}
 
 	.table_main_frame {
 	    width: 100%;
 		margin-bottom: 10px;
 	}
+
+	/*** for layout test ***/
+    .table_main_frame th, td {
+    	border: 1px solid #dddddd;
+    }
 
 	.table_main_header {
 		border: 1px solid #dddddd;
@@ -51,10 +56,20 @@ page-shop {
 		vertical-align: top;
 	}
 
-	.payment_button_panel {
+	.right_panel {
 	    margin-top: 20px;
 	    //background-color: #eeeeee;
 	}
+
+	.payment_button_panel {
+		width: 100%;
+	}
+
+    .payment_button {
+        font-size: 70%;
+        font-size: 70%; 
+    	//width:100px;
+    }
 
 	.chat_view {
 	    margin-top: 20px;
@@ -104,31 +119,6 @@ page-shop {
 	
 	.icon_padding {
 		margin-right: 10px;
-	}
-
-    .payment_button {
-        font-size: 70%;
-        font-size: 70%; 
-    	width:100px;
-    }
-
-	.confirm_button {
-	    font-size: 70%;
-    	display: table;
-    	margin: 0 auto;
-		width:100px;
-	}
-
-	.cancel_button {
-	    font-size: 70%;
-    	display: table;
-    	margin: 0 auto;
-		width:80px;
-	}
-
-	.align-right {
-		text-align: right;
-		padding: 10px 10px 0px 10px;
 	}
 
 	.payment_button_panel {

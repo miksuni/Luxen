@@ -46,6 +46,7 @@ export class ShopPage {
 
   cardPaymentEnabled: boolean = false;
   cashPaymentEnabled: boolean = false;
+  giftCardPaymentEnabled: boolean = false;
   
   cashier = "";
   
@@ -209,6 +210,13 @@ export class ShopPage {
     this.presentPromptPaymentCardInstructions();
   }
 
+  giftCardPayment() {
+      console.log('giftCardPayment');
+      this.shoppingCart.setCashier(this.cashier);
+      //this.setPaymentMethod("Lahjakortti");
+      //this.presentPromptPaymentCardInstructions();
+  }
+ 
   connectToPT() {
     console.log('connectToPT');
     this.shoppingCart.connectToPT();
@@ -230,6 +238,7 @@ export class ShopPage {
     document.getElementById("receipt_view").style.visibility = "visible";
     this.cardPaymentEnabled = false;
     this.cashPaymentEnabled = false;
+    this.giftCardPaymentEnabled = false;
     setTimeout( () => {
         this.finishLoading();
         this.presentLoading("Haetaan tuotteet...");
@@ -255,9 +264,13 @@ export class ShopPage {
 
   checkIfCashPaymentEnabled() {
     //console.log('checkIfCashPaymentEnabled');
-    return !this.cardPaymentEnabled;
+    return !this.cashPaymentEnabled;
   }
 
+  checkIfGiftCartPaymentEnabled() {
+    return !this.giftCardPaymentEnabled;
+  }
+  
   update() {
     console.log('update');
     this.productsInCart = this.shoppingCart.productsInCart;
@@ -266,9 +279,11 @@ export class ShopPage {
     if (this.totalSum > 0) {
       this.cardPaymentEnabled = true;
       this.cashPaymentEnabled = true;
+      this.giftCardPaymentEnabled = true;
     } else {
       this.cardPaymentEnabled = false;
       this.cashPaymentEnabled = false;
+      this.giftCardPaymentEnabled = false;
     }
   }
   

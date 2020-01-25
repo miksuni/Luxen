@@ -120,26 +120,35 @@
   	  <td class="table_right_column" colspan="2">
   	  
   	    <!-- PAYMENT BUTTONS start -->
-	    <table class="payment_button_panel" style="width:100%">
+	    <table class="right_panel" style="width:100%">
 	      <tr>
-	        <td style="text-align: center">
-	          <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
-	            <ion-icon name="card" item-start> Korttimaksu</ion-icon>
-   	          </button>
-	        </td>
-	      </tr>
-	      <tr>
-	        <td style="text-align: center">
-	          <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
-	            <ion-icon name="cash" item-start> Käteinen</ion-icon>
-	          </button>
-	        </td>
+			<table class="payment_button_panel">
+			  <tr>
+	            <td style="text-align: center">
+	              <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
+	                <ion-icon name="card" item-start> Korttimaksu</ion-icon>
+   	              </button>
+	            </td>
+	            <td style="text-align: center">
+	              <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
+	                <ion-icon name="cash" item-start> Käteinen</ion-icon>
+	              </button>
+	            </td>
+			  </tr>
+			  <tr>
+			    <td style="text-align: center">
+			       <button ion-button class="payment_button" id="gift_card_button" [disabled]="checkIfGiftCartPaymentEnabled()" (click)="giftCardPayment()">
+	                <ion-icon name="card" item-start> Lahjakortti</ion-icon>
+   	              </button>
+			    </td>
+			  </tr>
+			</table>
 	      </tr>
 	      <!-- PAYMENT BUTTONS end --> 
 
 	      <!-- CHAT start -->
 	      <tr>
-	        <td>
+	        <td colspan="2">
 	          <table class="chat_view">
 	            <tr>
 	              <td colspan="2">
