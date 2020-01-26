@@ -198,7 +198,7 @@ export class ShopPage {
   cashPayment() {
       console.log('cashPayment');
       this.shoppingCart.setCashier(this.cashier);
-      this.showPrompt();
+      this.showPrompt(this.totalSum);
       console.log('Saved clicked, data: ' + this.moneyGiven.toString());
       this.setPaymentMethod("Käteinen");
   }
@@ -411,29 +411,36 @@ export class ShopPage {
       alert.present();
     }
   
-  showPrompt() {
+  showPrompt(totalSum) {
       const prompt = this.alertController.create({
-        title: 'Käteinen',
-        message: "Asiakkaan antama summa",
-        inputs: [
-          {
-            name: 'Money',
-            type: 'number',
-            //placeholder: ''
-          }
-        ],
+        title: 'Maksettavaa: ' + totalSum + '€',
+        message: "Kirjoita alle asiakkaan antama summa ja paina \"Kirjoitettu summa\" " +
+        		"tai valitse jokin pikavalintavahtoehdoista (10€, 20€, 50€, Tasaraha)",
+                inputs: [
+                         {
+                           name: 'Money',
+                           type: 'number',
+                           placeholder: 'Asiakkaan antama summa'
+                         }
+                       ],
         buttons: [
           {
             text: 'Kirjoitettu summa',
             handler: data => {
-              this.moneyGiven = data.Money;
-              console.log('Saved clicked, data: ' + this.moneyGiven.toString());
-              this.showPrompt2(this.moneyGiven - this.totalSum);
+             this.moneyGiven = data.Money;
+             console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+             if (this.moneyGiven > this.totalSum) {
+                 this.showPrompt2(this.moneyGiven - this.totalSum);
+             } else if (this.moneyGiven == this.totalSum) {
+                 this.confirmPayment();
+             } else {
+                 this.showPrompt3(this.totalSum, this.moneyGiven);
+             }
             },
           },
           {
-              text: '10 e',
-              handler: data => {
+            text: '10 e',
+            handler: data => {
                 this.moneyGiven = data.Money;
                 console.log('Saved clicked, data: ' + this.moneyGiven.toString());
                 this.showPrompt2(10 - this.totalSum);
@@ -446,25 +453,25 @@ export class ShopPage {
                  console.log('Saved clicked, data: ' + this.moneyGiven.toString());
                  this.showPrompt2(20 - this.totalSum);
                },
-            },
-            {
-                text: '50 e',
-                handler: data => {
-                  this.moneyGiven = data.Money;
-                  console.log('Saved clicked, data: ' + this.moneyGiven.toString());
-                  this.showPrompt2(50 - this.totalSum);
-                },
-             },
-             {
-                 text: 'Tasaraha',
-                 handler: data => {
-                   this.moneyGiven = data.Money;
-                   console.log('Saved clicked, data: ' + this.moneyGiven.toString());
-                   //this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
-                   this.confirmPayment();
-                 },
-              },
-              {
+           },
+           {
+               text: '50 e',
+               handler: data => {
+                 this.moneyGiven = data.Money;
+                 console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+                 this.showPrompt2(50 - this.totalSum);
+               },
+           },
+           {
+               text: 'Tasaraha',
+               handler: data => {
+                 this.moneyGiven = data.Money;
+                 console.log('Saved clicked, data: ' + this.moneyGiven.toString());
+                 //this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
+                 this.confirmPayment();
+               },
+          },
+          {
                   text: 'Peruuta',
                   handler: data => {
                     console.log('Cancel clicked');
@@ -513,6 +520,22 @@ export class ShopPage {
             handler: data => {
               //console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
               this.confirmPayment();
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
+  
+  showPrompt3(totalsum, givensum) {
+      const prompt = this.alertController.create({
+        title: 'Annuettu summa ' + givensum.toString() + 'e ei riitä loppusummaan '
+               + totalsum +'e , syötä maksu uudestaan' ,
+        buttons: [
+          {
+            text: 'Peruuta nykyinen maksu',
+            handler: data => {
+              //console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
             }
           }
         ]
