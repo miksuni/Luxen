@@ -107,6 +107,9 @@ export class ProductUpdatePage {
 
     logData( data ) {
         console.log( data );
+        this.productUpdates = JSON.parse( data );
+        console.log( this.productUpdates );
+        console.log( JSON.stringify( this.productUpdates ) );
     }
 
     getUpdates() {
@@ -122,7 +125,7 @@ export class ProductUpdatePage {
 
     importProducts() {
         console.log( '>> productUpdate.importProducts' );
-        this.productUpdates = this.getUpdates();
+        this.getUpdates();
     }
 
     removeProduct() {
