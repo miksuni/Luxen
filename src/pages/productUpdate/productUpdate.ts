@@ -37,7 +37,7 @@ export class ProductUpdatePage {
     productUpdates: any;
 
     //productInfoStr: any;
-    productInfo = { objectId: '', ISBN: '', productName: '', price: '', amountInStock: '', productCode: '', availableFromPublisher: '' };
+    productInfo = { objectId: '', ISBN: '', productName: '', price: '', amountInStock: '', productCode: '', availableFromPublisher: false };
 
     constructor( public navCtrl: NavController,
         private barcodeScanner: BarcodeScanner,
@@ -64,7 +64,7 @@ export class ProductUpdatePage {
         //this.productInfo.productName = this.productName;
         this.productInfo.price = this.price;
         this.productInfo.amountInStock = this.amountInStock;
-        this.productInfo.availableFromPublisher = this.inProduction ? "true" : "false";
+        this.productInfo.availableFromPublisher = this.inProduction;
         console.log( '>> home.saveProduct ' + JSON.stringify( this.productInfo ) );
         this.productList.updateProductInfo( this.productInfo );
         setTimeout(() => {
@@ -95,7 +95,7 @@ export class ProductUpdatePage {
         this.productInfo.productCode = this.productCode;
         this.productInfo.price = this.price;
         this.productInfo.amountInStock = this.amountInStock;
-        this.productInfo.availableFromPublisher = this.inProduction ? "true" : "false";
+        this.productInfo.availableFromPublisher = this.inProduction;
         console.log( '>> productUpdate.product to be added: ' + JSON.stringify( this.productInfo ) );
         this.productList.addProduct( this.productInfo );
         setTimeout(() => {
@@ -105,11 +105,26 @@ export class ProductUpdatePage {
         }, 3000 );
     }
 
-    logData( data ) {
-        console.log( data );
+    sleep( ms ) {
+        return new Promise( resolve => setTimeout( resolve, ms ) );
+    }
+
+    async addProducts( data ) {
+        //console.log( data );
         this.productUpdates = JSON.parse( data );
-        console.log( this.productUpdates );
-        console.log( JSON.stringify( this.productUpdates ) );
+        //console.log( this.productUpdates );
+        //console.log( JSON.stringify( this.productUpdates ) );
+        console.log( '>> product count: ' + this.productUpdates.length );
+        for ( var i = 0; i < this.productUpdates.length; i++ ) {
+            var productInfo = { productName: "", price: 0, amountInStock: 0, availableFromPublisher: false };
+            productInfo.productName = this.productUpdates[i].productName;
+            productInfo.price = this.productUpdates[i].price;
+            productInfo.amountInStock = this.productUpdates[i].amountInStock;
+            productInfo.availableFromPublisher = this.productUpdates[i].availableFromPublisher;
+            this.productList.addProduct( productInfo );
+            console.log( '>> ' + i + JSON.stringify( productInfo ) );
+            await this.sleep( 2000 );
+        }
     }
 
     getUpdates() {
@@ -118,7 +133,7 @@ export class ProductUpdatePage {
                 responseType: 'text'
             } )
             .subscribe(
-            data => this.logData( data ),
+            data => this.addProducts( data ),
             err => console.log( 'something went wrong: ', err )
             );
     }
