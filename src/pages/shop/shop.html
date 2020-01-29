@@ -43,6 +43,7 @@
   	  <!-- *** LEFT PANEL *** -->
   	  <td class="table_left_column">
   	  
+  	  <div id = "left_panel_area">
   	    <!-- SHOPPING CART -->
 	    <table class="table_shopping_cart" style="width:100%">
 	      <tr>
@@ -114,6 +115,28 @@
 		    </table>
   	      </td>
   	    </tr>
+  	  </div>
+  	  <div id="payment_data_area">
+  	  </div>
+  	  	<table>
+  	  	  <tr>
+  	  	    <td colspan=3>
+  	  	      Lahden ry:n lahjakortti
+  	  	    </td>
+  	  	  </tr>
+  	  	  <tr>
+  	  	    <td>
+  	  	      <input id="check_box1" type="radio" name="ryGitCartType" value="parental" checked (change)="inputListener1()">Vauvalahjakortti<br>
+              <input id="check_box2" type="radio" name="ryGitCartType" value="birthday" (change)="inputListener1()">Merkkipäivä<br>
+  	  	    </td>
+  	  	    <td>
+  	  	      Saaja: <input id="test_input" type="text" (change)="inputListener()">
+  	  	    </td>
+  	  	    <td>
+  	  	      Annettu: <input type="date" name="bday">
+  	  	    </td>
+  	  	  </tr>
+  	  	</table>
   	  </td>
   	  
   	  <!-- *** RIGHT PANEL *** -->

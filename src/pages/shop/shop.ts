@@ -217,6 +217,31 @@ export class ShopPage {
         this.showCombinationPrompt();
     }
 
+    /******************************************************************************************/
+    /******************************************************************************************/
+    /******************************************************************************************/
+
+    inputListener() {
+        console.log( 'inputListener' );
+        var inputValue = ( <HTMLInputElement>document.getElementById( "test_input" ) ).value;
+        console.log( inputValue );
+    }
+
+    inputListener1() {
+        console.log( 'inputListener1' );
+        var inputValue1 = ( <HTMLInputElement>document.getElementById( "check_box1" ) ).value;
+        var inputValue2 = ( <HTMLInputElement>document.getElementById( "check_box2" ) ).value;
+        if ( ( <HTMLInputElement>document.getElementById( "check_box1" ) ).checked ) {
+            console.log( "1" );
+        } else {
+            console.log( "2" );
+        }
+    }
+
+    /******************************************************************************************/
+    /******************************************************************************************/
+    /******************************************************************************************/
+
     connectToPT() {
         console.log( 'connectToPT' );
         this.shoppingCart.connectToPT();
