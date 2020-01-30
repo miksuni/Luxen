@@ -38,6 +38,7 @@ export class ShopPage {
     totalSum: number = 0;
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
+    toBePaid: number = 0;
 
     givenAmount = 0;
     cashBack = 0;
@@ -63,6 +64,7 @@ export class ShopPage {
 
     ionViewDidLoad() {
         console.log( 'ionViewDidLoad ShopPage' );
+        document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
         document.getElementById( "receipt_view" ).style.visibility = "hidden";
         this.productList.getProductInfo();
         this.shoppingCart.clearAll();
@@ -210,18 +212,36 @@ export class ShopPage {
         this.presentPromptPaymentCardInstructions();
     }
 
-    giftCardPayment() {
-        console.log( 'giftCardPayment' );
+    combinedPayment() {
+        console.log( 'combinedPayment' );
         this.shoppingCart.setCashier( this.cashier );
         //this.setPaymentMethod("Lahjakortti");
-        this.showCombinationPrompt();
+        document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+    }
+
+    showCombinedPayment() {
+        console.log( 'showCombinedPayment' );
+        document.getElementById( "payment_combination_panel" ).style.visibility = "visible";
+        this.toBePaid = 0 - this.totalSum;
+    }
+
+    cancelCombinedPayment() {
+        console.log( 'cancelCombinedPayment' );
+        this.shoppingCart.setCashier( this.cashier );
+        document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
     }
 
     /******************************************************************************************/
     /******************************************************************************************/
     /******************************************************************************************/
 
-    cmListener() {
+    cm10Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked;
+        console.log( 'cm10Listener ' + inputValue );
+    }
+
+
+    cm11Listener() {
         console.log( 'cmListener' );
         var inputValue1 = ( <HTMLInputElement>document.getElementById( "cm11" ) ).value;
         var inputValue2 = ( <HTMLInputElement>document.getElementById( "cm12" ) ).value;
@@ -235,6 +255,11 @@ export class ShopPage {
     cm13Listener() {
         var inputValue = ( <HTMLInputElement>document.getElementById( "cm13" ) ).value;
         console.log( 'cm13Listener ' + inputValue );
+    }
+
+    cm14Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm14" ) ).value;
+        console.log( 'cm14Listener ' + inputValue );
     }
 
     cm21Listener() {

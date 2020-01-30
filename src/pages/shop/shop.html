@@ -120,12 +120,13 @@
   	  </div>
   	  
   	    <!-- *** PAYMENT METHOD COMBINATIONS start *** -->
+  	    <div id="payment_combination_panel">
   	  	<table class="paymen_method_combination_table">
   	  	
   	  	  <!-- Lahden ry lahjakortti -->
   	  	  <tr class="cm_1">
   	  	    <td colspan=6>
-  	  	      Lahden ry:n lahjakortti
+  	  	      <input id="cm1" type="checkbox" (change)="cm10Listener()"> Lahden ry:n lahjakortti
   	  	    </td>
   	  	  </tr>
   	  	  
@@ -147,8 +148,8 @@
   	  	      <table>
   	  	        <tr>
   	  	          <td>
-  	  	            <input class="radio_button" id="cm11" type="radio" name="cm1" checked (change)="cmListener()">Vauvalahjakortti<br>
-                    <input class="radio_button" id="cm12" type="radio" name="cm1" (change)="cmListener()">Merkkipäivä<br>
+  	  	            <input class="radio_button" id="cm11" type="radio" name="cm1" checked (change)="cm11Listener()">Vauvalahjakortti<br>
+                    <input class="radio_button" id="cm12" type="radio" name="cm1" (change)="cm11Listener()">Merkkipäivä<br>
   	  	          </td>
   	  	        </tr>
   	  	        <tr>
@@ -156,7 +157,7 @@
   	  	            Saaja: <input id="cm13" type="text" (change)="cm13Listener()">
   	  	          </td>
   	  	          <td>
-  	  	            Annettu: <input class="cm_date" type="date" name="bday">
+  	  	            Annettu: <input id="cm14" class="cm_date" type="date" (change)="cm14Listener()">
   	  	          </td>
   	  	        </tr>
   	  	      </table>
@@ -236,8 +237,24 @@
   	  	    </td>
   	  	    <td></td>
   	  	  </tr>
-  	  	  
+  	  	  <tr>
+  	  	    <td>
+  	  	      Puuttuu:
+  	  	    </td>
+  	  	    <td>
+  	  	        <input class="cm_number" type="number" value="{{toBePaid}}" ng-model="toBePaid" readonly />
+  	  	    </td>
+  	  	    <td>
+  	  	      <button ion-button class="product_line_button" (click)="combinedPayment()">
+                Vahvista maksu
+              </button>
+              <button ion-button class="product_line_button" color="light" (click)="cancelCombinedPayment()">
+                Peruuta
+              </button>
+            </td>
+  	  	  </tr>
   	  	</table>
+  	  	</div>
   	  	<!-- *** PAYMENT METHOD COMBINATIONS end *** -->
   	  </td>
   	  
@@ -256,14 +273,14 @@
 	            </td>
 	            <td style="text-align: center">
 	              <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
-	                <ion-icon name="cash" item-start> KÃ¤teinen</ion-icon>
+	                <ion-icon name="cash" item-start> Käteinen</ion-icon>
 	              </button>
 	            </td>
 			  </tr>
 			  <tr>
 			    <td style="text-align: center">
-			       <button ion-button class="payment_button" id="gift_card_button" [disabled]="checkIfGiftCartPaymentEnabled()" (click)="giftCardPayment()">
-	                <ion-icon name="card" item-start> Lahjakortti</ion-icon>
+			       <button ion-button class="payment_button" id="gift_card_button" [disabled]="checkIfGiftCartPaymentEnabled()" (click)="showCombinedPayment()">
+	                <ion-icon name="card" item-start> Maksuyhd.</ion-icon>
    	              </button>
 			    </td>
 			  </tr>
