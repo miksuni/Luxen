@@ -118,25 +118,127 @@
   	  </div>
   	  <div id="payment_data_area">
   	  </div>
-  	  	<table>
-  	  	  <tr>
-  	  	    <td colspan=3>
+  	  
+  	    <!-- *** PAYMENT METHOD COMBINATIONS start *** -->
+  	  	<table class="paymen_method_combination_table">
+  	  	
+  	  	  <!-- Lahden ry lahjakortti -->
+  	  	  <tr class="cm_1">
+  	  	    <td colspan=6>
   	  	      Lahden ry:n lahjakortti
   	  	    </td>
   	  	  </tr>
-  	  	  <tr>
+  	  	  
+  	  	  <tr class="cm_1">
   	  	    <td>
-  	  	      <input id="check_box1" type="radio" name="ryGitCartType" value="parental" checked (change)="inputListener1()">Vauvalahjakortti<br>
-              <input id="check_box2" type="radio" name="ryGitCartType" value="birthday" (change)="inputListener1()">Merkkipäivä<br>
+  	  	      Arvo:
+  	  	    </td>
+    	  	<td>
+  	  	      <input class="cm_number" type="text" value="20" readonly>
+  	  	    </td>
+  	  	    <td></td>	  	    
+  	  	  </tr>
+  	  	  <tr class="cm_1">
+  	  	    <td>
   	  	    </td>
   	  	    <td>
-  	  	      Saaja: <input id="test_input" type="text" (change)="inputListener()">
   	  	    </td>
   	  	    <td>
-  	  	      Annettu: <input type="date" name="bday">
+  	  	      <table>
+  	  	        <tr>
+  	  	          <td>
+  	  	            <input class="radio_button" id="cm11" type="radio" name="cm1" checked (change)="cmListener()">Vauvalahjakortti<br>
+                    <input class="radio_button" id="cm12" type="radio" name="cm1" (change)="cmListener()">Merkkipäivä<br>
+  	  	          </td>
+  	  	        </tr>
+  	  	        <tr>
+  	  	          <td>
+  	  	            Saaja: <input id="cm13" type="text" (change)="cm13Listener()">
+  	  	          </td>
+  	  	          <td>
+  	  	            Annettu: <input class="cm_date" type="date" name="bday">
+  	  	          </td>
+  	  	        </tr>
+  	  	      </table>
   	  	    </td>
   	  	  </tr>
+  	  	  
+  	  	  <!-- SRK lahjakortti -->
+  	  	  <tr class="cm_2">
+  	  	    <td colspan=6>
+  	  	      SRK:n julkaisulahjakortti
+  	  	    </td>
+  	  	  </tr>
+  	  	  <tr class="cm_2">
+  	  	    <td>
+  	  	      Veloitus:
+  	  	    </td>
+  	  	    <td>
+  	  	      <input class="cm_number" id="cm21" type="number" (change)="cm21Listener()">
+  	  	    </td>
+  	  	    <td></td>
+  	  	  </tr>
+  	  	  <tr class="cm_2">
+  	  	    <td>
+  	  	    </td>
+  	  	    <td>
+  	  	    </td>
+  	  	    <td>	  	    
+  	  	      <table>
+  	  	        <tr>
+  	  	          <td>
+  	  	            Myynyt ry: <input id="cm22" type="text" (change)="cm22Listener()">
+  	  	          </td>
+  	  	        </tr>
+  	  	        <tr>
+  	  	          <td>
+  	  	            Myynti pvm: <input class="cm_date" id="cm23" type="date" (change)="cm23Listener()">
+  	  	          </td>
+  	  	          <td>
+  	  	            Alkup arvo: <input class="cm_number" id="cm24" type="number" (change)="cm24Listener()">
+  	  	          </td>
+  	  	          <td>
+  	  	            Jäljellä: <input class="cm_number" id="cm25" type="number" (change)="cm25Listener()">
+  	  	          </td>
+  	  	        </tr>
+  	  	      </table>
+  	  	    </td>
+  	  	  </tr>
+  	  	  
+  	  	  <!-- Cash -->
+  	  	  <tr class="cm_3">
+  	  	    <td colspan=6>
+  	  	      Käteinen
+  	  	    </td>
+  	  	  </tr>
+  	  	  <tr class="cm_3">
+  	  	    <td>
+  	  	      Veloitus:
+  	  	    </td>
+  	  	    <td>
+  	  	      <input class="cm_number" id="cm31" type="number" (change)="cm31Listener()">
+  	  	    </td>
+  	  	    <td></td>
+  	  	  </tr>
+  	  	  
+  	  	  <!-- Card -->
+  	  	  <tr class="cm_4">
+  	  	    <td colspan=6>
+  	  	      Kortilla
+  	  	    </td>
+  	  	  </tr>
+  	  	  <tr class="cm_4">
+  	  	    <td>
+  	  	      Veloitus:
+  	  	    </td>
+  	  	    <td>
+  	  	      <input class="cm_number" id="cm41" type="number" (change)="cm41Listener()">
+  	  	    </td>
+  	  	    <td></td>
+  	  	  </tr>
+  	  	  
   	  	</table>
+  	  	<!-- *** PAYMENT METHOD COMBINATIONS end *** -->
   	  </td>
   	  
   	  <!-- *** RIGHT PANEL *** -->
@@ -154,7 +256,7 @@
 	            </td>
 	            <td style="text-align: center">
 	              <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
-	                <ion-icon name="cash" item-start> Käteinen</ion-icon>
+	                <ion-icon name="cash" item-start> KÃ¤teinen</ion-icon>
 	              </button>
 	            </td>
 			  </tr>
@@ -217,7 +319,7 @@
 		        <tr>
 		          <th>Tuote</th>
 		          <th>Hinta</th>
-		          <th>Määrä</th>
+		          <th>MÃ¤Ã¤rÃ¤</th>
                   <th>Yht.</th>
 		        </tr>
 		        <tr  *ngFor="let item of receiptContent let i = index">

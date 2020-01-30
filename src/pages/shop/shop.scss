@@ -46,7 +46,7 @@ page-shop {
     	padding: 0px 5px 0px 5px;
 	}
 	
-	.table_product_input_fields{
+	.table_product_input_fields {
 	    border: 1px solid #dddddd;
 	    background-color: #fefad4;
 	    font-size: 80%;
@@ -68,7 +68,6 @@ page-shop {
 
     .payment_button {
         font-size: 70%;
-        font-size: 70%; 
     	//width:100px;
     }
 
@@ -113,6 +112,41 @@ page-shop {
 		margin-bottom: 10px;
 		background-color: #ccaaaa;
 	}
+	
+	.paymen_method_combination_table {
+	    font-size: 70%;
+	}
+	
+	.cm_number {
+	    width:30px;
+	}
+	
+	.cm_1 {
+	    background-color: #ccaaaa;
+	}
+	
+	.cm_2 {
+	    background-color: #a9ad99;
+	}
+	
+    .cm_3 {
+	    background-color: #96875d;
+	}
+	
+	.cm_4 {
+	    background-color: #84b1bf;
+	}
+		
+	.input[type=radio] {
+        border: 0px;
+        width: 100%;
+        height: 2em;
+    }
+	
+	// default value ensures date is show entirely
+	//.cm_date {
+	//    width:80px;
+	//}
 	
 	.receipt {
 	    font-size: 70%;

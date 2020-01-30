@@ -221,21 +221,55 @@ export class ShopPage {
     /******************************************************************************************/
     /******************************************************************************************/
 
-    inputListener() {
-        console.log( 'inputListener' );
-        var inputValue = ( <HTMLInputElement>document.getElementById( "test_input" ) ).value;
-        console.log( inputValue );
-    }
-
-    inputListener1() {
-        console.log( 'inputListener1' );
-        var inputValue1 = ( <HTMLInputElement>document.getElementById( "check_box1" ) ).value;
-        var inputValue2 = ( <HTMLInputElement>document.getElementById( "check_box2" ) ).value;
-        if ( ( <HTMLInputElement>document.getElementById( "check_box1" ) ).checked ) {
+    cmListener() {
+        console.log( 'cmListener' );
+        var inputValue1 = ( <HTMLInputElement>document.getElementById( "cm11" ) ).value;
+        var inputValue2 = ( <HTMLInputElement>document.getElementById( "cm12" ) ).value;
+        if ( ( <HTMLInputElement>document.getElementById( "cm11" ) ).checked ) {
             console.log( "1" );
         } else {
             console.log( "2" );
         }
+    }
+
+    cm13Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm13" ) ).value;
+        console.log( 'cm13Listener ' + inputValue );
+    }
+
+    cm21Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm21" ) ).value;
+        console.log( 'cm21Listener ' + inputValue );
+    }
+
+    cm22Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
+        console.log( 'cm22Listener ' + inputValue );
+    }
+
+    cm23Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm23" ) ).value;
+        console.log( 'cm23Listener ' + inputValue );
+    }
+
+    cm24Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm24" ) ).value;
+        console.log( 'cm24Listener ' + inputValue );
+    }
+
+    cm25Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm25" ) ).value;
+        console.log( 'cm24Listener ' + inputValue );
+    }
+
+    cm31Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm31" ) ).value;
+        console.log( 'cm31Listener ' + inputValue );
+    }
+
+    cm41Listener() {
+        var inputValue = ( <HTMLInputElement>document.getElementById( "cm41" ) ).value;
+        console.log( 'cm41Listener ' + inputValue );
     }
 
     /******************************************************************************************/
