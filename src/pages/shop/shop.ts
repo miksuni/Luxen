@@ -53,6 +53,7 @@ export class ShopPage {
     cardPaymentEnabled: boolean = false;
     cashPaymentEnabled: boolean = false;
     giftCardPaymentEnabled: boolean = false;
+    confirmedPaymentEnabled: boolean = false;
 
     cashier = "";
 
@@ -233,18 +234,25 @@ export class ShopPage {
         this.shoppingCart.setCashier( this.cashier );
         //this.setPaymentMethod("Lahjakortti");
         document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        this.shoppingCart.clearAll(); // TEST !!!
+        this.update(); // TEST !!!
     }
 
     showCombinedPayment() {
         console.log( 'showCombinedPayment' );
         document.getElementById( "payment_combination_panel" ).style.visibility = "visible";
         this.toBePaid = this.totalSum;
+        this.cardPaymentEnabled = false;
+        this.cashPaymentEnabled = false;
+        this.showAmountToBePaid();
     }
 
     cancelCombinedPayment() {
         console.log( 'cancelCombinedPayment' );
-        this.shoppingCart.setCashier( this.cashier );
         document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        for ( var i = 0; i < this.payments.length; i++ ) {
+            this.payments[i] = 0.0;
+        }
     }
 
     showAmountToBePaid() {
@@ -253,7 +261,9 @@ export class ShopPage {
             currentPayments += this.payments[i];
         }
         this.toBePaid = this.totalSum - currentPayments;
+        this.confirmedPaymentEnabled = ( this.toBePaid == 0 );
     }
+
 
     /******************************************************************************************/
     /******************************************************************************************/
@@ -459,6 +469,10 @@ export class ShopPage {
         return !this.giftCardPaymentEnabled;
     }
 
+    checkIfConfirmedPaymentEnabled() {
+        return !this.confirmedPaymentEnabled;
+    }
+
     update() {
         console.log( 'update' );
         this.productsInCart = this.shoppingCart.productsInCart;
@@ -592,6 +606,12 @@ export class ShopPage {
                     handler: () => {
                         console.log( 'Confirm card payment Ok' );
                         this.confirmPayment();
+                    }
+                },
+                {
+                    text: 'Peruuta',
+                    handler: () => {
+                        console.log( 'Card payment cancelled' );
                     }
                 }
             ]

@@ -245,7 +245,7 @@
   	  	        <input class="cm_number" type="number" value="{{toBePaid}}" ng-model="toBePaid" readonly />
   	  	    </td>
   	  	    <td>
-  	  	      <button ion-button class="product_line_button" (click)="combinedPayment()">
+  	  	      <button ion-button class="product_line_button" [disabled]="checkIfConfirmedPaymentEnabled()" (click)="combinedPayment()">
                 Vahvista maksu
               </button>
               <button ion-button class="product_line_button" color="light" (click)="cancelCombinedPayment()">
