@@ -135,9 +135,9 @@
   	  	      Arvo:
   	  	    </td>
     	  	<td>
-  	  	      <input class="cm_number" type="text" value="20" readonly>
+  	  	      <input id="cm11" class="cm_number" type="text" readonly>
   	  	    </td>
-  	  	    <td></td>	  	    
+  	  	    <td><input [(ngModel)]="testModel" (ngModelChange)="testModelChanged($event)" name="testModel">{{testModel}}</td>	  	    
   	  	  </tr>
   	  	  <tr class="cm_1">
   	  	    <td>
@@ -167,7 +167,7 @@
   	  	  <!-- SRK lahjakortti -->
   	  	  <tr class="cm_2">
   	  	    <td colspan=6>
-  	  	      SRK:n julkaisulahjakortti
+  	  	       <input id="cm2" type="checkbox" (change)="cm20Listener()"> SRK:n julkaisulahjakortti
   	  	    </td>
   	  	  </tr>
   	  	  <tr class="cm_2">
@@ -175,7 +175,7 @@
   	  	      Veloitus:
   	  	    </td>
   	  	    <td>
-  	  	      <input class="cm_number" id="cm21" type="number" (change)="cm21Listener()">
+  	  	      <input class="cm_number" id="cm21" type="number" value="{{giftCardPayment}}" ng-model="giftCardPayment" (change)="cm21Listener()">
   	  	    </td>
   	  	    <td></td>
   	  	  </tr>
@@ -209,7 +209,7 @@
   	  	  <!-- Cash -->
   	  	  <tr class="cm_3">
   	  	    <td colspan=6>
-  	  	      Käteinen
+  	  	      <input id="cm3" type="checkbox" (change)="cm30Listener()"> Käteinen
   	  	    </td>
   	  	  </tr>
   	  	  <tr class="cm_3">
@@ -225,7 +225,7 @@
   	  	  <!-- Card -->
   	  	  <tr class="cm_4">
   	  	    <td colspan=6>
-  	  	      Kortilla
+  	  	      <input id="cm4" type="checkbox" (change)="cm40Listener()"> Kortilla
   	  	    </td>
   	  	  </tr>
   	  	  <tr class="cm_4">

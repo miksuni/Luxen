@@ -5,12 +5,6 @@ import { ProductList } from '../../providers/productlist/productlist';
 import { HttpClient } from '@angular/common/http';
 import { RestProvider } from '../../providers/rest/rest';
 import { LoadingController } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
-
-interface IData {
-    productName?: string
-}
 
 @Component( {
     selector: 'page-productUpdate',

@@ -38,7 +38,12 @@ export class ShopPage {
     totalSum: number = 0;
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
+
     toBePaid: number = 0;
+    giftCardPayment: number = 0;
+    testModel: number = 0;
+
+    payments = [0.0, 0.0, 0.0, 0.0];
 
     givenAmount = 0;
     cashBack = 0;
@@ -66,12 +71,23 @@ export class ShopPage {
         console.log( 'ionViewDidLoad ShopPage' );
         document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
         document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
+        ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
+        ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
+        ( <HTMLInputElement>document.getElementById( "cm31" ) ).disabled = true;
+        ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
+        ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
+        ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
         this.productList.getProductInfo();
         this.shoppingCart.clearAll();
         this.cartContent = this.shoppingCart.getProducts();
         this.getCashiers();
         this.getChat();
         this.update();
+    }
+
+    testModelChanged( $event ) {
+        console.log( '>> testModelChanged: ' + $event )
     }
 
     getCashiers() {
@@ -222,7 +238,7 @@ export class ShopPage {
     showCombinedPayment() {
         console.log( 'showCombinedPayment' );
         document.getElementById( "payment_combination_panel" ).style.visibility = "visible";
-        this.toBePaid = 0 - this.totalSum;
+        this.toBePaid = this.totalSum;
     }
 
     cancelCombinedPayment() {
@@ -231,25 +247,35 @@ export class ShopPage {
         document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
     }
 
+    showAmountToBePaid() {
+        var currentPayments = 0.0;
+        for ( var i = 0; i < this.payments.length; i++ ) {
+            currentPayments += this.payments[i];
+        }
+        this.toBePaid = this.totalSum - currentPayments;
+    }
+
     /******************************************************************************************/
     /******************************************************************************************/
     /******************************************************************************************/
 
     cm10Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked;
-        console.log( 'cm10Listener ' + inputValue );
+        var selected = ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked;
+        console.log( 'cm10Listener ' + selected );
+        if ( selected ) {
+            ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "20";
+            this.payments[0] = 20;
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
+            this.payments[0] = 0;
+        }
+        this.showAmountToBePaid();
     }
 
 
     cm11Listener() {
         console.log( 'cmListener' );
-        var inputValue1 = ( <HTMLInputElement>document.getElementById( "cm11" ) ).value;
-        var inputValue2 = ( <HTMLInputElement>document.getElementById( "cm12" ) ).value;
-        if ( ( <HTMLInputElement>document.getElementById( "cm11" ) ).checked ) {
-            console.log( "1" );
-        } else {
-            console.log( "2" );
-        }
+        this.cm10Listener();
     }
 
     cm13Listener() {
@@ -262,39 +288,117 @@ export class ShopPage {
         console.log( 'cm14Listener ' + inputValue );
     }
 
+    cm20Listener() {
+        var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
+        console.log( 'cm20Listener ' + selected );
+        if ( selected ) {
+            ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = false;
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
+            ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
+            this.payments[1] = 0;
+
+        }
+        this.showAmountToBePaid();
+    }
+
     cm21Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm21" ) ).value;
-        console.log( 'cm21Listener ' + inputValue );
+        var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
+        console.log( 'cm20Listener ' + selected );
+        if ( selected ) {
+            var inputValue = ( <HTMLInputElement>document.getElementById( "cm21" ) ).value;
+            if ( inputValue.length > 0 ) {
+                this.payments[1] = parseFloat(( <HTMLInputElement>document.getElementById( "cm21" ) ).value );
+            } else {
+                ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
+            }
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
+            this.payments[1] = 0;
+        }
+        this.showAmountToBePaid();
     }
 
     cm22Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
-        console.log( 'cm22Listener ' + inputValue );
+        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
+        //console.log( 'cm22Listener ' + inputValue );
     }
 
     cm23Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm23" ) ).value;
-        console.log( 'cm23Listener ' + inputValue );
+        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm23" ) ).value;
+        //console.log( 'cm23Listener ' + inputValue );
     }
 
     cm24Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm24" ) ).value;
-        console.log( 'cm24Listener ' + inputValue );
+        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm24" ) ).value;
+        //console.log( 'cm24Listener ' + inputValue );
     }
 
     cm25Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm25" ) ).value;
-        console.log( 'cm24Listener ' + inputValue );
+        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm25" ) ).value;
+        //console.log( 'cm24Listener ' + inputValue );
+    }
+
+    cm30Listener() {
+        var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
+        console.log( 'cm30Listener ' + selected );
+        if ( selected ) {
+            ( <HTMLInputElement>document.getElementById( "cm31" ) ).disabled = false;
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm31" ) ).disabled = true;
+            ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
+            this.payments[2] = 0;
+
+        }
+        this.showAmountToBePaid();
     }
 
     cm31Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm31" ) ).value;
-        console.log( 'cm31Listener ' + inputValue );
+        var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
+        console.log( 'cm30Listener ' + selected );
+        if ( selected ) {
+            var inputValue = ( <HTMLInputElement>document.getElementById( "cm31" ) ).value;
+            if ( inputValue.length > 0 ) {
+                this.payments[2] = parseFloat(( <HTMLInputElement>document.getElementById( "cm31" ) ).value );
+            } else {
+                ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
+            }
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
+            this.payments[2] = 0;
+        }
+        this.showAmountToBePaid();
+    }
+
+    cm40Listener() {
+        var selected = ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked;
+        console.log( 'cm40Listener ' + selected );
+        if ( selected ) {
+            ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = false;
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
+            ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
+            this.payments[3] = 0;
+
+        }
+        this.showAmountToBePaid();
     }
 
     cm41Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm41" ) ).value;
-        console.log( 'cm41Listener ' + inputValue );
+        var selected = ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked;
+        console.log( 'cm40Listener ' + selected );
+        if ( selected ) {
+            var inputValue = ( <HTMLInputElement>document.getElementById( "cm41" ) ).value;
+            if ( inputValue.length > 0 ) {
+                this.payments[3] = parseFloat(( <HTMLInputElement>document.getElementById( "cm41" ) ).value );
+            } else {
+                ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
+            }
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
+            this.payments[3] = 0;
+        }
+        this.showAmountToBePaid();
     }
 
     /******************************************************************************************/
