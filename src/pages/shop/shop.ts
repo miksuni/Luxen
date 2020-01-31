@@ -42,6 +42,10 @@ export class ShopPage {
     toBePaid: number = 0;
     giftCardPayment: number = 0;
     testModel: number = 0;
+    giftCard1Receiver: string = "";
+    giftCard1PurchaseDate: any;
+    giftCard2Receiver: string = "";
+    giftCard2PurchaseDate: any;
 
     payments = [0.0, 0.0, 0.0, 0.0];
 
@@ -288,6 +292,14 @@ export class ShopPage {
         this.cm10Listener();
     }
 
+    giftCard1ReceiverChanged( $event ) {
+        console.log( 'giftCard1ReceiverChanged ' + $event );
+    }
+
+    giftCard1PurchaseDateChanged( $event ) {
+        console.log( 'giftCard1PurchaseDateChanged ' + $event );
+    }
+
     cm13Listener() {
         var inputValue = ( <HTMLInputElement>document.getElementById( "cm13" ) ).value;
         console.log( 'cm13Listener ' + inputValue );
@@ -332,6 +344,10 @@ export class ShopPage {
     cm22Listener() {
         //var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
         //console.log( 'cm22Listener ' + inputValue );
+    }
+
+    giftCard2PurchaseDateChanged( $event ) {
+        console.log( 'giftCard2PurchaseDateChanged ' + $event );
     }
 
     cm23Listener() {
@@ -780,6 +796,7 @@ export class ShopPage {
                         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
                         e.selectedIndex = 0;
                         this.shoppingCart.clearAll();
+                        this.cancelCombinedPayment();
                     }
                 },
                 {

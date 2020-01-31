@@ -137,7 +137,7 @@
     	  	<td>
   	  	      <input id="cm11" class="cm_number" type="text" readonly>
   	  	    </td>
-  	  	    <td><input [(ngModel)]="testModel" (ngModelChange)="testModelChanged($event)" name="testModel">{{testModel}}</td>	  	    
+  	  	    <td></td>	  	    
   	  	  </tr>
   	  	  <tr class="cm_1">
   	  	    <td>
@@ -154,10 +154,10 @@
   	  	        </tr>
   	  	        <tr>
   	  	          <td>
-  	  	            Saaja: <input id="cm13" type="text" (change)="cm13Listener()">
+  	  	            Saaja: <input [(ngModel)]="giftCard1Receiver" (ngModelChange)="giftCard1ReceiverChanged($event)" name="giftCard1Receiver">
   	  	          </td>
   	  	          <td>
-  	  	            Annettu: <input id="cm14" class="cm_date" type="date" (change)="cm14Listener()">
+  	  	            Annettu: <input [(ngModel)]="giftCard1PurchaseDate" (ngModelChange)="giftCard1PurchaseDateChanged($event)" type="date" name="giftCard1PurchaseDate" >
   	  	          </td>
   	  	        </tr>
   	  	      </table>
@@ -177,7 +177,9 @@
   	  	    <td>
   	  	      <input class="cm_number" id="cm21" type="number" value="{{giftCardPayment}}" ng-model="giftCardPayment" (change)="cm21Listener()">
   	  	    </td>
-  	  	    <td></td>
+  	  	    <td>
+  	  	      Saaja: <input [(ngModel)]="giftCard1Receiver" (ngModelChange)="giftCard1ReceiverChanged($event)" name="giftCard1Receiver">
+  	  	    </td>
   	  	  </tr>
   	  	  <tr class="cm_2">
   	  	    <td>
@@ -193,7 +195,7 @@
   	  	        </tr>
   	  	        <tr>
   	  	          <td>
-  	  	            Myynti pvm: <input class="cm_date" id="cm23" type="date" (change)="cm23Listener()">
+  	  	            Myynti pvm: <input [(ngModel)]="giftCard2PurchaseDate" (ngModelChange)="giftCard2PurchaseDateChanged($event)" type="date" name="giftCard2PurchaseDate" >
   	  	          </td>
   	  	          <td>
   	  	            Alkup arvo: <input class="cm_number" id="cm24" type="number" (change)="cm24Listener()">
