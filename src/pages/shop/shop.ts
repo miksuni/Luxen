@@ -5,6 +5,7 @@ import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart'
 import { RestProvider } from '../../providers/rest/rest';
 import { AlertController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
+import * as $ from "jquery";
 
 /**
  * Generated class for the ShopPage page.
@@ -75,9 +76,27 @@ export class ShopPage {
         public loadingCtrl: LoadingController ) {
     }
 
+
+    ngAfterViewInit() {
+        $( document ).ready( function() {
+            //alert( 'JQuery is working!!' );
+            $( ".btn1" ).click( function() {
+                $( "#shopping_cart_area" ).show();
+                $( "#payment_data_area" ).hide();
+            } );
+            $( ".btn2" ).click( function() {
+                $( "#shopping_cart_area" ).hide();
+                $( "#payment_data_area" ).show();
+            } );
+        } );
+    }
+
+
     ionViewDidLoad() {
         console.log( 'ionViewDidLoad ShopPage' );
-        document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        //document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        //document.getElementById( "payment_data_area" ).style.visibility = "hidden";
+        $( "#payment_data_area" ).hide();
         document.getElementById( "receipt_view" ).style.visibility = "hidden";
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
@@ -240,14 +259,20 @@ export class ShopPage {
         console.log( 'combinedPayment' );
         this.shoppingCart.setCashier( this.cashier );
         //this.setPaymentMethod("Lahjakortti");
-        document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        //document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        //document.getElementById( "payment_data_area" ).style.visibility = "hidden";
+        $( "#payment_data_area" ).hide();
+        $( "#shopping_cart_area" ).show();
         this.shoppingCart.clearAll(); // TEST !!!
         this.update(); // TEST !!!
     }
 
     showCombinedPayment() {
         console.log( 'showCombinedPayment' );
-        document.getElementById( "payment_combination_panel" ).style.visibility = "visible";
+        //document.getElementById( "payment_combination_panel" ).style.visibility = "visible";
+        //document.getElementById( "payment_data_area" ).style.visibility = "visible";
+        $( "#shopping_cart_area" ).hide();
+        $( "#payment_data_area" ).show();
         this.toBePaid = this.totalSum;
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
@@ -256,7 +281,10 @@ export class ShopPage {
 
     cancelCombinedPayment() {
         console.log( 'cancelCombinedPayment' );
-        document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        //document.getElementById( "payment_combination_panel" ).style.visibility = "hidden";
+        //document.getElementById( "payment_data_area" ).style.visibility = "hidden";
+        $( "#payment_data_area" ).hide();
+        $( "#shopping_cart_area" ).show();
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
         }
