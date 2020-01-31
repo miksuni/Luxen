@@ -190,7 +190,7 @@
   	  	      <table>
   	  	        <tr>
   	  	          <td>
-  	  	            Myynyt ry: <input id="cm22" type="text" (change)="cm22Listener()">
+  	  	            Myynyt ry: <input [(ngModel)]="giftCard2Originator" (ngModelChange)="giftCard2OriginatorChanged($event)" name="giftCard2Originator">
   	  	          </td>
   	  	        </tr>
   	  	        <tr>
@@ -198,10 +198,10 @@
   	  	            Myynti pvm: <input [(ngModel)]="giftCard2PurchaseDate" (ngModelChange)="giftCard2PurchaseDateChanged($event)" type="date" name="giftCard2PurchaseDate" >
   	  	          </td>
   	  	          <td>
-  	  	            Alkup arvo: <input class="cm_number" id="cm24" type="number" (change)="cm24Listener()">
+  	  	            Käytettävissä: <input class="cm_number" [(ngModel)]="giftCard2AmountBefore" (ngModelChange)="giftCard2AmountBeforeChanged($event)" type="number" name="giftCard2AmountBefore">
   	  	          </td>
   	  	          <td>
-  	  	            Jäljellä: <input class="cm_number" id="cm25" type="number" (change)="cm25Listener()">
+  	  	            Jäljellä: <input class="cm_number" [(ngModel)]="giftCard2AmountAfter" (ngModelChange)="giftCard2AmountAfterChanged($event)" type="number" name="giftCard2AmountAfter">
   	  	          </td>
   	  	        </tr>
   	  	      </table>

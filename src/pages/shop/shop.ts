@@ -39,14 +39,17 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
+    // TODO: KUN COMBINED PAYMENT TALLETETTU, NOLLAA NÄMÄ !!!
     toBePaid: number = 0;
-    giftCardPayment: number = 0;
-    testModel: number = 0;
+    giftCardPayment: number = 0.0;
+    testModel: number = 0.0;
     giftCard1Receiver: string = "";
     giftCard1PurchaseDate: any;
     giftCard2Receiver: string = "";
     giftCard2PurchaseDate: any;
-
+    giftCard2Originator: string = "";
+    giftCard2AmountBefore: number = 0.0;
+    giftCard2AmountAfter: number = 0.0;
     payments = [0.0, 0.0, 0.0, 0.0];
 
     givenAmount = 0;
@@ -300,15 +303,15 @@ export class ShopPage {
         console.log( 'giftCard1PurchaseDateChanged ' + $event );
     }
 
-    cm13Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm13" ) ).value;
-        console.log( 'cm13Listener ' + inputValue );
-    }
-
-    cm14Listener() {
-        var inputValue = ( <HTMLInputElement>document.getElementById( "cm14" ) ).value;
-        console.log( 'cm14Listener ' + inputValue );
-    }
+    //    cm13Listener() {
+    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm13" ) ).value;
+    //        console.log( 'cm13Listener ' + inputValue );
+    //    }
+    //
+    //    cm14Listener() {
+    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm14" ) ).value;
+    //        console.log( 'cm14Listener ' + inputValue );
+    //    }
 
     cm20Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
@@ -341,29 +344,42 @@ export class ShopPage {
         this.showAmountToBePaid();
     }
 
-    cm22Listener() {
-        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
-        //console.log( 'cm22Listener ' + inputValue );
+    //    cm22Listener() {
+    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
+    //        console.log( 'cm22Listener ' + inputValue );
+    //    }
+
+    giftCard2OriginatorChanged( $event ) {
+        console.log( 'giftCard2OriginatorChanged ' + $event );
     }
 
     giftCard2PurchaseDateChanged( $event ) {
         console.log( 'giftCard2PurchaseDateChanged ' + $event );
     }
 
-    cm23Listener() {
-        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm23" ) ).value;
-        //console.log( 'cm23Listener ' + inputValue );
+    giftCard2AmountBeforeChanged( $event ) {
+        console.log( 'giftCard2AmountBeforeChanged ' + $event );
+        this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
     }
 
-    cm24Listener() {
-        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm24" ) ).value;
-        //console.log( 'cm24Listener ' + inputValue );
+    giftCard2AmountAfterChanged( $event ) {
+        console.log( 'giftCard2AmountAfterChanged ' + $event );
     }
 
-    cm25Listener() {
-        //var inputValue = ( <HTMLInputElement>document.getElementById( "cm25" ) ).value;
-        //console.log( 'cm24Listener ' + inputValue );
-    }
+    //    cm23Listener() {
+    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm23" ) ).value;
+    //        console.log( 'cm23Listener ' + inputValue );
+    //    }
+    //
+    //    cm24Listener() {
+    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm24" ) ).value;
+    //        console.log( 'cm24Listener ' + inputValue );
+    //    }
+    //
+    //    cm25Listener() {
+    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm25" ) ).value;
+    //        console.log( 'cm24Listener ' + inputValue );
+    //    }
 
     cm30Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
