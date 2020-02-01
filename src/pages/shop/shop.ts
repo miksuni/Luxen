@@ -278,13 +278,24 @@ export class ShopPage {
         this.presentPromptPaymentCardInstructions();
     }
 
+    clearPayments() {
+        for ( var i = 0; i < this.payments.length; i++ ) {
+            this.payments[i] = 0.0;
+        }
+    }
+
     // TODO: add receipt nr handling
     combinedPayment() {
         console.log( 'combinedPayment' );
-        this.shoppingCart.setCashier( this.cashier );
+
         //this.setPaymentMethod("Lahjakortti");
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
+
+        this.presentLoading( "Talletetaan..." );
+        this.shoppingCart.setCashier( this.cashier );
+        this.receiptContent = Array.from( this.cartContent );
+        this.receiptTotalSumAsString = this.totalSumAsString;
 
         var receiptData = {
             receiptNr: 0,
@@ -365,11 +376,20 @@ export class ShopPage {
         }
 
         this.shoppingCart.saveReceipt2( receiptData );
-
         this.shoppingCart.clearAll();
+        this.clearPayments();
         this.update();
+        document.getElementById( "receipt_view" ).style.visibility = "visible";
 
-        //console.log( 'receiptData: ' + JSON.stringify( receiptData ) );
+        setTimeout(() => {
+            this.finishLoading();
+            this.presentLoading( "Haetaan tuotteet..." );
+            setTimeout(() => {
+                this.productList.getProductInfo();
+                this.finishLoading();
+            }, 2000 );
+            this.finishLoading();
+        }, 2000 );
 
     }
 
