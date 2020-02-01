@@ -30,6 +30,7 @@ export class ShopPage {
 
     sites = [{ id: 'Lahti' }];
     cashiers: any;
+    currentState: any;
     orderList = { products: [] };
     chat = { from: '', message: '' };
     chatMessages: any;
@@ -130,6 +131,7 @@ export class ShopPage {
         this.productList.getProductInfo();
         this.shoppingCart.clearAll();
         this.cartContent = this.shoppingCart.getProducts();
+        this.getCurrentState();
         this.getCashiers();
         this.getChat();
         this.update();
@@ -144,7 +146,23 @@ export class ShopPage {
         this.restProvider.cashiers( "" ).then(( result: any ) => {
             console.log( '>> result received' );
             this.cashiers = JSON.parse( result.result );
-            //console.log('cashiers: ' + JSON.stringify(this.cashiers));
+            console.log( 'cashiers: ' + JSON.stringify( this.cashiers ) );
+        }, ( err ) => {
+            console.log( err );
+        } );
+    }
+
+    getCurrentState() {
+        console.log( '>> home.getCurrentState' );
+        this.restProvider.sendRequest( 'current_state', [] ).then(( result: any ) => {
+            console.log( '>> result received' );
+            //this.currentState = JSON.parse( result.result );
+            var currentState = JSON.parse( result.result );
+            if ( currentState.length > 0 ) {
+                this.currentState = currentState[0];
+            }
+            console.log( 'currentState: ' + JSON.stringify( this.currentState ) );
+
         }, ( err ) => {
             console.log( err );
         } );
@@ -191,7 +209,7 @@ export class ShopPage {
             var found = this.productList.getProductProgressivelyByNumber( this.productNumberInitials );
             this.searchResult = found;
             console.log( '>> found: ' + found.length );
-            console.log( '>> json: ' + JSON.stringify( found ) );
+            //console.log( '>> json: ' + JSON.stringify( found ) );
         }
     }
 
@@ -201,7 +219,7 @@ export class ShopPage {
         var found = this.productList.getProductByName( this.productNameInitials );
         this.searchResult = found;
         console.log( '>> found: ' + found.length );
-        console.log( '>> json: ' + JSON.stringify( found ) );
+        //console.log( '>> json: ' + JSON.stringify( found ) );
     }
 
     onProductSelected( productName, index ) {
@@ -296,6 +314,10 @@ export class ShopPage {
         this.shoppingCart.setCashier( this.cashier );
         this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
+        console.log( '*** current state ' + JSON.stringify( this.currentState ) );
+        console.log( '*** receipt nr: 1 ' + this.currentState.lastReceiptNr );
+        this.currentState.lastReceiptNr = this.currentState.lastReceiptNr + 1;
+        console.log( '*** receipt nr: 2 ' + this.currentState.lastReceiptNr );
 
         var receiptData = {
             receiptNr: 0,
@@ -303,7 +325,7 @@ export class ShopPage {
             items: []
         }
 
-        receiptData.receiptNr = 2;
+        receiptData.receiptNr = this.currentState.lastReceiptNr;
         receiptData.cashier = this.cashier;
 
         if ( this.payments[0] > 0 ) {
@@ -386,11 +408,11 @@ export class ShopPage {
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
                 this.productList.getProductInfo();
+                this.getCurrentState();
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();
         }, 2000 );
-
     }
 
     showCombinedPayment() {
