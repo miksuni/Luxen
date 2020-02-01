@@ -161,11 +161,11 @@
 							<tr class="cm_2">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm21" type="number"
-									value="{{giftCardPayment}}" ng-model="giftCardPayment"
-									(change)="cm21Listener()"></td>
-								<td>Saaja: <input id="cm22" [(ngModel)]="giftCard1Receiver"
-									(ngModelChange)="giftCard1ReceiverChanged($event)"
-									name="giftCard1Receiver">
+									[(ngModel)]="giftCard2Payment"
+									(ngModelChange)="cm21Listener($event)"></td>
+								<td>Saaja: <input id="cm22" [(ngModel)]="giftCard2Receiver"
+									(ngModelChange)="giftCard2ReceiverChanged($event)"
+									name="giftCard2Receiver">
 								</td>
 							</tr>
 							<tr class="cm_2">

@@ -42,12 +42,12 @@ export class ShopPage {
 
     // TODO: KUN COMBINED PAYMENT TALLETETTU, NOLLAA NÄMÄ !!!
     toBePaid: number = 0;
-    giftCardPayment: number = 0.0;
     testModel: number = 0.0;
     giftCard1Receiver: string = "";
-    giftCard1PurchaseDate: any;
+    giftCard1PurchaseDate: any = "";
+    giftCard2Payment: number = 0.0;
     giftCard2Receiver: string = "";
-    giftCard2PurchaseDate: any;
+    giftCard2PurchaseDate: any = "";
     giftCard2Originator: string = "";
     giftCard2AmountBefore: number = 0.0;
     giftCard2AmountAfter: number = 0.0;
@@ -269,7 +269,7 @@ export class ShopPage {
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
         this.disableCombinedPaymentFields();
-        this.showAmountToBePaid();
+        this.validateCm();
     }
 
     cancelCombinedPayment() {
@@ -281,21 +281,20 @@ export class ShopPage {
         }
     }
 
-    showAmountToBePaid() {
+    validateCm() {
+        console.log( 'validateCm' );
         var currentPayments = 0.0;
         for ( var i = 0; i < this.payments.length; i++ ) {
             currentPayments += this.payments[i];
         }
         this.toBePaid = this.totalSum - currentPayments;
-        this.confirmedPaymentEnabled = ( this.toBePaid == 0 );
+        this.confirmedPaymentEnabled = ( ( this.toBePaid == 0 ) &&
+            this.cm1Valid() &&
+            this.cm2Valid() );
     }
 
-    cm1DataComplete: boolean = false;
-    cm2DataComplete: boolean = false;
-    cm3DataComplete: boolean = false;
-    cm4DataComplete: boolean = false;
-
     disableCombinedPaymentFields() {
+        console.log( 'disableCombinedPaymentFields' );
         this.enableCm1Fields( false );
         this.enableCm2Fields( false );
     }
@@ -315,11 +314,9 @@ export class ShopPage {
             this.payments[0] = 0;
             this.enableCm1Fields( false );
             this.clearCm1Fields();
-            this.cm1DataComplete = false;
         }
-        this.showAmountToBePaid();
+        this.validateCm();
     }
-
 
     cm11Listener() {
         console.log( 'cmListener' );
@@ -328,13 +325,29 @@ export class ShopPage {
 
     giftCard1ReceiverChanged( $event ) {
         console.log( 'giftCard1ReceiverChanged ' + $event );
+        this.validateCm();
     }
 
     giftCard1PurchaseDateChanged( $event ) {
         console.log( 'giftCard1PurchaseDateChanged ' + $event );
+        this.validateCm();
+    }
+
+    cm1Valid() {
+        console.log( 'cm1Valid' );
+        if ( ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked ) {
+            if ( ( this.giftCard1Receiver.length > 0 ) &&
+                ( this.giftCard1PurchaseDate.length > 0 ) ) {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
     }
 
     enableCm1Fields( enabled ) {
+        console.log( 'enableCm1Fields' );
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm12" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm13" ) ).disabled = !enabled;
@@ -343,6 +356,7 @@ export class ShopPage {
     }
 
     clearCm1Fields() {
+        console.log( 'clearCm1Fields' );
         this.giftCard1Receiver = "";
         this.giftCard1PurchaseDate = "";
     }
@@ -351,6 +365,7 @@ export class ShopPage {
     /*** CM 2 ***/
 
     cm20Listener() {
+        console.log( 'cm20Listener' );
         var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
         console.log( 'cm20Listener ' + selected );
         if ( selected ) {
@@ -359,47 +374,74 @@ export class ShopPage {
             this.payments[1] = 0;
             this.enableCm2Fields( false );
             this.clearCm2Fields();
-            this.cm2DataComplete = false;
 
         }
-        this.showAmountToBePaid();
+        ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
+        this.validateCm();
     }
 
-    cm21Listener() {
-        var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
-        console.log( 'cm20Listener ' + selected );
-        if ( selected ) {
-            var inputValue = ( <HTMLInputElement>document.getElementById( "cm21" ) ).value;
-            if ( inputValue.length > 0 ) {
-                this.payments[1] = parseFloat(( <HTMLInputElement>document.getElementById( "cm21" ) ).value );
-            } else {
-                ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
-            }
-        } else {
-            ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
-            this.payments[1] = 0;
-        }
-        this.showAmountToBePaid();
+    giftCard2ReceiverChanged( $event ) {
+        console.log( 'giftCard2ReceiverChanged ' + $event );
+        this.validateCm();
+    }
+
+    cm21Listener( $event ) {
+        console.log( 'cm21Listener ' + $event );
+        this.payments[1] = parseFloat( $event );
+        this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
+        this.validateCm();
     }
 
     giftCard2OriginatorChanged( $event ) {
         console.log( 'giftCard2OriginatorChanged ' + $event );
+        this.validateCm();
     }
 
     giftCard2PurchaseDateChanged( $event ) {
         console.log( 'giftCard2PurchaseDateChanged ' + $event );
+        this.validateCm();
     }
 
     giftCard2AmountBeforeChanged( $event ) {
         console.log( 'giftCard2AmountBeforeChanged ' + $event );
         this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
+        this.validateCm();
     }
 
     giftCard2AmountAfterChanged( $event ) {
         console.log( 'giftCard2AmountAfterChanged ' + $event );
+        this.validateCm();
+    }
+
+    cm2Valid() {
+        console.log( 'cm2valid' );
+        if ( ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked ) {
+            if ( ( this.payments[1] > 0 ) &&
+                ( this.giftCard2Receiver.length > 0 ) &&
+                ( this.giftCard2Originator.length > 0 ) &&
+                ( this.giftCard2PurchaseDate.length > 0 ) &&
+                ( this.giftCard2AmountBefore > 0 ) &&
+                ( this.giftCard2AmountAfter >= 0 ) ) {
+                console.log( 'cm2valid: true' );
+                return true;
+            } else {
+                console.log( 'cm2valid: false ' + this.payments[1] + ', '
+                    + this.giftCard2Receiver.length + ', '
+                    + this.giftCard2Originator.length + ', '
+                    + this.giftCard2PurchaseDate.length + ', '
+                    + this.giftCard2AmountBefore + ', '
+                    + this.giftCard2AmountAfter
+                );
+            }
+
+        } else {
+            console.log( 'cm2valid: false (cm2 not enabled)' );
+            return false;
+        }
     }
 
     enableCm2Fields( enabled ) {
+        console.log( 'enableCm2Fields' );
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm22" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm23" ) ).disabled = !enabled;
@@ -409,8 +451,9 @@ export class ShopPage {
     }
 
     clearCm2Fields() {
-        this.giftCardPayment = 0;
-        this.giftCard1Receiver = "";
+        console.log( 'clearCm2Fields' );
+        this.giftCard2Payment = 0;
+        this.giftCard2Receiver = "";
         this.giftCard2Originator = "";
         this.giftCard2PurchaseDate = "";
         this.giftCard2AmountBefore = 0;
@@ -431,7 +474,7 @@ export class ShopPage {
             this.payments[2] = 0;
 
         }
-        this.showAmountToBePaid();
+        this.validateCm();
     }
 
     cm31Listener() {
@@ -448,7 +491,7 @@ export class ShopPage {
             ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
             this.payments[2] = 0;
         }
-        this.showAmountToBePaid();
+        this.validateCm();
     }
 
     cm40Listener() {
@@ -462,7 +505,7 @@ export class ShopPage {
             this.payments[3] = 0;
 
         }
-        this.showAmountToBePaid();
+        this.validateCm();
     }
 
     cm41Listener() {
@@ -479,7 +522,7 @@ export class ShopPage {
             ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
             this.payments[3] = 0;
         }
-        this.showAmountToBePaid();
+        this.validateCm();
     }
 
     /******************************************************************************************/
