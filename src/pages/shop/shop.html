@@ -5,366 +5,349 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Julkaisumyynti</ion-title>
-  </ion-navbar>
-</ion-header>
+<ion-header> <ion-navbar>
+<button ion-button menuToggle>
+	<ion-icon name="menu"></ion-icon>
+</button>
+<ion-title>Julkaisumyynti</ion-title> </ion-navbar> </ion-header>
 
 
 <ion-content padding class="shop">
 <div class="row">
 
-  <table class="table_main_frame">
-  	<tr>
-  	
-  	  <!-- HEADER -->
-  	  <td class="table_main_header">
-         Ostoskorissa {{productsInCart}} tuotetta, yhteensä {{totalSumAsString}} euroa
-      </td>
-      <td class="cashier_field" style="text-align: center">
-	    Kassa:
-	    <select id="current_cashier" class="cashier_button">
-	      <option></option>
-	      <option *ngFor="let cashier of cashiers">{{cashier.firstName}}</option>
-	    </select>
-      </td>
-      <td style="text-align: center" td width = "50px">
-        <button ion-button class="product_line_button" (click)="onLogout()">
-            Kirjaudu ulos
-         </button>
-  	  </td>
-  	</tr>
-  	<tr>
-  	
-  	  <!-- *** LEFT PANEL *** -->
-  	  <td class="table_left_column">
-  	  
-  	  <div id = "left_panel_area">
-  	    <!-- SHOPPING CART -->
-  	    <div id="shopping_cart_area">
-	    <table class="table_shopping_cart" style="width:100%">
-	      <tr>
-	        <th>Nimi</th>
-	        <th class="th_narrow_centered">Saldo</th>
-	        <th class="th_narrow_centered">Hinta</th>
-	        <th class="th_narrow_centered"></th>
-	        <th class="th_narrow_centered">Määrä</th>
-	        <th class="th_narrow_centered"></th>
-	        <th class="th_narrow_centered">Yht.</th>
-	        <th class="th_narrow_centered">Poista</th>
-	      </tr>
-	      <tr *ngFor="let item of cartContent let i = index">
-	        <td style="">{{item.productName}}</td>
-	        <td class="counter_cell">{{item.amountInStock}}</td>
-	        <td>{{item.priceAsString}}</td>
-	        <td class="counter_cell">
-	          <button ion-button class="product_line_button" (click)="increase(item, i)">
-	            <ion-icon name="add" item-start></ion-icon>
-	          </button>
-	        </td>
-	        <td class="counter_cell">{{item.quantity}}</td>
-	        <td class="counter_cell">
-	          <button ion-button class="product_line_button" (click)="decrease(item, i)">
-	            <ion-icon name="remove" item-start></ion-icon>
-	          </button>
-	        </td>
-	        <td>{{item.totalAsString}}</td>
-	        <td class="counter_cell">
-	          <button ion-button class="product_line_button" (click)="removeProduct(item.productName, i)">
-	            <ion-icon name="trash" item-start></ion-icon>
-	          </button>
-	        </td>
-	      </tr>
-	    </table>
-  	    <tr>
-  	    
-  	      <!-- PRODUCT INPUT FIELDS -->
-  	      <td>
-  	         <table class="table_product_input_fields">
-		      <tr>
-		        <td>
-		          <ion-input [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="onInputClicked()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
-		        </td>
-		        <td>
-		          <ion-input type="number" [(ngModel)]="productNumberInitials" placeholder="Tuotenumero" (click)="onInputClicked()" (ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
-		        </td>
-		        <td width = "80px">
-		          <ion-input placeholder="Hinta" [disabled] = "true"></ion-input>
-		        </td>
-		        <td width = "80px">
-		          <ion-input placeholder="Saldo" [disabled] = "true"></ion-input>
-		        </td>
-		      </tr>
-		      <tr *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >
-		        <td>
-		          {{element.productName}}
-		        </td>
-		        <td>
-		          {{element.ISBN}}
-		        </td>
-		        <td>
-		          {{element.price}}
-		        </td>
-		        <td>
-		          {{element.amountInStock}}
-		        </td>
-		      </tr>
-		    </table>
-  	      </td>
-  	    </tr>
-  	  </div>
-  	  </div>
-  	  
-  	  <div id="payment_data_area">
-  	    <!-- *** PAYMENT METHOD COMBINATIONS start *** -->
-  	    <div id="payment_combination_panel">
-  	  	<table class="paymen_method_combination_table">
-  	  	
-  	  	  <!-- Lahden ry lahjakortti -->
-  	  	  <tr class="cm_1">
-  	  	    <td colspan=6>
-  	  	      <input id="cm1" type="checkbox" (change)="cm10Listener()"> Lahden ry:n lahjakortti
-  	  	    </td>
-  	  	  </tr>
-  	  	  
-  	  	  <tr class="cm_1">
-  	  	    <td>
-  	  	      Arvo:
-  	  	    </td>
-    	  	<td>
-  	  	      <input id="cm11" class="cm_number" type="text" readonly>
-  	  	    </td>
-  	  	    <td></td>	  	    
-  	  	  </tr>
-  	  	  <tr class="cm_1">
-  	  	    <td>
-  	  	    </td>
-  	  	    <td>
-  	  	    </td>
-  	  	    <td>
-  	  	      <table>
-  	  	        <tr>
-  	  	          <td>
-  	  	            <input class="radio_button" id="cm11" type="radio" name="cm1" checked (change)="cm11Listener()">Vauvalahjakortti<br>
-                    <input class="radio_button" id="cm12" type="radio" name="cm1" (change)="cm11Listener()">Merkkipäivä<br>
-  	  	          </td>
-  	  	        </tr>
-  	  	        <tr>
-  	  	          <td>
-  	  	            Saaja: <input [(ngModel)]="giftCard1Receiver" (ngModelChange)="giftCard1ReceiverChanged($event)" name="giftCard1Receiver">
-  	  	          </td>
-  	  	          <td>
-  	  	            Annettu: <input [(ngModel)]="giftCard1PurchaseDate" (ngModelChange)="giftCard1PurchaseDateChanged($event)" type="date" name="giftCard1PurchaseDate" >
-  	  	          </td>
-  	  	        </tr>
-  	  	      </table>
-  	  	    </td>
-  	  	  </tr>
-  	  	  
-  	  	  <!-- SRK lahjakortti -->
-  	  	  <tr class="cm_2">
-  	  	    <td colspan=6>
-  	  	       <input id="cm2" type="checkbox" (change)="cm20Listener()"> SRK:n julkaisulahjakortti
-  	  	    </td>
-  	  	  </tr>
-  	  	  <tr class="cm_2">
-  	  	    <td>
-  	  	      Veloitus:
-  	  	    </td>
-  	  	    <td>
-  	  	      <input class="cm_number" id="cm21" type="number" value="{{giftCardPayment}}" ng-model="giftCardPayment" (change)="cm21Listener()">
-  	  	    </td>
-  	  	    <td>
-  	  	      Saaja: <input [(ngModel)]="giftCard1Receiver" (ngModelChange)="giftCard1ReceiverChanged($event)" name="giftCard1Receiver">
-  	  	    </td>
-  	  	  </tr>
-  	  	  <tr class="cm_2">
-  	  	    <td>
-  	  	    </td>
-  	  	    <td>
-  	  	    </td>
-  	  	    <td>	  	    
-  	  	      <table>
-  	  	        <tr>
-  	  	          <td>
-  	  	            Myynyt ry: <input [(ngModel)]="giftCard2Originator" (ngModelChange)="giftCard2OriginatorChanged($event)" name="giftCard2Originator">
-  	  	          </td>
-  	  	        </tr>
-  	  	        <tr>
-  	  	          <td>
-  	  	            Myynti pvm: <input [(ngModel)]="giftCard2PurchaseDate" (ngModelChange)="giftCard2PurchaseDateChanged($event)" type="date" name="giftCard2PurchaseDate" >
-  	  	          </td>
-  	  	          <td>
-  	  	            Käytettävissä: <input class="cm_number" [(ngModel)]="giftCard2AmountBefore" (ngModelChange)="giftCard2AmountBeforeChanged($event)" type="number" name="giftCard2AmountBefore">
-  	  	          </td>
-  	  	          <td>
-  	  	            Jäljellä: <input class="cm_number" [(ngModel)]="giftCard2AmountAfter" (ngModelChange)="giftCard2AmountAfterChanged($event)" type="number" name="giftCard2AmountAfter">
-  	  	          </td>
-  	  	        </tr>
-  	  	      </table>
-  	  	    </td>
-  	  	  </tr>
-  	  	  
-  	  	  <!-- Cash -->
-  	  	  <tr class="cm_3">
-  	  	    <td colspan=6>
-  	  	      <input id="cm3" type="checkbox" (change)="cm30Listener()"> Käteinen
-  	  	    </td>
-  	  	  </tr>
-  	  	  <tr class="cm_3">
-  	  	    <td>
-  	  	      Veloitus:
-  	  	    </td>
-  	  	    <td>
-  	  	      <input class="cm_number" id="cm31" type="number" (change)="cm31Listener()">
-  	  	    </td>
-  	  	    <td></td>
-  	  	  </tr>
-  	  	  
-  	  	  <!-- Card -->
-  	  	  <tr class="cm_4">
-  	  	    <td colspan=6>
-  	  	      <input id="cm4" type="checkbox" (change)="cm40Listener()"> Kortilla
-  	  	    </td>
-  	  	  </tr>
-  	  	  <tr class="cm_4">
-  	  	    <td>
-  	  	      Veloitus:
-  	  	    </td>
-  	  	    <td>
-  	  	      <input class="cm_number" id="cm41" type="number" (change)="cm41Listener()">
-  	  	    </td>
-  	  	    <td></td>
-  	  	  </tr>
-  	  	  <tr>
-  	  	    <td>
-  	  	      Puuttuu:
-  	  	    </td>
-  	  	    <td>
-  	  	        <input class="cm_number" type="number" value="{{toBePaid}}" ng-model="toBePaid" readonly />
-  	  	    </td>
-  	  	    <td>
-  	  	      <button ion-button class="product_line_button" [disabled]="checkIfConfirmedPaymentEnabled()" (click)="combinedPayment()">
-                Vahvista maksu
-              </button>
-              <button ion-button class="product_line_button" color="light" (click)="cancelCombinedPayment()">
-                Peruuta
-              </button>
-            </td>
-  	  	  </tr>
-  	  	</table>
-  	  	</div>
-  	  	<!-- *** PAYMENT METHOD COMBINATIONS end *** -->
-  	  	</div>
-  	  </td>
-  	  
-  	  <!-- *** RIGHT PANEL *** -->
-  	  <td class="table_right_column" colspan="2">
-  	  
-  	    <!-- PAYMENT BUTTONS start -->
-	    <table class="right_panel" style="width:100%">
-	      <tr>
-			<table class="payment_button_panel">
-			  <tr>
-	            <td style="text-align: center">
-	              <button ion-button class="payment_button" id="card_button" [disabled]="checkIfCardPaymentEnabled()" (click)="cardPayment()">
-	                <ion-icon name="card" item-start> Korttimaksu</ion-icon>
-   	              </button>
-	            </td>
-	            <td style="text-align: center">
-	              <button ion-button class="payment_button" id="cash_button" [disabled]="checkIfCashPaymentEnabled()" (click)="cashPayment()">
-	                <ion-icon name="cash" item-start> Käteinen</ion-icon>
-	              </button>
-	            </td>
-			  </tr>
-			  <tr>
-			    <td style="text-align: center">
-			       <button ion-button class="payment_button" id="gift_card_button" [disabled]="checkIfGiftCartPaymentEnabled()" (click)="showCombinedPayment()">
-	                <ion-icon name="card" item-start> Maksuyhd.</ion-icon>
-   	              </button>
-			    </td>
-			  </tr>
-			</table>
-			<button class="btn1">On</button>
-            <button class="btn2">Siistii</button>
-	      </tr>
-	      <!-- PAYMENT BUTTONS end --> 
+	<table class="table_main_frame">
+		<tr>
 
-	      <!-- CHAT start -->
-	      <tr>
-	        <td colspan="2">
-	          <table class="chat_view">
-	            <tr>
-	              <td colspan="2">
-    		        <table>
-    		          <div class="chat_box">
-    		            <tr  *ngFor="let entry of chatMessages let i = index">
-    		              <td class="chat_lines">
-    		                <div id="{{ 'chat' + i }}">
-    		                  <b>{{entry.from}}:</b> {{entry.message}}
-    		                </div>
-    		              </td>
-    		            </tr>
-    		          </div>
-    		        </table>
-			      </td>
-			    </tr>
-			    <tr>
-			      <td>
-			        <div class="chat_input_box">
-			          <ion-input [(ngModel)]="chatMessage" placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
-			        </div>
-			  	  </td>
-			  	  <td>
-    		        <button ion-button class="send_button" (click)="saveChat()">
-       			      <ion-icon name="send" item-start></ion-icon>
-    		        </button>
-    		      </td>
-    		    </tr>
-    		  </table>
-    		</td>
-	      </tr>
-	      <!-- CHAT end -->
-    
-	      <!-- RECEIPT start -->
-	      <tr>
-	        <div id="receipt_view">
-      		  <table class="receipt" style="width:100%">
-      		    <tr>
-      		      <td colspan="4">
-      		      Viimeisin kuitti:
-      		      </td>
-      		    </tr>
-		        <tr>
-		          <th>Tuote</th>
-		          <th>Hinta</th>
-		          <th>MÃ¤Ã¤rÃ¤</th>
-                  <th>Yht.</th>
-		        </tr>
-		        <tr  *ngFor="let item of receiptContent let i = index">
-		          <td>{{item.productName}}</td>
-		          <td>{{item.priceAsString}}</td>
-		          <td>{{item.quantity}}</td>
-		          <td>{{item.totalAsString}}</td>
-		        </tr>
-                <tr>
-		          <td></td>
-		          <td></td>
-		          <td></td>
-		          <th>{{receiptTotalSumAsString}}</th>
-		        </tr>
-		      </table>
-		    </div>
-	      </tr>
-	      <!-- RECEIPT end -->
-	      
-	    </table>
-  	  </td>
-  	</tr>
-  </table>
+			<!-- HEADER -->
+			<td class="table_main_header">Ostoskorissa {{productsInCart}}
+				tuotetta, yhteensä {{totalSumAsString}} euroa</td>
+			<td class="cashier_field" style="text-align: center">Kassa: <select
+				id="current_cashier" class="cashier_button">
+					<option></option>
+					<option *ngFor="let cashier of cashiers">{{cashier.firstName}}</option>
+			</select>
+			</td>
+			<td style="text-align: center" td width="50px">
+				<button ion-button class="product_line_button" (click)="onLogout()">
+					Kirjaudu ulos</button>
+			</td>
+		</tr>
+		<tr>
+
+			<!-- *** LEFT PANEL *** -->
+			<td class="table_left_column">
+
+				<div id="left_panel_area">
+					<!-- SHOPPING CART -->
+					<div id="shopping_cart_area">
+						<table class="table_shopping_cart" style="width: 100%">
+							<tr>
+								<th>Nimi</th>
+								<th class="th_narrow_centered">Saldo</th>
+								<th class="th_narrow_centered">Hinta</th>
+								<th class="th_narrow_centered"></th>
+								<th class="th_narrow_centered">Määrä</th>
+								<th class="th_narrow_centered"></th>
+								<th class="th_narrow_centered">Yht.</th>
+								<th class="th_narrow_centered">Poista</th>
+							</tr>
+							<tr *ngFor="let item of cartContent let i = index">
+								<td style="">{{item.productName}}</td>
+								<td class="counter_cell">{{item.amountInStock}}</td>
+								<td>{{item.priceAsString}}</td>
+								<td class="counter_cell">
+									<button ion-button class="product_line_button"
+										(click)="increase(item, i)">
+										<ion-icon name="add" item-start></ion-icon>
+									</button>
+								</td>
+								<td class="counter_cell">{{item.quantity}}</td>
+								<td class="counter_cell">
+									<button ion-button class="product_line_button"
+										(click)="decrease(item, i)">
+										<ion-icon name="remove" item-start></ion-icon>
+									</button>
+								</td>
+								<td>{{item.totalAsString}}</td>
+								<td class="counter_cell">
+									<button ion-button class="product_line_button"
+										(click)="removeProduct(item.productName, i)">
+										<ion-icon name="trash" item-start></ion-icon>
+									</button>
+								</td>
+							</tr>
+						</table>
+						<tr>
+
+							<!-- PRODUCT INPUT FIELDS -->
+							<td>
+								<table class="table_product_input_fields">
+									<tr>
+										<td><ion-input [(ngModel)]="productNameInitials"
+												placeholder="Tuotteen nimi" (click)="onInputClicked()"
+												(ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+										</td>
+										<td><ion-input type="number"
+												[(ngModel)]="productNumberInitials"
+												placeholder="Tuotenumero" (click)="onInputClicked()"
+												(ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
+										</td>
+										<td width="80px"><ion-input placeholder="Hinta"
+												[disabled]="true"></ion-input></td>
+										<td width="80px"><ion-input placeholder="Saldo"
+												[disabled]="true"></ion-input></td>
+									</tr>
+									<tr *ngFor="let element of searchResult; let i = index"
+										(click)="onProductSelected(element.productName, i)">
+										<td>{{element.productName}}</td>
+										<td>{{element.ISBN}}</td>
+										<td>{{element.price}}</td>
+										<td>{{element.amountInStock}}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</div>
+				</div>
+
+				<div id="payment_data_area">
+					<!-- *** PAYMENT METHOD COMBINATIONS start *** -->
+					<div id="payment_combination_panel">
+						<table class="paymen_method_combination_table">
+
+							<!-- Lahden ry lahjakortti -->
+							<tr class="cm_1">
+								<td colspan=6><input id="cm1" type="checkbox"
+									(change)="cm10Listener()"> Lahden ry:n lahjakortti</td>
+							</tr>
+
+							<tr class="cm_1">
+								<td>Arvo:</td>
+								<td><input id="cm11" class="cm_number" type="text" readonly>
+								</td>
+								<td></td>
+							</tr>
+							<tr class="cm_1">
+								<td></td>
+								<td></td>
+								<td>
+									<table>
+										<tr>
+											<td><input class="radio_button" id="cm11" type="radio"
+												name="cm1" checked (change)="cm11Listener()">Vauvalahjakortti<br>
+												<input class="radio_button" id="cm12" type="radio"
+												name="cm1" (change)="cm11Listener()">Merkkipäivä<br>
+											</td>
+										</tr>
+										<tr>
+											<td>Saaja: <input [(ngModel)]="giftCard1Receiver"
+												(ngModelChange)="giftCard1ReceiverChanged($event)"
+												name="giftCard1Receiver">
+											</td>
+											<td>Annettu: <input [(ngModel)]="giftCard1PurchaseDate"
+												(ngModelChange)="giftCard1PurchaseDateChanged($event)"
+												type="date" name="giftCard1PurchaseDate">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+							<!-- SRK lahjakortti -->
+							<tr class="cm_2">
+								<td colspan=6><input id="cm2" type="checkbox"
+									(change)="cm20Listener()"> SRK:n julkaisulahjakortti</td>
+							</tr>
+							<tr class="cm_2">
+								<td>Veloitus:</td>
+								<td><input class="cm_number" id="cm21" type="number"
+									value="{{giftCardPayment}}" ng-model="giftCardPayment"
+									(change)="cm21Listener()"></td>
+								<td>Saaja: <input [(ngModel)]="giftCard1Receiver"
+									(ngModelChange)="giftCard1ReceiverChanged($event)"
+									name="giftCard1Receiver">
+								</td>
+							</tr>
+							<tr class="cm_2">
+								<td></td>
+								<td></td>
+								<td>
+									<table>
+										<tr>
+											<td>Myynyt ry: <input [(ngModel)]="giftCard2Originator"
+												(ngModelChange)="giftCard2OriginatorChanged($event)"
+												name="giftCard2Originator">
+											</td>
+										</tr>
+										<tr>
+											<td>Myynti pvm: <input
+												[(ngModel)]="giftCard2PurchaseDate"
+												(ngModelChange)="giftCard2PurchaseDateChanged($event)"
+												type="date" name="giftCard2PurchaseDate">
+											</td>
+											<td>Käytettävissä: <input class="cm_number"
+												[(ngModel)]="giftCard2AmountBefore"
+												(ngModelChange)="giftCard2AmountBeforeChanged($event)"
+												type="number" name="giftCard2AmountBefore">
+											</td>
+											<td>Jäljellä: <input class="cm_number"
+												[(ngModel)]="giftCard2AmountAfter"
+												(ngModelChange)="giftCard2AmountAfterChanged($event)"
+												type="number" name="giftCard2AmountAfter">
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+							<!-- Cash -->
+							<tr class="cm_3">
+								<td colspan=6><input id="cm3" type="checkbox"
+									(change)="cm30Listener()"> Käteinen</td>
+							</tr>
+							<tr class="cm_3">
+								<td>Veloitus:</td>
+								<td><input class="cm_number" id="cm31" type="number"
+									(change)="cm31Listener()"></td>
+								<td></td>
+							</tr>
+
+							<!-- Card -->
+							<tr class="cm_4">
+								<td colspan=6><input id="cm4" type="checkbox"
+									(change)="cm40Listener()"> Kortilla</td>
+							</tr>
+							<tr class="cm_4">
+								<td>Veloitus:</td>
+								<td><input class="cm_number" id="cm41" type="number"
+									(change)="cm41Listener()"></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Puuttuu:</td>
+								<td><input class="cm_number" type="number"
+									value="{{toBePaid}}" ng-model="toBePaid" readonly /></td>
+								<td>
+									<button ion-button class="product_line_button"
+										[disabled]="checkIfConfirmedPaymentEnabled()"
+										(click)="combinedPayment()">Vahvista maksu</button>
+									<button ion-button class="product_line_button" color="light"
+										(click)="cancelCombinedPayment()">Peruuta</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- *** PAYMENT METHOD COMBINATIONS end *** -->
+				</div>
+			</td>
+
+			<!-- *** RIGHT PANEL *** -->
+			<td class="table_right_column" colspan="2">
+				<!-- PAYMENT BUTTONS start -->
+				<table class="right_panel" style="width: 100%">
+					<tr>
+						<table class="payment_button_panel">
+							<tr>
+								<td style="text-align: center">
+									<button ion-button class="payment_button" id="card_button"
+										[disabled]="checkIfCardPaymentEnabled()"
+										(click)="cardPayment()">
+										<ion-icon name="card" item-start> Korttimaksu</ion-icon>
+									</button>
+								</td>
+								<td style="text-align: center">
+									<button ion-button class="payment_button" id="cash_button"
+										[disabled]="checkIfCashPaymentEnabled()"
+										(click)="cashPayment()">
+										<ion-icon name="cash" item-start> Käteinen</ion-icon>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align: center">
+									<button ion-button class="payment_button" id="gift_card_button"
+										[disabled]="checkIfGiftCartPaymentEnabled()"
+										(click)="showCombinedPayment()">
+										<ion-icon name="card" item-start> Maksuyhd.</ion-icon>
+									</button>
+								</td>
+							</tr>
+						</table>
+						<button class="btn1">On</button>
+						<button class="btn2">Siistii</button>
+					</tr>
+					<!-- PAYMENT BUTTONS end -->
+
+					<!-- CHAT start -->
+					<tr>
+						<td colspan="2">
+							<table class="chat_view">
+								<tr>
+									<td colspan="2">
+										<table>
+											<div class="chat_box">
+												<tr *ngFor="let entry of chatMessages let i = index">
+													<td class="chat_lines">
+														<div id="{{ 'chat' + i }}">
+															<b>{{entry.from}}:</b> {{entry.message}}
+														</div>
+													</td>
+												</tr>
+											</div>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="chat_input_box">
+											<ion-input [(ngModel)]="chatMessage"
+												placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
+										</div>
+									</td>
+									<td>
+										<button ion-button class="send_button" (click)="saveChat()">
+											<ion-icon name="send" item-start></ion-icon>
+										</button>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<!-- CHAT end -->
+
+					<!-- RECEIPT start -->
+					<tr>
+						<div id="receipt_view">
+							<table class="receipt" style="width: 100%">
+								<tr>
+									<td colspan="4">Viimeisin kuitti:</td>
+								</tr>
+								<tr>
+									<th>Tuote</th>
+									<th>Hinta</th>
+									<th>MÃ¤Ã¤rÃ¤</th>
+									<th>Yht.</th>
+								</tr>
+								<tr *ngFor="let item of receiptContent let i = index">
+									<td>{{item.productName}}</td>
+									<td>{{item.priceAsString}}</td>
+									<td>{{item.quantity}}</td>
+									<td>{{item.totalAsString}}</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<th>{{receiptTotalSumAsString}}</th>
+								</tr>
+							</table>
+						</div>
+					</tr>
+					<!-- RECEIPT end -->
+
+				</table>
+			</td>
+		</tr>
+	</table>
 </div>
 </ion-content>
