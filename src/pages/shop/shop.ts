@@ -51,6 +51,8 @@ export class ShopPage {
     giftCard2Originator: string = "";
     giftCard2AmountBefore: number = 0.0;
     giftCard2AmountAfter: number = 0.0;
+    cashPay: number = 0.0;
+    cardPay: number = 0.0;
     payments = [0.0, 0.0, 0.0, 0.0];
 
     givenAmount = 0;
@@ -432,11 +434,12 @@ export class ShopPage {
                     + this.giftCard2AmountBefore + ', '
                     + this.giftCard2AmountAfter
                 );
+                return false;
             }
 
         } else {
-            console.log( 'cm2valid: false (cm2 not enabled)' );
-            return false;
+            console.log( 'cm2valid: true (cm2 not enabled)' );
+            return true;
         }
     }
 
@@ -476,23 +479,32 @@ export class ShopPage {
         }
         this.validateCm();
     }
-
-    cm31Listener() {
-        var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
-        console.log( 'cm30Listener ' + selected );
-        if ( selected ) {
-            var inputValue = ( <HTMLInputElement>document.getElementById( "cm31" ) ).value;
-            if ( inputValue.length > 0 ) {
-                this.payments[2] = parseFloat(( <HTMLInputElement>document.getElementById( "cm31" ) ).value );
+    /*
+        cm31Listener() {
+            var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
+            console.log( 'cm30Listener ' + selected );
+            if ( selected ) {
+                var inputValue = ( <HTMLInputElement>document.getElementById( "cm31" ) ).value;
+                if ( inputValue.length > 0 ) {
+                    this.payments[2] = parseFloat(( <HTMLInputElement>document.getElementById( "cm31" ) ).value );
+                } else {
+                    ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
+                }
             } else {
                 ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
+                this.payments[2] = 0;
             }
-        } else {
-            ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
-            this.payments[2] = 0;
+            this.validateCm();
         }
+        */
+    cm31Listener( $event ) {
+        console.log( 'cm31Listener ' + $event );
+        this.payments[2] = parseFloat( $event );
         this.validateCm();
     }
+
+    /******************************************************************************************/
+    /*** CM 4 ***/
 
     cm40Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked;
@@ -508,7 +520,7 @@ export class ShopPage {
         this.validateCm();
     }
 
-    cm41Listener() {
+    /*cm41Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked;
         console.log( 'cm40Listener ' + selected );
         if ( selected ) {
@@ -523,10 +535,14 @@ export class ShopPage {
             this.payments[3] = 0;
         }
         this.validateCm();
+    }*/
+
+    cm41Listener( $event ) {
+        console.log( 'cm41Listener ' + $event );
+        this.payments[3] = parseFloat( $event );
+        this.validateCm();
     }
 
-    /******************************************************************************************/
-    /******************************************************************************************/
     /******************************************************************************************/
 
     connectToPT() {
