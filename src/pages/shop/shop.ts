@@ -313,7 +313,7 @@ export class ShopPage {
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
-                givenDate: '2020-01-01T00:00:00.000Z',
+                givenDate: '',
                 valueBefore: 0,
                 valueAfter: 0
             };
@@ -331,7 +331,7 @@ export class ShopPage {
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
-                givenDate: '2020-01-01T00:00:00.000Z',
+                givenDate: '',
                 valueBefore: 0,
                 valueAfter: 0
             };
@@ -351,7 +351,7 @@ export class ShopPage {
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
-                givenDate: '2020-01-01T00:00:00.000Z',
+                givenDate: '',
                 valueBefore: 0,
                 valueAfter: 0
             };
@@ -366,7 +366,7 @@ export class ShopPage {
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
-                givenDate: '2020-01-01T00:00:00.000Z',
+                givenDate: '',
                 valueBefore: 0,
                 valueAfter: 0
             };
@@ -840,7 +840,9 @@ export class ShopPage {
                     text: 'Ok',
                     handler: () => {
                         console.log( 'Confirm card payment Ok' );
-                        this.confirmPayment();
+                        //this.confirmPayment();
+                        this.payments[3] = this.totalSum;
+                        this.combinedPayment();
                     }
                 },
                 {
@@ -875,7 +877,9 @@ export class ShopPage {
                         if ( this.moneyGiven > this.totalSum ) {
                             this.showPrompt2( this.moneyGiven - this.totalSum );
                         } else if ( this.moneyGiven == this.totalSum ) {
-                            this.confirmPayment();
+                            //this.confirmPayment();
+                            this.payments[2] = this.totalSum;
+                            this.combinedPayment();
                         } else {
                             this.showPrompt3( this.totalSum, this.moneyGiven );
                         }
@@ -911,7 +915,9 @@ export class ShopPage {
                         this.moneyGiven = data.Money;
                         console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
                         //this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
-                        this.confirmPayment();
+                        //this.confirmPayment();
+                        this.payments[2] = this.totalSum;
+                        this.combinedPayment();
                     },
                 },
                 {
@@ -978,7 +984,9 @@ export class ShopPage {
                     text: 'OK',
                     handler: data => {
                         //console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
-                        this.confirmPayment();
+                        //this.confirmPayment();
+                        this.payments[2] = this.totalSum;
+                        this.combinedPayment();
                     }
                 }
             ]
