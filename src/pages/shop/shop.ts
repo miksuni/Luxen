@@ -40,6 +40,29 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
+
+    /*
+    paymentInfo = {
+        giftCard1: {
+            value: 0,
+            cardtype: 0,
+            receiver: '',
+            givenDate: '2020-01-01T00:00:00.000Z'
+        },
+        giftCard2: {
+            value: 0,
+            cardtype: 1,
+            receiver: '',
+            originator: '',
+            givenDate: '2020-01-01T00:00:00.000Z',
+            valueBefore: 0,
+            valueAfter: 0
+        },
+        cash: 0,
+        card: 0
+    };
+    */
+
     // TODO: KUN COMBINED PAYMENT TALLETETTU, NOLLAA NÄMÄ !!!
     toBePaid: number = 0;
     testModel: number = 0.0;
@@ -141,6 +164,7 @@ export class ShopPage {
             var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
             e.selectedIndex = 0;
         }
+        // TODO: ACTIVATE IN PRODUCTION
         /*this.orderList.products = this.productList.getProductsBelowCount(2);
         if (this.orderList.products.length > 0) {
             console.log('>> number of items to be ordered: ' + this.orderList.products.length);
@@ -259,8 +283,35 @@ export class ShopPage {
         //this.setPaymentMethod("Lahjakortti");
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
-        this.shoppingCart.clearAll(); // TEST !!!
-        this.update(); // TEST !!!
+
+        this.shoppingCart.clearAll(); // TODO: TEST !!!
+        this.update(); // TODO: TEST !!!
+
+        var paymentInfo = {
+            giftCard1: {
+                value: 0,
+                cardtype: 0,
+                receiver: '',
+                givenDate: '2020-01-01T00:00:00.000Z'
+            },
+            giftCard2: {
+                value: 0,
+                cardtype: 1,
+                receiver: '',
+                originator: '',
+                givenDate: '2020-01-01T00:00:00.000Z',
+                valueBefore: 0,
+                valueAfter: 0
+            },
+            cash: 0,
+            card: 0
+        };
+        for ( var i = 0; i < this.payments.length; i++ ) {
+            if ( this.payments[2] > 0 ) {
+                paymentInfo.cash = this.payments[2];
+            }
+        }
+
     }
 
     showCombinedPayment() {
@@ -479,24 +530,7 @@ export class ShopPage {
         }
         this.validateCm();
     }
-    /*
-        cm31Listener() {
-            var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
-            console.log( 'cm30Listener ' + selected );
-            if ( selected ) {
-                var inputValue = ( <HTMLInputElement>document.getElementById( "cm31" ) ).value;
-                if ( inputValue.length > 0 ) {
-                    this.payments[2] = parseFloat(( <HTMLInputElement>document.getElementById( "cm31" ) ).value );
-                } else {
-                    ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
-                }
-            } else {
-                ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
-                this.payments[2] = 0;
-            }
-            this.validateCm();
-        }
-        */
+
     cm31Listener( $event ) {
         console.log( 'cm31Listener ' + $event );
         this.payments[2] = parseFloat( $event );
@@ -519,23 +553,6 @@ export class ShopPage {
         }
         this.validateCm();
     }
-
-    /*cm41Listener() {
-        var selected = ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked;
-        console.log( 'cm40Listener ' + selected );
-        if ( selected ) {
-            var inputValue = ( <HTMLInputElement>document.getElementById( "cm41" ) ).value;
-            if ( inputValue.length > 0 ) {
-                this.payments[3] = parseFloat(( <HTMLInputElement>document.getElementById( "cm41" ) ).value );
-            } else {
-                ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
-            }
-        } else {
-            ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
-            this.payments[3] = 0;
-        }
-        this.validateCm();
-    }*/
 
     cm41Listener( $event ) {
         console.log( 'cm41Listener ' + $event );
