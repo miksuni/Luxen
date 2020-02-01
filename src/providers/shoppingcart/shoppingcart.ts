@@ -20,23 +20,6 @@ export class ShoppingcartProvider {
         paymentMethod2: ''
     };
 
-    receiptData = {
-        receiptNr: 0,
-        cashier: '',
-        sum: 0,
-        items: []
-    }
-
-    receiptItemData = {
-        paymentMethod: 0,
-        giftCard1Type: '0',
-        receiver: '',
-        originator: '',
-        givenDate: '2020-01-01T00:00:00.000Z',
-        valueBefore: 0,
-        valueAfter: 0
-    };
-
     /*shoppingcart = [{ objectId:'',
                      ISBN:'',
                      productName:'',
@@ -47,7 +30,8 @@ export class ShoppingcartProvider {
                      quantity: 0,
                      total: 0 }];*/
     shoppingCart = [];
-    purchase = { productList: [], total: {} };
+    purchase = { productList: [], total: {} }; // remove
+    purchaseData = { productList: [], receiptData: {} };
     productsInCart = 0;
     totalSum = 0;
     cashier = "";
@@ -151,12 +135,11 @@ export class ShoppingcartProvider {
     saveReceipt2( receiptData ) {
         console.log( '>> ShoppingcartProvider.saveReceipt2' );
         console.log( 'shoppingCart2: ' + JSON.stringify( this.shoppingCart ) );
-        console.log( 'receipt2: ' + JSON.stringify( this.receipt ) );
-        //this.receipt.receiptNr = 1; // TODO Handle receipt nr
-        //this.purchase.productList = this.shoppingCart;
-        //this.purchase.total = this.receipt;
-        //this.restProvider.sendRequest( "saveReceipt", this.purchase );
         console.log( 'receiptData: ' + JSON.stringify( receiptData ) );
+        this.purchaseData.productList = this.shoppingCart;
+        this.purchaseData.receiptData = receiptData;
+        console.log( 'purchaseData: ' + JSON.stringify( this.purchaseData ) );
+        this.restProvider.sendRequest( "save_purchase_data", this.purchaseData );
     }
 
     // JSON data must be encoded in ASCII which also means character and byte

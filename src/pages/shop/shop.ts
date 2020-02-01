@@ -278,15 +278,13 @@ export class ShopPage {
         this.presentPromptPaymentCardInstructions();
     }
 
+    // TODO: add receipt nr handling
     combinedPayment() {
         console.log( 'combinedPayment' );
         this.shoppingCart.setCashier( this.cashier );
         //this.setPaymentMethod("Lahjakortti");
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
-
-        this.shoppingCart.clearAll(); // TODO: TEST !!!
-        this.update(); // TODO: TEST !!!
 
         var receiptData = {
             receiptNr: 0,
@@ -366,7 +364,12 @@ export class ShopPage {
             receiptData.items.push( receiptItemData );
         }
 
-        console.log( 'receiptData: ' + JSON.stringify( receiptData ) );
+        this.shoppingCart.saveReceipt2( receiptData );
+
+        this.shoppingCart.clearAll();
+        this.update();
+
+        //console.log( 'receiptData: ' + JSON.stringify( receiptData ) );
 
     }
 
