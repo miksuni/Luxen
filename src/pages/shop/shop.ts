@@ -268,6 +268,7 @@ export class ShopPage {
         this.toBePaid = this.totalSum;
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
+        this.disableCombinedPaymentFields();
         this.showAmountToBePaid();
     }
 
@@ -289,20 +290,32 @@ export class ShopPage {
         this.confirmedPaymentEnabled = ( this.toBePaid == 0 );
     }
 
+    cm1DataComplete: boolean = false;
+    cm2DataComplete: boolean = false;
+    cm3DataComplete: boolean = false;
+    cm4DataComplete: boolean = false;
+
+    disableCombinedPaymentFields() {
+        this.enableCm1Fields( false );
+        this.enableCm2Fields( false );
+    }
 
     /******************************************************************************************/
-    /******************************************************************************************/
-    /******************************************************************************************/
+    /*** CM 1 ***/
 
     cm10Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked;
         console.log( 'cm10Listener ' + selected );
         if ( selected ) {
             ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "20";
+            this.enableCm1Fields( true );
             this.payments[0] = 20;
         } else {
             ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
             this.payments[0] = 0;
+            this.enableCm1Fields( false );
+            this.clearCm1Fields();
+            this.cm1DataComplete = false;
         }
         this.showAmountToBePaid();
     }
@@ -321,25 +334,32 @@ export class ShopPage {
         console.log( 'giftCard1PurchaseDateChanged ' + $event );
     }
 
-    //    cm13Listener() {
-    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm13" ) ).value;
-    //        console.log( 'cm13Listener ' + inputValue );
-    //    }
-    //
-    //    cm14Listener() {
-    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm14" ) ).value;
-    //        console.log( 'cm14Listener ' + inputValue );
-    //    }
+    enableCm1Fields( enabled ) {
+        ( <HTMLInputElement>document.getElementById( "cm11" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm12" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm13" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm14" ) ).disabled = !enabled;
+
+    }
+
+    clearCm1Fields() {
+        this.giftCard1Receiver = "";
+        this.giftCard1PurchaseDate = "";
+    }
+
+    /******************************************************************************************/
+    /*** CM 2 ***/
 
     cm20Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
         console.log( 'cm20Listener ' + selected );
         if ( selected ) {
-            ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = false;
+            this.enableCm2Fields( true );
         } else {
-            ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
-            ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
             this.payments[1] = 0;
+            this.enableCm2Fields( false );
+            this.clearCm2Fields();
+            this.cm2DataComplete = false;
 
         }
         this.showAmountToBePaid();
@@ -362,11 +382,6 @@ export class ShopPage {
         this.showAmountToBePaid();
     }
 
-    //    cm22Listener() {
-    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm22" ) ).value;
-    //        console.log( 'cm22Listener ' + inputValue );
-    //    }
-
     giftCard2OriginatorChanged( $event ) {
         console.log( 'giftCard2OriginatorChanged ' + $event );
     }
@@ -384,20 +399,26 @@ export class ShopPage {
         console.log( 'giftCard2AmountAfterChanged ' + $event );
     }
 
-    //    cm23Listener() {
-    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm23" ) ).value;
-    //        console.log( 'cm23Listener ' + inputValue );
-    //    }
-    //
-    //    cm24Listener() {
-    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm24" ) ).value;
-    //        console.log( 'cm24Listener ' + inputValue );
-    //    }
-    //
-    //    cm25Listener() {
-    //        var inputValue = ( <HTMLInputElement>document.getElementById( "cm25" ) ).value;
-    //        console.log( 'cm24Listener ' + inputValue );
-    //    }
+    enableCm2Fields( enabled ) {
+        ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm22" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm23" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm24" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm25" ) ).disabled = !enabled;
+        ( <HTMLInputElement>document.getElementById( "cm26" ) ).disabled = !enabled;
+    }
+
+    clearCm2Fields() {
+        this.giftCardPayment = 0;
+        this.giftCard1Receiver = "";
+        this.giftCard2Originator = "";
+        this.giftCard2PurchaseDate = "";
+        this.giftCard2AmountBefore = 0;
+        this.giftCard2AmountAfter = 0;
+    }
+
+    /******************************************************************************************/
+    /*** CM 3 ***/
 
     cm30Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;

@@ -140,11 +140,11 @@
 											</td>
 										</tr>
 										<tr>
-											<td>Saaja: <input [(ngModel)]="giftCard1Receiver"
+											<td>Saaja: <input id="cm13" [(ngModel)]="giftCard1Receiver"
 												(ngModelChange)="giftCard1ReceiverChanged($event)"
 												name="giftCard1Receiver">
 											</td>
-											<td>Annettu: <input [(ngModel)]="giftCard1PurchaseDate"
+											<td>Annettu: <input id="cm14" [(ngModel)]="giftCard1PurchaseDate"
 												(ngModelChange)="giftCard1PurchaseDateChanged($event)"
 												type="date" name="giftCard1PurchaseDate">
 											</td>
@@ -163,7 +163,7 @@
 								<td><input class="cm_number" id="cm21" type="number"
 									value="{{giftCardPayment}}" ng-model="giftCardPayment"
 									(change)="cm21Listener()"></td>
-								<td>Saaja: <input [(ngModel)]="giftCard1Receiver"
+								<td>Saaja: <input id="cm22" [(ngModel)]="giftCard1Receiver"
 									(ngModelChange)="giftCard1ReceiverChanged($event)"
 									name="giftCard1Receiver">
 								</td>
@@ -174,23 +174,23 @@
 								<td>
 									<table>
 										<tr>
-											<td>Myynyt ry: <input [(ngModel)]="giftCard2Originator"
+											<td>Myynyt ry: <input id="cm23" [(ngModel)]="giftCard2Originator"
 												(ngModelChange)="giftCard2OriginatorChanged($event)"
 												name="giftCard2Originator">
 											</td>
 										</tr>
 										<tr>
-											<td>Myynti pvm: <input
+											<td>Myynti pvm: <input id="cm24"
 												[(ngModel)]="giftCard2PurchaseDate"
 												(ngModelChange)="giftCard2PurchaseDateChanged($event)"
 												type="date" name="giftCard2PurchaseDate">
 											</td>
-											<td>Käytettävissä: <input class="cm_number"
+											<td>Käytettävissä: <input id="cm25" class="cm_number"
 												[(ngModel)]="giftCard2AmountBefore"
 												(ngModelChange)="giftCard2AmountBeforeChanged($event)"
 												type="number" name="giftCard2AmountBefore">
 											</td>
-											<td>Jäljellä: <input class="cm_number"
+											<td>Jäljellä: <input id="cm26" class="cm_number"
 												[(ngModel)]="giftCard2AmountAfter"
 												(ngModelChange)="giftCard2AmountAfterChanged($event)"
 												type="number" name="giftCard2AmountAfter">
