@@ -33,6 +33,7 @@ export class ShopPage {
     currentState: any;
     orderList = { products: [] };
     chat = { from: '', message: '' };
+    purchases = { giftCard1: 0.0, giftCard2: 0.0, cash: 0.0, card: 0.0 };
     chatMessages: any;
     chatMessage: string = "";
     //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
@@ -183,6 +184,42 @@ export class ShopPage {
             var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
             e.selectedIndex = 0;
         }
+
+        this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
+            var receipts = JSON.parse( result.result );
+            console.log( 'receipts: ' + JSON.stringify( receipts ) );
+            var giftCard1 = 0.0;
+            var giftCard2 = 0.0;
+            var cash = 0.0;
+            var card = 0.0;
+            for ( var i = 0; i < receipts.length; i++ ) {
+                if ( receipts[i].paymentMethod == 0 ) {
+                    console.log( '** 1a ' + receipts[i].totalSum );
+                    console.log( '** 1b ' + giftCard1 );
+                    giftCard1 += receipts[i].totalSum;
+                    console.log( '** 1 ' + giftCard1 )
+                } else if ( receipts[i].paymentMethod == 1 ) {
+                    giftCard2 += receipts[i].totalSum;
+                } else if ( receipts[i].paymentMethod == 2 ) {
+                    cash += receipts[i].totalSum;
+                } else if ( receipts[i].paymentMethod == 3 ) {
+                    card += receipts[i].totalSum;
+                }
+            }
+            // purchases = { giftCard1: 0.0, giftCard2: 0.0, cash:0.0, card:0.0};
+
+            this.purchases.giftCard1 = giftCard1;
+            this.purchases.giftCard2 = giftCard2;
+            this.purchases.cash = cash;
+            this.purchases.card = card;
+            console.log( 'purchases: ' + JSON.stringify( this.purchases ) );
+
+            this.restProvider.sendRequest( 'send_email', this.purchases );
+
+        }, ( err ) => {
+            console.log( err );
+        } );
+
         // TODO: ACTIVATE IN PRODUCTION
         /*this.orderList.products = this.productList.getProductsBelowCount(2);
         if (this.orderList.products.length > 0) {
