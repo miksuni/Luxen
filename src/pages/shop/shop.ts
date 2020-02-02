@@ -404,10 +404,8 @@ export class ShopPage {
         this.shoppingCart.setCashier( this.cashier );
         this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
-        console.log( '*** current state ' + JSON.stringify( this.currentState ) );
-        console.log( '*** receipt nr: 1 ' + this.currentState.lastReceiptNr );
         this.currentState.lastReceiptNr = this.currentState.lastReceiptNr + 1;
-        console.log( '*** receipt nr: 2 ' + this.currentState.lastReceiptNr );
+        console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
             receiptNr: 0,
@@ -490,8 +488,10 @@ export class ShopPage {
         this.shoppingCart.saveReceipt2( receiptData );
         this.shoppingCart.clearAll();
         this.clearPayments();
+        this.clearCombinedPaymentData();
         this.update();
         document.getElementById( "receipt_view" ).style.visibility = "visible";
+        console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
             this.finishLoading();
@@ -517,6 +517,29 @@ export class ShopPage {
         this.validateCm();
     }
 
+    clearCombinedPaymentData() {
+        console.log( 'clearCombinedPaymentData' );
+
+        this.toBePaid = 0;
+        this.giftCard1Type = 0;
+        this.giftCard1Receiver = "";
+        this.giftCard1PurchaseDate = "";
+        this.giftCard2Payment = 0.0;
+        this.giftCard2Receiver = "";
+        this.giftCard2PurchaseDate = "";
+        this.giftCard2Originator = "";
+        this.giftCard2AmountBefore = 0.0;
+        this.giftCard2AmountAfter = 0.0;
+        this.cashPay = 0.0;
+        this.cardPay = 0.0;
+        this.payments = [0.0, 0.0, 0.0, 0.0];
+
+        ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked = false;
+        ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked = false;
+        ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked = false;
+        ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked = false;
+    }
+
     cancelCombinedPayment() {
         console.log( 'cancelCombinedPayment' );
         $( "#payment_data_area" ).hide();
@@ -524,6 +547,11 @@ export class ShopPage {
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
         }
+        this.cardPaymentEnabled = true;
+        this.cashPaymentEnabled = true;
+        this.combinedPaymentEnabled = true;
+
+        this.clearCombinedPaymentData();
     }
 
     // TODO: change so that cm1 value can be more that total sum
@@ -552,9 +580,13 @@ export class ShopPage {
         var selected = ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked;
         //console.log( 'cm10Listener ' + selected );
         if ( selected ) {
-            ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "20";
+            var value = 20.0;
+            if ( this.totalSum < 20 ) {
+                value = this.totalSum;
+            }
+            ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = value.toString();
             this.enableCm1Fields( true );
-            this.payments[0] = 20;
+            this.payments[0] = value;
         } else {
             ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
             this.payments[0] = 0;
@@ -1196,6 +1228,25 @@ export class ShopPage {
         } );
         alert.present();
     }
+
+    presentPromptCombinedPaymentGuide() {
+        let alert = this.alertController.create( {
+            title: 'Maksutapojen yhdistelmä',
+            message: "Valitse asiakkaan haluamat maksutavat vasemmalla olevista valintaruuduista." +
+            "<b>Täytä kaikki tiedot valituista maksutavoista</b>. Kirjoita valittujen maksutapojen Veloitus-kenttään veloituksen määrä" +
+            " ko. maksutavalla.",
+            buttons: [
+                {
+                    text: 'Sulje ohje',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+
 
     presentLoading( text ) {
         this.loadingIndicator = this.loadingCtrl.create( {

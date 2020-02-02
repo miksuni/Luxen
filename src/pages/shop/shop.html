@@ -118,7 +118,7 @@
 							<!-- Lahden ry lahjakortti -->
 							<tr class="cm_1">
 								<td colspan=6><input id="cm1" type="checkbox"
-									(change)="cm10Listener()"> Lahden ry:n lahjakortti</td>
+									(change)="cm10Listener()"> <b>Lahden ry:n lahjakortti</b></td>
 							</tr>
 
 							<tr class="cm_1">
@@ -144,7 +144,7 @@
 												(ngModelChange)="giftCard1ReceiverChanged($event)"
 												name="giftCard1Receiver">
 											</td>
-											<td>Annettu: <input id="cm14" [(ngModel)]="giftCard1PurchaseDate"
+											<td>Annettu (pvm): <input id="cm14" [(ngModel)]="giftCard1PurchaseDate"
 												(ngModelChange)="giftCard1PurchaseDateChanged($event)"
 												type="date" name="giftCard1PurchaseDate">
 											</td>
@@ -156,7 +156,7 @@
 							<!-- SRK lahjakortti -->
 							<tr class="cm_2">
 								<td colspan=6><input id="cm2" type="checkbox"
-									(change)="cm20Listener()"> SRK:n julkaisulahjakortti</td>
+									(change)="cm20Listener()"> <b>SRK:n julkaisulahjakortti</b></td>
 							</tr>
 							<tr class="cm_2">
 								<td>Veloitus:</td>
@@ -203,7 +203,7 @@
 							<!-- Cash -->
 							<tr class="cm_3">
 								<td colspan=6><input id="cm3" type="checkbox"
-									(change)="cm30Listener()"> Käteinen</td>
+									(change)="cm30Listener()"> <b>Käteinen</b></td>
 							</tr>
 							<tr class="cm_3">
 								<td>Veloitus:</td>
@@ -216,7 +216,7 @@
 							<!-- Card -->
 							<tr class="cm_4">
 								<td colspan=6><input id="cm4" type="checkbox"
-									(change)="cm40Listener()"> Kortilla</td>
+									(change)="cm40Listener()"> <b>Kortilla</b></td>
 							</tr>
 							<tr class="cm_4">
 								<td>Veloitus:</td>
@@ -235,6 +235,8 @@
 										(click)="combinedPayment()">Vahvista maksu</button>
 									<button ion-button class="product_line_button" color="light"
 										(click)="cancelCombinedPayment()">Peruuta</button>
+									<button ion-button class="product_line_button"
+										(click)="presentPromptCombinedPaymentGuide()">Ohje</button>
 								</td>
 							</tr>
 						</table>
