@@ -122,7 +122,7 @@ export class ShopPage {
     ionViewDidLoad() {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
-        document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
@@ -292,7 +292,7 @@ export class ShopPage {
 
     onProductNumberUpdated() {
         console.log( '>> shop.onProductNumberUpdated: ' + this.productNumberInitials );
-        document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
         if ( this.productNumberInitials.length > 0 ) {
             var found = this.productList.getProductProgressivelyByNumber( this.productNumberInitials );
             this.searchResult = found;
@@ -303,7 +303,7 @@ export class ShopPage {
 
     onProductNameUpdated() {
         console.log( '>> shop.onProductNameUpdated: ' + this.productNameInitials );
-        document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
         var found = this.productList.getProductByName( this.productNameInitials );
         this.searchResult = found;
         console.log( '>> found: ' + found.length );
@@ -830,7 +830,7 @@ export class ShopPage {
 
     cancelPurchase() {
         console.log( 'cancelPurchase' );
-        document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
         this.shoppingCart.clearAll();
         this.update();
     }
