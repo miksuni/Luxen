@@ -89,7 +89,7 @@ export class ShopPage {
 
     cardPaymentEnabled: boolean = false;
     cashPaymentEnabled: boolean = false;
-    giftCardPaymentEnabled: boolean = false;
+    combinedPaymentEnabled: boolean = false;
     confirmedPaymentEnabled: boolean = false;
 
     cashier = "";
@@ -218,7 +218,7 @@ export class ShopPage {
         str += '--------------------------------------------------------------\n'
 
         str += 'Maksukorttiostojen määrä: ';
-        str += '\t\t\t\';
+        str += '\t\t\t';
         str += cardTransactionCount.toString();
         str += ' kpl, \t arvo: ';
         str += cardPurchaseValue.toString();
@@ -246,6 +246,21 @@ export class ShopPage {
         return str;
     }
 
+    sendReport() {
+        this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
+            var receipts = JSON.parse( result.result );
+            console.log( 'receipts: ' + JSON.stringify( receipts ) );
+
+            this.reportMessage.content = this.makeReportMessage( receipts );
+            this.reportMessage.recipient = 'mikko.m.suni@gmail.com';
+            this.restProvider.sendRequest( 'send_email', this.reportMessage );
+
+
+        }, ( err ) => {
+            console.log( err );
+        } );
+    }
+
     onLogout() {
         console.log( '>> shop.onLogout' );
         if ( this.shoppingCart.hasContent() ) {
@@ -255,45 +270,7 @@ export class ShopPage {
             e.selectedIndex = 0;
         }
 
-        this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
-            var receipts = JSON.parse( result.result );
-            console.log( 'receipts: ' + JSON.stringify( receipts ) );
-            //            var giftCard1 = 0.0;
-            //            var giftCard2 = 0.0;
-            //            var cash = 0.0;
-            //            var card = 0.0;
-            //            for ( var i = 0; i < receipts.length; i++ ) {
-            //                if ( receipts[i].paymentMethod == 0 ) {
-            //                    console.log( '** 1a ' + receipts[i].totalSum );
-            //                    console.log( '** 1b ' + giftCard1 );
-            //                    giftCard1 += receipts[i].totalSum;
-            //                    console.log( '** 1 ' + giftCard1 )
-            //                } else if ( receipts[i].paymentMethod == 1 ) {
-            //                    giftCard2 += receipts[i].totalSum;
-            //                } else if ( receipts[i].paymentMethod == 2 ) {
-            //                    cash += receipts[i].totalSum;
-            //                } else if ( receipts[i].paymentMethod == 3 ) {
-            //                    card += receipts[i].totalSum;
-            //                }
-            //            }
-
-            //            this.purchases.giftCard1 = giftCard1;
-            //            this.purchases.giftCard2 = giftCard2;
-            //            this.purchases.cash = cash;
-            //            this.purchases.card = card;
-            //            console.log( 'purchases: ' + JSON.stringify( this.purchases ) );
-            //
-            //            this.restProvider.sendRequest( 'send_email', this.purchases );
-            this.reportMessage.content = this.makeReportMessage( receipts );
-            this.reportMessage.recipient = 'mikko.m.suni@gmail.com';
-            this.restProvider.sendRequest( 'send_email', this.reportMessage );
-            //this.makeReportMessage( this.purchases );
-
-
-        }, ( err ) => {
-            console.log( err );
-        } );
-
+        this.presentPromptSendReport();
         // TODO: ACTIVATE IN PRODUCTION
         /*this.orderList.products = this.productList.getProductsBelowCount(2);
         if (this.orderList.products.length > 0) {
@@ -411,6 +388,8 @@ export class ShopPage {
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
         }
+        this.productNameInitials = "";
+        this.productNumberInitials = "";
     }
 
     // TODO: add receipt nr handling
@@ -533,6 +512,7 @@ export class ShopPage {
         this.toBePaid = this.totalSum;
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
+        this.combinedPaymentEnabled = false;
         this.disableCombinedPaymentFields();
         this.validateCm();
     }
@@ -804,7 +784,7 @@ export class ShopPage {
         document.getElementById( "receipt_view" ).style.visibility = "visible";
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
-        this.giftCardPaymentEnabled = false;
+        this.combinedPaymentEnabled = false;
         setTimeout(() => {
             this.finishLoading();
             this.presentLoading( "Haetaan tuotteet..." );
@@ -834,7 +814,7 @@ export class ShopPage {
     }
 
     checkIfGiftCartPaymentEnabled() {
-        return !this.giftCardPaymentEnabled;
+        return !this.combinedPaymentEnabled;
     }
 
     checkIfConfirmedPaymentEnabled() {
@@ -849,11 +829,11 @@ export class ShopPage {
         if ( this.totalSum > 0 ) {
             this.cardPaymentEnabled = true;
             this.cashPaymentEnabled = true;
-            this.giftCardPaymentEnabled = true;
+            this.combinedPaymentEnabled = true;
         } else {
             this.cardPaymentEnabled = false;
             this.cashPaymentEnabled = false;
-            this.giftCardPaymentEnabled = false;
+            this.combinedPaymentEnabled = false;
         }
     }
 
@@ -1185,6 +1165,29 @@ export class ShopPage {
                 },
                 {
                     text: 'Peruuta',
+                    handler: () => {
+                        console.log( 'Cancel' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+
+    presentPromptSendReport() {
+        let alert = this.alertController.create( {
+            title: 'Lähetetäänko päivän päätösraportti?',
+            message: "Valitse Lähtetä jos myynti päätetään. Valitse Älä lähetä jos myynti jatkuu tai myyntiä ei ole ollut",
+            buttons: [
+                {
+                    text: 'Lähetä',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                        this.sendReport();
+                    }
+                },
+                {
+                    text: 'Älä lähetä',
                     handler: () => {
                         console.log( 'Cancel' );
                     }
