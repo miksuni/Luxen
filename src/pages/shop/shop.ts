@@ -34,6 +34,7 @@ export class ShopPage {
     orderList = { products: [] };
     chat = { from: '', message: '' };
     purchases = { giftCard1: 0.0, giftCard2: 0.0, cash: 0.0, card: 0.0 };
+    reportMessage = { recipient: '', content: '' };
     chatMessages: any;
     chatMessage: string = "";
     //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
@@ -176,6 +177,75 @@ export class ShopPage {
     //    this.shoppingCart.setCashier(this.cashier);
     //}
 
+    makeReportMessage( purchases ) {
+
+        console.log( 'purchases: ' + JSON.stringify( purchases ) );
+
+        var giftCard1TransactionCount = 0;
+        var giftCard2TransactionCount = 0;
+        var cashTransactionCount = 0;
+        var cardTransactionCount = 0;
+
+        var giftCard1PurchaseValue = 0.0;
+        var giftCard2PurchaseValue = 0.0;
+        var cashPurchaseValue = 0.0;
+        var cardPurchaseValue = 0.0;
+
+        for ( var i = 0; i < purchases.length; i++ ) {
+            if ( purchases[i].paymentMethod == 0 ) {
+                giftCard1TransactionCount++;
+                giftCard1PurchaseValue += purchases[i].totalSum;
+            } else if ( purchases[i].paymentMethod == 1 ) {
+                giftCard2TransactionCount++;
+                giftCard2PurchaseValue += purchases[i].totalSum;
+            } else if ( purchases[i].paymentMethod == 2 ) {
+                cashTransactionCount++;
+                cashPurchaseValue += purchases[i].totalSum;
+            } else if ( purchases[i].paymentMethod == 3 ) {
+                cardTransactionCount++;
+                cardPurchaseValue += purchases[i].totalSum;
+            }
+        }
+
+        var currentDate = new Date();
+        console.log( 'current date: ' + currentDate.toString() );
+        var str = "Tilitysraportti " + currentDate.toString();
+
+        str += '\n';
+        str += '\n';
+
+        str += 'Kassatapahtumat\n';
+        str += '--------------------------------------------------------------\n'
+
+        str += 'Maksukorttiostojen määrä: ';
+        str += '\t\t\t\';
+        str += cardTransactionCount.toString();
+        str += ' kpl, \t arvo: ';
+        str += cardPurchaseValue.toString();
+        str += ' euroa \n';
+
+        str += 'Käteisostojen määrä: ';
+        str += '\t\t\t\t\t';
+        str += cashTransactionCount.toString();
+        str += ' kpl, \t arvo: ';
+        str += cashPurchaseValue.toString();
+        str += ' euroa \n';
+
+        str += 'Lahden ry:n lahjakorttiostojen määrä: ';
+        str += '\t';
+        str += giftCard1TransactionCount.toString();
+        str += ' kpl, \t arvo: ';
+        str += giftCard1PurchaseValue.toString();
+        str += ' euroa \n';
+
+        str += '\n';
+        str += 'Viesti on lähetetty julkaisumyynnin kassajärjestelmästä automaattisesti.'
+
+        console.log( '*** report: ' + str );
+
+        return str;
+    }
+
     onLogout() {
         console.log( '>> shop.onLogout' );
         if ( this.shoppingCart.hasContent() ) {
@@ -188,33 +258,37 @@ export class ShopPage {
         this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
             var receipts = JSON.parse( result.result );
             console.log( 'receipts: ' + JSON.stringify( receipts ) );
-            var giftCard1 = 0.0;
-            var giftCard2 = 0.0;
-            var cash = 0.0;
-            var card = 0.0;
-            for ( var i = 0; i < receipts.length; i++ ) {
-                if ( receipts[i].paymentMethod == 0 ) {
-                    console.log( '** 1a ' + receipts[i].totalSum );
-                    console.log( '** 1b ' + giftCard1 );
-                    giftCard1 += receipts[i].totalSum;
-                    console.log( '** 1 ' + giftCard1 )
-                } else if ( receipts[i].paymentMethod == 1 ) {
-                    giftCard2 += receipts[i].totalSum;
-                } else if ( receipts[i].paymentMethod == 2 ) {
-                    cash += receipts[i].totalSum;
-                } else if ( receipts[i].paymentMethod == 3 ) {
-                    card += receipts[i].totalSum;
-                }
-            }
-            // purchases = { giftCard1: 0.0, giftCard2: 0.0, cash:0.0, card:0.0};
+            //            var giftCard1 = 0.0;
+            //            var giftCard2 = 0.0;
+            //            var cash = 0.0;
+            //            var card = 0.0;
+            //            for ( var i = 0; i < receipts.length; i++ ) {
+            //                if ( receipts[i].paymentMethod == 0 ) {
+            //                    console.log( '** 1a ' + receipts[i].totalSum );
+            //                    console.log( '** 1b ' + giftCard1 );
+            //                    giftCard1 += receipts[i].totalSum;
+            //                    console.log( '** 1 ' + giftCard1 )
+            //                } else if ( receipts[i].paymentMethod == 1 ) {
+            //                    giftCard2 += receipts[i].totalSum;
+            //                } else if ( receipts[i].paymentMethod == 2 ) {
+            //                    cash += receipts[i].totalSum;
+            //                } else if ( receipts[i].paymentMethod == 3 ) {
+            //                    card += receipts[i].totalSum;
+            //                }
+            //            }
 
-            this.purchases.giftCard1 = giftCard1;
-            this.purchases.giftCard2 = giftCard2;
-            this.purchases.cash = cash;
-            this.purchases.card = card;
-            console.log( 'purchases: ' + JSON.stringify( this.purchases ) );
+            //            this.purchases.giftCard1 = giftCard1;
+            //            this.purchases.giftCard2 = giftCard2;
+            //            this.purchases.cash = cash;
+            //            this.purchases.card = card;
+            //            console.log( 'purchases: ' + JSON.stringify( this.purchases ) );
+            //
+            //            this.restProvider.sendRequest( 'send_email', this.purchases );
+            this.reportMessage.content = this.makeReportMessage( receipts );
+            this.reportMessage.recipient = 'mikko.m.suni@gmail.com';
+            this.restProvider.sendRequest( 'send_email', this.reportMessage );
+            //this.makeReportMessage( this.purchases );
 
-            this.restProvider.sendRequest( 'send_email', this.purchases );
 
         }, ( err ) => {
             console.log( err );
