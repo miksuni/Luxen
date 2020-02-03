@@ -43,6 +43,7 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
+    version = "Kassaversio 1.0.0";
 
     /*
     paymentInfo = {
@@ -252,7 +253,7 @@ export class ShopPage {
             console.log( 'receipts: ' + JSON.stringify( receipts ) );
 
             this.reportMessage.content = this.makeReportMessage( receipts );
-            this.reportMessage.recipient = 'mikko.m.suni@gmail.com';
+            this.reportMessage.recipient = 'lahdenry.laskut@gmail.com';
             this.restProvider.sendRequest( 'send_email', this.reportMessage );
 
 
