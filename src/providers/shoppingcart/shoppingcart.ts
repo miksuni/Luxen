@@ -122,6 +122,15 @@ export class ShoppingcartProvider {
         return this.shoppingCart;
     }
 
+	hasProduct(productName) {
+		for (var i = 0; i < this.shoppingCart.length; i++) {
+			if (productName === this.shoppingCart[i].productName){
+				return true;
+			}	
+		}
+		return false;
+	}
+
     saveReceipt() {
         console.log( '>> ShoppingcartProvider.saveReceipt' );
         console.log( 'shoppingCart: ' + JSON.stringify( this.shoppingCart ) );

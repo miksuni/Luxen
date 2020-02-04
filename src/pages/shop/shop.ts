@@ -336,7 +336,11 @@ export class ShopPage {
         if ( this.cashier.length == 0 ) {
             this.presentPromptSelectCashier();
         } else {
-            this.addToShoppingCart( productInfo );
+			if (this.shoppingCart.hasProduct(productInfo.productName)) {
+				this.presentPromptAlreadyInShoppingCart();	
+			} else {
+            	this.addToShoppingCart( productInfo );
+			}
         }
     }
 
@@ -1249,6 +1253,21 @@ export class ShopPage {
         alert.present();
     }
 
+    presentPromptAlreadyInShoppingCart() {
+        let alert = this.alertController.create( {
+            title: 'Tuote on jo ostoskorissa',
+            message: "Voit lisätä tuotteiden määrää ostoskorin tuoterivillä painamalla +:lla merkittyä nappia.",
+            buttons: [
+                {
+                    text: 'Sulje ohje',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
 
     presentLoading( text ) {
         this.loadingIndicator = this.loadingCtrl.create( {
