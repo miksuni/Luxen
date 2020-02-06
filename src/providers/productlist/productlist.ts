@@ -114,7 +114,9 @@ export class ProductList {
         console.log( '>> productList.getProductsBelowCount' );
         var results = [];
         for ( var i = 0; i < this.productInfo.length; i++ ) {
-            if ( this.productInfo[i].amountInStock < count && this.productInfo[i].availableFromPublisher ) {
+            if ( this.productInfo[i].amountInStock < count &&
+                this.productInfo[i].stockKeepingCount > 0 &&
+                this.productInfo[i].availableFromPublisher ) {
                 results.push( this.productInfo[i] );
             }
         }

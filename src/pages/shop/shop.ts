@@ -93,6 +93,9 @@ export class ShopPage {
     combinedPaymentEnabled: boolean = false;
     confirmedPaymentEnabled: boolean = false;
 
+    //reportAddress = "lahdenry.laskut@gmail.com";
+    reportAddress = "mikko.m.suni@gmail.com";
+
     cashier = "";
 
     loadingIndicator: any;
@@ -247,16 +250,20 @@ export class ShopPage {
         return str;
     }
 
-    sendReport() {
+    sendReports() {
         this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
             var receipts = JSON.parse( result.result );
             console.log( 'receipts: ' + JSON.stringify( receipts ) );
 
             this.reportMessage.content = this.makeReportMessage( receipts );
-            this.reportMessage.recipient = 'lahdenry.laskut@gmail.com';
-            this.restProvider.sendRequest( 'send_email', this.reportMessage );
+            this.reportMessage.recipient = this.reportAddress;
+            this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
 
-
+                var productsToBeOrdered = this.productList.getProductsBelowCount( 2 );
+                console.log( 'products to be ordered: ' + JSON.stringify( productsToBeOrdered ) );
+            }, ( err ) => {
+                console.log( err );
+            } );
         }, ( err ) => {
             console.log( err );
         } );
@@ -336,11 +343,11 @@ export class ShopPage {
         if ( this.cashier.length == 0 ) {
             this.presentPromptSelectCashier();
         } else {
-			if (this.shoppingCart.hasProduct(productInfo.productName)) {
-				this.presentPromptAlreadyInShoppingCart();	
-			} else {
-            	this.addToShoppingCart( productInfo );
-			}
+            if ( this.shoppingCart.hasProduct( productInfo.productName ) ) {
+                this.presentPromptAlreadyInShoppingCart();
+            } else {
+                this.addToShoppingCart( productInfo );
+            }
         }
     }
 
@@ -1215,13 +1222,14 @@ export class ShopPage {
     presentPromptSendReport() {
         let alert = this.alertController.create( {
             title: 'Lähetetäänko päivän päätösraportti?',
-            message: "Valitse Lähtetä jos myynti päätetään. Valitse Älä lähetä jos myynti jatkuu tai myyntiä ei ole ollut",
+            message: "Valitse Lähtetä jos myynti päätetään. Valitse Älä lähetä jos myynti jatkuu tai myyntiä ei ole ollut" +
+            "Vastaanottaja: " + this.reportAddress,
             buttons: [
                 {
                     text: 'Lähetä',
                     handler: () => {
                         console.log( 'Confirm Ok' );
-                        this.sendReport();
+                        this.sendReports();
                     }
                 },
                 {
