@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ProductList } from '../../providers/productlist/productlist';
 import { ShoppingcartProvider } from '../../providers/shoppingcart/shoppingcart';
+import { ReportProvider } from '../../providers/report/report';
 import { RestProvider } from '../../providers/rest/rest';
 import { AlertController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
@@ -34,7 +35,6 @@ export class ShopPage {
     orderList = { products: [] };
     chat = { from: '', message: '' };
     purchases = { giftCard1: 0.0, giftCard2: 0.0, cash: 0.0, card: 0.0 };
-    reportMessage = { recipient: '', content: '' };
     chatMessages: any;
     chatMessage: string = "";
     //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
@@ -43,7 +43,7 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
-    version = "Kassaversio 1.0.1";
+    version = "Kassaversio 1.0.1b";
 
     /*
     paymentInfo = {
@@ -93,9 +93,6 @@ export class ShopPage {
     combinedPaymentEnabled: boolean = false;
     confirmedPaymentEnabled: boolean = false;
 
-    //reportAddress = "lahdenry.laskut@gmail.com";
-    reportAddress = "mikko.m.suni@gmail.com";
-
     cashier = "";
 
     loadingIndicator: any;
@@ -104,6 +101,7 @@ export class ShopPage {
         public navParams: NavParams,
         public productList: ProductList,
         private shoppingCart: ShoppingcartProvider,
+        private reportProvider: ReportProvider,
         public restProvider: RestProvider,
         private alertController: AlertController,
         public loadingCtrl: LoadingController ) {
@@ -181,94 +179,6 @@ export class ShopPage {
     //    this.shoppingCart.setCashier(this.cashier);
     //}
 
-    makeReportMessage( purchases ) {
-
-        console.log( 'purchases: ' + JSON.stringify( purchases ) );
-
-        var giftCard1TransactionCount = 0;
-        var giftCard2TransactionCount = 0;
-        var cashTransactionCount = 0;
-        var cardTransactionCount = 0;
-
-        var giftCard1PurchaseValue = 0.0;
-        var giftCard2PurchaseValue = 0.0;
-        var cashPurchaseValue = 0.0;
-        var cardPurchaseValue = 0.0;
-
-        for ( var i = 0; i < purchases.length; i++ ) {
-            if ( purchases[i].paymentMethod == 0 ) {
-                giftCard1TransactionCount++;
-                giftCard1PurchaseValue += purchases[i].totalSum;
-            } else if ( purchases[i].paymentMethod == 1 ) {
-                giftCard2TransactionCount++;
-                giftCard2PurchaseValue += purchases[i].totalSum;
-            } else if ( purchases[i].paymentMethod == 2 ) {
-                cashTransactionCount++;
-                cashPurchaseValue += purchases[i].totalSum;
-            } else if ( purchases[i].paymentMethod == 3 ) {
-                cardTransactionCount++;
-                cardPurchaseValue += purchases[i].totalSum;
-            }
-        }
-
-        var currentDate = new Date();
-        console.log( 'current date: ' + currentDate.toString() );
-        var str = "Tilitysraportti " + currentDate.toString();
-
-        str += '\n';
-        str += '\n';
-
-        str += 'Kassatapahtumat\n';
-        str += '--------------------------------------------------------------\n'
-
-        str += 'Maksukorttiostojen määrä: ';
-        str += '\t\t\t';
-        str += cardTransactionCount.toString();
-        str += ' kpl, \t arvo: ';
-        str += cardPurchaseValue.toString();
-        str += ' euroa \n';
-
-        str += 'Käteisostojen määrä: ';
-        str += '\t\t\t\t\t';
-        str += cashTransactionCount.toString();
-        str += ' kpl, \t arvo: ';
-        str += cashPurchaseValue.toString();
-        str += ' euroa \n';
-
-        str += 'Lahden ry:n lahjakorttiostojen määrä: ';
-        str += '\t';
-        str += giftCard1TransactionCount.toString();
-        str += ' kpl, \t arvo: ';
-        str += giftCard1PurchaseValue.toString();
-        str += ' euroa \n';
-
-        str += '\n';
-        str += 'Viesti on lähetetty julkaisumyynnin kassajärjestelmästä automaattisesti.'
-
-        console.log( '*** report: ' + str );
-
-        return str;
-    }
-
-    sendReports() {
-        this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
-            var receipts = JSON.parse( result.result );
-            console.log( 'receipts: ' + JSON.stringify( receipts ) );
-
-            this.reportMessage.content = this.makeReportMessage( receipts );
-            this.reportMessage.recipient = this.reportAddress;
-            this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
-
-                var productsToBeOrdered = this.productList.getProductsBelowCount( 2 );
-                console.log( 'products to be ordered: ' + JSON.stringify( productsToBeOrdered ) );
-            }, ( err ) => {
-                console.log( err );
-            } );
-        }, ( err ) => {
-            console.log( err );
-        } );
-    }
-
     onLogout() {
         console.log( '>> shop.onLogout' );
         if ( this.shoppingCart.hasContent() ) {
@@ -279,6 +189,7 @@ export class ShopPage {
         }
 
         this.presentPromptSendReport();
+        //this.reportProvider.sendToBeOrderedReport();
         // TODO: ACTIVATE IN PRODUCTION
         /*this.orderList.products = this.productList.getProductsBelowCount(2);
         if (this.orderList.products.length > 0) {
@@ -1223,13 +1134,13 @@ export class ShopPage {
         let alert = this.alertController.create( {
             title: 'Lähetetäänko päivän päätösraportti?',
             message: "Valitse Lähtetä jos myynti päätetään. Valitse Älä lähetä jos myynti jatkuu tai myyntiä ei ole ollut" +
-            "Vastaanottaja: " + this.reportAddress,
+            "Vastaanottaja: " + this.reportProvider.getReportingAddress(),
             buttons: [
                 {
                     text: 'Lähetä',
                     handler: () => {
                         console.log( 'Confirm Ok' );
-                        this.sendReports();
+                        this.reportProvider.sendReports();
                     }
                 },
                 {

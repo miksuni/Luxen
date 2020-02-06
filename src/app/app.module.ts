@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProductList } from '../providers/productlist/productlist';
 import { RestProvider } from '../providers/rest/rest';
 import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
+import { ReportProvider } from '../providers/report/report';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
     ProductList,
     RestProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ShoppingcartProvider
+    ShoppingcartProvider,
+    ReportProvider
   ]
 })
 export class AppModule {}
