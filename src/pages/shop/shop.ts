@@ -316,7 +316,34 @@ export class ShopPage {
         this.productNumberInitials = "";
     }
 
-    // TODO: add receipt nr handling
+    combinedPaymentGuide() {
+        console.log( 'combinedPayment' );
+
+        var count = 1;
+
+        var str = "";
+        if ( this.payments[0] > 0 ) {
+            str += ( count++ + ". Talleta oman ry:n lahjakortti<br>" );
+        }
+        if ( this.payments[1] > 0 ) {
+            // jos kokonaan käytetty ohje kortin pois ottamiseksi
+            // jos kortille jää käyttövaraa, summa siihen
+            str += ( count++ + ". Talleta SRK:n julkaisumyynnin lahjakortti<br>" );
+        }
+        if ( this.payments[2] > 0 ) {
+            str += ( count++ + ". Suorita käteisveloitus<br>" );
+        }
+        if ( this.payments[3] > 0 ) {
+            str += ( count++ + ". Suorita pankkikorttiveloitus" );
+        }
+
+        this.presentPromptCombinedPaymentConfirmationGuide( str );
+    }
+
+    initCombinedPayment() {
+        this.combinedPaymentGuide();
+    }
+
     combinedPayment() {
         console.log( 'combinedPayment' );
 
@@ -624,7 +651,7 @@ export class ShopPage {
     }
 
     cm2Valid() {
-        //console.log( 'cm2valid' );
+        console.log( 'cm2valid' );
         if ( ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked ) {
             if ( ( this.payments[1] > 0 ) &&
                 ( this.giftCard2Receiver.length > 0 ) &&
@@ -635,18 +662,9 @@ export class ShopPage {
                 console.log( 'cm2valid: true' );
                 return true;
             } else {
-                //                console.log( 'cm2valid: false ' + this.payments[1] + ', '
-                //                    + this.giftCard2Receiver.length + ', '
-                //                    + this.giftCard2Originator.length + ', '
-                //                    + this.giftCard2PurchaseDate.length + ', '
-                //                    + this.giftCard2AmountBefore + ', '
-                //                    + this.giftCard2AmountAfter
-                //                );
                 return false;
             }
-
         } else {
-            //console.log( 'cm2valid: true (cm2 not enabled)' );
             return true;
         }
     }
@@ -1000,51 +1018,6 @@ export class ShopPage {
         prompt.present();
     }
 
-    showCombinationPrompt() {
-        const prompt = this.alertController.create( {
-            title: 'Maksuyhdistelmä',
-            message: "Anna tiedot summista eri maksutavoilla",
-            inputs: [
-                {
-                    name: 'Money',
-                    type: 'number',
-                    placeholder: 'Käteinen'
-                },
-                {
-                    name: 'Card',
-                    type: 'number',
-                    placeholder: 'Pankkikortti'
-                },
-                {
-                    name: 'Giftcard',
-                    type: 'number',
-                    placeholder: 'Lahjakortti'
-                },
-                {
-                    name: 'OriginOrganization',
-                    type: 'string',
-                    placeholder: 'Myynyt rauhanyhdistys'
-                }
-            ],
-            buttons: [
-                {
-                    text: 'Oman ry:n lahjakortti 20€',
-                    handler: data => {
-                        console.log( 'Cancel clicked' );
-                    }
-                },
-                {
-                    text: 'Peruuta',
-                    handler: data => {
-                        console.log( 'Cancel clicked' );
-                    }
-                },
-            ]
-        } );
-        prompt.present();
-    }
-
-
     showPrompt2( moneyback ) {
         const prompt = this.alertController.create( {
             title: 'Takaisin ' + moneyback.toString() + ' e',
@@ -1157,14 +1130,39 @@ export class ShopPage {
     presentPromptCombinedPaymentGuide() {
         let alert = this.alertController.create( {
             title: 'Maksutapojen yhdistelmä',
-            message: "Valitse asiakkaan haluamat maksutavat vasemmalla olevista valintaruuduista." +
-            "<b>Täytä kaikki tiedot valituista maksutavoista</b>. Kirjoita valittujen maksutapojen Veloitus-kenttään veloituksen määrä" +
-            " ko. maksutavalla.",
+            message: "1. Valitse asiakkaan haluamat maksutavat vasemmalla olevista valintaruuduista<br><br>" +
+            "2. Kirjoita valittujen maksutapojen Veloitus-kenttään veloituksen määrä ko. maksutavalla<br><br>" +
+            "3. <b>Täytä kaikki tiedot valituista maksutavoista</b><br><br>." +
+            "4. Paina lopuksi \"Vahvista maksu\""
+            ,
             buttons: [
                 {
                     text: 'Sulje ohje',
                     handler: () => {
                         console.log( 'Confirm Ok' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+
+    presentPromptCombinedPaymentConfirmationGuide( str ) {
+        let alert = this.alertController.create( {
+            title: 'Maksutapojen yhdistelmä',
+            message: str,
+            buttons: [
+                {
+                    text: 'Veloitukset suoritettu',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                        this.combinedPayment();
+                    }
+                },
+                {
+                    text: 'Peru veloitus',
+                    handler: () => {
+                        console.log( 'Cancel' );
                     }
                 }
             ]
