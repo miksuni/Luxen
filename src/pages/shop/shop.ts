@@ -326,16 +326,20 @@ export class ShopPage {
             str += ( count++ + ". Talleta oman ry:n lahjakortti<br>" );
         }
         if ( this.payments[1] > 0 ) {
-            // jos kokonaan käytetty ohje kortin pois ottamiseksi
-            // jos kortille jää käyttövaraa, summa siihen
-            str += ( count++ + ". Talleta SRK:n julkaisumyynnin lahjakortti<br>" );
+            if ( this.giftCard2AmountAfter > 0 ) {
+                str += ( count++ + ". Kirjoita SRK:n julkaisumyynnin lahjakorttiin jäljellä oleva käyttövara " +
+                    this.giftCard2AmountAfter + " € ja anna kortti asiakkaalle<br>" );
+            } else {
+                str += ( count++ + ". Talleta SRK:n julkaisumyynnin lahjakortti<br>" );
+            }
         }
         if ( this.payments[2] > 0 ) {
             str += ( count++ + ". Suorita käteisveloitus<br>" );
         }
         if ( this.payments[3] > 0 ) {
-            str += ( count++ + ". Suorita pankkikorttiveloitus" );
+            str += ( count++ + ". Suorita pankkikorttiveloitus<br><br>" );
         }
+        str += "Kun toimenpiteet suoritettu, paina \"Veloitukset suoritettu\"";
 
         this.presentPromptCombinedPaymentConfirmationGuide( str );
     }
@@ -1106,7 +1110,8 @@ export class ShopPage {
     presentPromptSendReport() {
         let alert = this.alertController.create( {
             title: 'Lähetetäänko päivän päätösraportti?',
-            message: "Valitse Lähtetä jos myynti päätetään. Valitse Älä lähetä jos myynti jatkuu tai myyntiä ei ole ollut" +
+            message: "Valitse \"Lähtetä\" jos myynti päätetään. Tämä on normaali valinta myyntipäivän päätteeksi.<br><br>" +
+            "Valitse \"Älä lähetä\" jos myynti jatkuu tai myyntiä ei ole ollut.<br>" +
             "Vastaanottaja: " + this.reportProvider.getReportingAddress(),
             buttons: [
                 {
