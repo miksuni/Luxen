@@ -29,16 +29,14 @@ export class AdminPage {
     }
 
     getProductList() {
-        var fileContent = "";
-        this.products = this.productList.getProducts();
-        for ( var i = 0; i < this.products.length; i++ ) {
-            var entry = [
-                this.products[i].productName,
-                this.products[i].price,
-            ].join( ";" );
-            entry += '\n';
-            fileContent += entry;
-        }
-        console.log( '>>' + fileContent );
+        this.reportProvider.sendProductInfoDbDumb();
+    }
+
+    getSoldProducts() {
+        this.reportProvider.senddBClassDumb( "SoldItem" );
+    }
+
+    getReceipts() {
+        this.reportProvider.senddBClassDumb( "Receipt" );
     }
 }

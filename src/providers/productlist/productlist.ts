@@ -24,7 +24,7 @@ export class ProductList {
         //this.getProductInfo();
     }
 
-    getProducts() {
+    products() {
         return this.productInfo;
     }
 

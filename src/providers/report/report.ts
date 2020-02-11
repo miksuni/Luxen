@@ -12,11 +12,13 @@ import { RestProvider } from '../../providers/rest/rest';
 @Injectable()
 export class ReportProvider {
 
-    reportMessage = { recipient: '', content: '' };
+    reportMessage = { recipient: '', content: '', format: '' };
+    dbDump = { dbentry: '' };
 
-    //reportAddress = "lahdenry.laskut@gmail.com";
+    //transactionReportAddress = "lahdenry.laskut@gmail.com";
     transactionReportAddress = "mikko.m.suni@gmail.com";
     productsToBeOrderedReportAddress = "mikko.m.suni@gmail.com";
+    adminEmail = "mikko.m.suni@gmail.com";
 
     constructor( public http: HttpClient, public productList: ProductList, public restProvider: RestProvider ) {
         console.log( 'Hello ReportProvider Provider' );
@@ -122,7 +124,7 @@ export class ReportProvider {
             cashTrValue,
             "</td>",
             "</tr><tr><td>",
-            "Lahjakorttiostot:</td><td style=\"padding:0px 0px 0px 10px\">",
+            "Lahjakorttiostot ry:n lahjakortilla:</td><td style=\"padding:0px 0px 0px 10px\">",
             giftCartTrCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             giftCartTrValue,
@@ -172,9 +174,41 @@ export class ReportProvider {
 
             this.reportMessage.content = this.makeTransactionReportMessage( receipts );
             this.reportMessage.recipient = this.transactionReportAddress;
+            this.reportMessage.format = "text/html";
+            //this.reportMessage.format = "text/plain";
             this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
                 console.log( 'report mail sent' );
                 //this.sendToBeOrderedReport();
+            }, ( err ) => {
+                console.log( err );
+            } );
+        }, ( err ) => {
+            console.log( err );
+        } );
+    }
+
+    sendProductInfoDbDumb() {
+        this.reportMessage.content = JSON.stringify( this.productList.products() );;
+        this.reportMessage.recipient = this.adminEmail;
+        this.reportMessage.format = "text/plain";
+        this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
+            console.log( 'productInfo dump mail sent' );
+        }, ( err ) => {
+            console.log( err );
+        } );
+        //console.log( '>>' + this.reportMessage.content );
+    }
+
+    senddBClassDumb( dbClass ) {
+        this.dbDump.dbentry = dbClass;
+        this.restProvider.sendRequest( 'db_entries', this.dbDump ).then(( result: any ) => {
+            var entries = JSON.parse( result.result );
+            console.log( '>>' + JSON.stringify( entries ) );
+            this.reportMessage.content = JSON.stringify( entries );
+            this.reportMessage.recipient = this.adminEmail;
+            this.reportMessage.format = "text/plain";
+            this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
+                console.log( dbClass + ' dump mail sent' );
             }, ( err ) => {
                 console.log( err );
             } );
@@ -193,7 +227,5 @@ export class ReportProvider {
         }, ( err ) => {
             console.log( err );
         } );
-
     }
-
 }
