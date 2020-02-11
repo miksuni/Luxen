@@ -24,6 +24,9 @@ export class ProductList {
         //this.getProductInfo();
     }
 
+    getProducts() {
+        return this.productInfo;
+    }
 
     getProductInfo() {
         console.log( '>> productList.getProductInfo' );

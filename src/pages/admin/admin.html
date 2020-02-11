@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Kassan hallinta</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+<button ion-button round full (click)="getProductsToBeOrdered()">Listaa Loppumassa olevat tuotteet</button>
+<button ion-button round full (click)="getProductList()">Listaa tuotteet</button>
+
+Loppumassa olevat tuotteet:
+	<table>
+		<tr><th>Tuotenimi</th><th>Nykyinen hyllyssä</th><th>SKC</th></tr>
+		<tr *ngFor="let element of productsToBeOrdered; let i = index"
+			(click)="onProductSelected(element.productName, i)">
+			<td>{{element.productName}}</td>
+			<td>{{element.amountInStock}}</td>
+			<td>{{element.stockKeepingCount}}</td>
+		</tr>
+	</table>
+
+</ion-content>

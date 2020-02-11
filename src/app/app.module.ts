@@ -3,8 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+//import { HomePage } from '../pages/home/home';
+import { AdminPage } from '../pages/admin/admin';
 import { ShopPage } from '../pages/shop/shop';
 import { ProductUpdatePage } from '../pages/productUpdate/productUpdate';
 
@@ -18,38 +18,38 @@ import { RestProvider } from '../providers/rest/rest';
 import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
 import { ReportProvider } from '../providers/report/report';
 
-@NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-    ListPage,
-    ShopPage,
-    ProductUpdatePage
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    IonicModule.forRoot(MyApp, {
-      scrollAssist: false
-    }),
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    ListPage,
-    ShopPage,
-    ProductUpdatePage
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    BarcodeScanner,
-    ProductList,
-    RestProvider,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ShoppingcartProvider,
-    ReportProvider
-  ]
-})
-export class AppModule {}
+@NgModule( {
+    declarations: [
+        MyApp,
+        /*HomePage,*/
+        AdminPage,
+        ShopPage,
+        ProductUpdatePage
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        IonicModule.forRoot( MyApp, {
+            scrollAssist: false
+        } ),
+    ],
+    bootstrap: [IonicApp],
+    entryComponents: [
+        MyApp,
+        /*HomePage,*/
+        AdminPage,
+        ShopPage,
+        ProductUpdatePage
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        BarcodeScanner,
+        ProductList,
+        RestProvider,
+        { provide: ErrorHandler, useClass: IonicErrorHandler },
+        ShoppingcartProvider,
+        ReportProvider
+    ]
+} )
+export class AppModule { }
