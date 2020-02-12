@@ -169,15 +169,9 @@ export class ProductUpdatePage {
 
     onProductNameUpdated() {
         console.log( '>> productUpdate.onProductNameUpdated: ' + this.productNameInitials );
-        var found = this.productList.getProductByName( this.productNameInitials );
+        var found = this.productList.getProductByWord( this.productNameInitials );
         this.searchResult = found;
-        //console.log('>> found: ' + found.length);
-        //console.log('>> json: ' + JSON.stringify(found));
-        //this.clear();
-        if ( found.length == 1 ) {
-            console.log( '>> found item: ' + found[0].productName );
-            this.showProduct( found[0] );
-        }
+        console.log( '>> found: ' + found.length );
     }
 
     onProductCodeUpdated() {

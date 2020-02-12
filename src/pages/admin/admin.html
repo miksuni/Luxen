@@ -10,15 +10,16 @@
 
 <ion-content padding>
 
-<button ion-button round full (click)="getProductsToBeOrdered()">Listaa Loppumassa olevat tuotteet</button>
-<button ion-button round full (click)="getProductList()">Listaa tuotteet</button>
-<button ion-button round full (click)="getSoldProducts()">Listaa ostetut tuotteet</button>
-<button ion-button round full (click)="getReceipts()">Listaa kuitit</button>
+<button ion-button round full (click)="getProductsToBeOrdered()">Loppumassa olevat tuotteet</button>
+<button ion-button round full (click)="getProductsNotKeptInStock()">Tuotteet joita ei pidetä varastossa</button>
+<button ion-button round full (click)="getProductList()">Varmuuskopioi tuotetietokanta</button>
+<button ion-button round full (click)="getSoldProducts()">Varmuuskopioi tiedot ostoista</button>
+<button ion-button round full (click)="getReceipts()">Varmuuskopioi kuitit</button>
 
 Loppumassa olevat tuotteet:
 	<table>
 		<tr><th>Tuotenimi</th><th>Nykyinen hyllyssä</th><th>SKC</th></tr>
-		<tr *ngFor="let element of productsToBeOrdered; let i = index"
+		<tr *ngFor="let element of searchResults; let i = index"
 			(click)="onProductSelected(element.productName, i)">
 			<td>{{element.productName}}</td>
 			<td>{{element.amountInStock}}</td>

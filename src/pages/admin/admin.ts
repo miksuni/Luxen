@@ -10,7 +10,7 @@ import { ProductList } from '../../providers/productlist/productlist';
 } )
 export class AdminPage {
 
-    productsToBeOrdered: any;
+    searchResults: any;
     products: any;
 
     constructor( public navCtrl: NavController,
@@ -25,7 +25,11 @@ export class AdminPage {
     }
 
     getProductsToBeOrdered() {
-        this.productsToBeOrdered = this.productList.getProductsBelowCount( 2 );
+        this.searchResults = this.productList.getProductsBelowCount( 2 );
+    }
+
+    getProductsNotKeptInStock() {
+        this.searchResults = this.productList.getProductsNotKeptInStock();
     }
 
     getProductList() {

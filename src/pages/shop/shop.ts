@@ -222,12 +222,9 @@ export class ShopPage {
 
     onProductNameUpdated() {
         console.log( '>> shop.onProductNameUpdated: ' + this.productNameInitials );
-        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
-        //var found = this.productList.getProductByName( this.productNameInitials );
         var found = this.productList.getProductByWord( this.productNameInitials );
         this.searchResult = found;
         console.log( '>> found: ' + found.length );
-        //console.log( '>> json: ' + JSON.stringify( found ) );
     }
 
     onProductSelected( productName, index ) {

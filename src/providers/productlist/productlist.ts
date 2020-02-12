@@ -76,12 +76,8 @@ export class ProductList {
             return this.nullProduct;
         }
         var results = [];
-        //console.log('>> LEN ' + this.productInfo.length);
         for ( var i = 0; i < this.productInfo.length; i++ ) {
             if ( this.productInfo[i].productName.toLowerCase().startsWith( letters.toLowerCase() ) ) {
-                //console.log('>> candicate found');
-                //console.log('>> ISBN: ' + this.productInfo[i].ISBN);
-                //console.log('>> product code: ' + this.productInfo[i].ISBN.replace(/-/g,''));
                 results.push( this.productInfo[i] );
             }
         }
@@ -94,7 +90,6 @@ export class ProductList {
             return this.nullProduct;
         }
         var results = [];
-        //console.log('>> LEN ' + this.productInfo.length);
         for ( var i = 0; i < this.productInfo.length; i++ ) {
             //if (this.productInfo[i].productName.toLowerCase().startsWith(letters.toLowerCase())) {
             var n = this.productInfo[i].productName.toLowerCase().indexOf( letters.toLowerCase() );
@@ -105,20 +100,23 @@ export class ProductList {
         return results;
     }
 
-    getProductByIndex( index ) {
-        console.log( '>> ProductList.getProductByIndex' );
-        //if (index < this.productList.length) {
-        //	return this.productList[index];
-        //}
-        //return this.nullProduct;
+    getProductsNotKeptInStock() {
+        console.log( '>> productList.getProductsNotKeptInStock' );
+
+        var results = [];
+        for ( var i = 0; i < this.productInfo.length; i++ ) {
+            if ( this.productInfo[i].stockKeepingCount < 1 ) {
+                results.push( this.productInfo[i] );
+            }
+        }
+        return results;
     }
 
     getProductsBelowCount( count ) {
         console.log( '>> productList.getProductsBelowCount' );
         var results = [];
         for ( var i = 0; i < this.productInfo.length; i++ ) {
-            if ( this.productInfo[i].amountInStock < count &&
-                this.productInfo[i].stockKeepingCount > 0 &&
+            if ( this.productInfo[i].amountInStock < this.productInfo[i].stockKeepingCount &&
                 this.productInfo[i].availableFromPublisher ) {
                 results.push( this.productInfo[i] );
             }
