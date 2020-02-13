@@ -12,7 +12,7 @@ import { RestProvider } from '../../providers/rest/rest';
 @Injectable()
 export class ReportProvider {
 
-    reportMessage = { recipient: '', content: '', format: '' };
+    reportMessage = { recipient: '', subject: '', content: '', format: '' };
     dbDump = { dbentry: '' };
 
     //transactionReportAddress = "lahdenry.laskut@gmail.com";
@@ -28,7 +28,7 @@ export class ReportProvider {
         return this.transactionReportAddress;
     }
 
-    makeTransactionReportMessage( purchases ) {
+    makeTransactionReportMessage( purchases, cashier ) {
 
         console.log( 'purchases: ' + JSON.stringify( purchases ) );
 
@@ -131,7 +131,11 @@ export class ReportProvider {
             "</td>",
             "</tr>",
             "</table>",
-            "<p><i>Käteistuotto tilitetään jokaisen kuukauden viimeisenä sunnuntaina.</t></p>",
+            "<p>Kassa: ",
+            cashier,
+            "</p>",
+            "<p><i>Maksupäätekuitit on arkistoitu myyntipisteellä.</i></p>",
+            "<p><i>Käteistuotto tilitetään jokaisen kuukauden viimeisenä sunnuntaina.</i></p>",
             "</body>",
             "</html>"
 
@@ -166,13 +170,16 @@ export class ReportProvider {
         return str;
     }
 
-
     sendReports() {
         this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
             var receipts = JSON.parse( result.result );
+            var cashier = "";
             console.log( 'receipts: ' + JSON.stringify( receipts ) );
-
-            this.reportMessage.content = this.makeTransactionReportMessage( receipts );
+            this.reportMessage.subject = "Julkaisumyyntiraportti";
+            if ( receipts.length > 0 ) {
+                cashier = receipts[receipts.length - 1].cashier;
+            }
+            this.reportMessage.content = this.makeTransactionReportMessage( receipts, cashier );
             this.reportMessage.recipient = this.transactionReportAddress;
             this.reportMessage.format = "text/html";
             //this.reportMessage.format = "text/plain";
@@ -188,7 +195,9 @@ export class ReportProvider {
     }
 
     sendProductInfoDbDumb() {
-        this.reportMessage.content = JSON.stringify( this.productList.products() );;
+        console.log( '>> sendProductInfoDbDumb ' );
+        this.reportMessage.subject = "productInfo";
+        this.reportMessage.content = JSON.stringify( this.productList.products() );
         this.reportMessage.recipient = this.adminEmail;
         this.reportMessage.format = "text/plain";
         this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
@@ -200,10 +209,12 @@ export class ReportProvider {
     }
 
     senddBClassDumb( dbClass ) {
+        console.log( '>> senddBClassDumb: ' + dbClass );
         this.dbDump.dbentry = dbClass;
         this.restProvider.sendRequest( 'db_entries', this.dbDump ).then(( result: any ) => {
             var entries = JSON.parse( result.result );
             console.log( '>>' + JSON.stringify( entries ) );
+            this.reportMessage.subject = dbClass;
             this.reportMessage.content = JSON.stringify( entries );
             this.reportMessage.recipient = this.adminEmail;
             this.reportMessage.format = "text/plain";
