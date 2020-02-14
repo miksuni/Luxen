@@ -10,21 +10,36 @@
 
 <ion-content padding>
 
+<ion-list>
+	<ion-item>
+		<ion-label>Testimoodi</ion-label>
+		<ion-toggle [(ngModel)]="testMode" (ionChange)="onTestModeChanged()"></ion-toggle>
+  	</ion-item>
+</ion-list>
 <button ion-button round full (click)="getProductsToBeOrdered()">Loppumassa olevat tuotteet</button>
 <button ion-button round full (click)="getProductsNotKeptInStock()">Tuotteet joita ei pidetä varastossa</button>
-<button ion-button round full (click)="getProductList()">Varmuuskopioi tuotetietokanta</button>
-<button ion-button round full (click)="getSoldProducts()">Varmuuskopioi tiedot ostoista</button>
-<button ion-button round full (click)="getReceipts()">Varmuuskopioi kuitit</button>
-
-Loppumassa olevat tuotteet:
-	<table>
-		<tr><th>Tuotenimi</th><th>Nykyinen hyllyssä</th><th>SKC</th></tr>
-		<tr *ngFor="let element of searchResults; let i = index"
-			(click)="onProductSelected(element.productName, i)">
-			<td>{{element.productName}}</td>
-			<td>{{element.amountInStock}}</td>
-			<td>{{element.stockKeepingCount}}</td>
-		</tr>
+<button ion-button round full (click)="initProductListBu()">Varmuuskopioi tuotetietokanta</button>
+<button ion-button round full (click)="initSoldProductsBu()">Varmuuskopioi tiedot ostoista</button>
+<button ion-button round full (click)="initReceiptsBu()">Varmuuskopioi kuitit</button>
+<br>
+<div id=productTable>
+	<table class="products">
+		<caption>Loppumassa olevat tuotteet</caption>
+		<thead>
+			<tr>
+				<th id="thProductName">Tuotenimi</th>
+				<th id="thInShelf">Hyllyssä</th>
+				<th id="thSKC">SKC</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let element of searchResults; let i = index" [ngClass]="{'odd': 0 !== i % 2}"
+				(click)="onProductSelected(element.productName, i)">
+				<td>{{element.productName}}</td>
+				<td id="tdInShelf">{{element.amountInStock}}</td>
+				<td id="tdSKC">{{element.stockKeepingCount}}</td>
+			</tr>
+		</tbody>
 	</table>
-
+</div>
 </ion-content>

@@ -15,13 +15,28 @@ export class ReportProvider {
     reportMessage = { recipient: '', subject: '', content: '', format: '' };
     dbDump = { dbentry: '' };
 
-    //transactionReportAddress = "lahdenry.laskut@gmail.com";
-    transactionReportAddress = "mikko.m.suni@gmail.com";
+    transactionReportAddress = "lahdenry.laskut@gmail.com";
+    //transactionReportAddress = "mikko.m.suni@gmail.com";
     productsToBeOrderedReportAddress = "mikko.m.suni@gmail.com";
     adminEmail = "mikko.m.suni@gmail.com";
 
+    testMode: boolean = false;
+
     constructor( public http: HttpClient, public productList: ProductList, public restProvider: RestProvider ) {
         console.log( 'Hello ReportProvider Provider' );
+    }
+
+    getTestMode() {
+        return this.testMode;
+    }
+
+    setTestMode( testModeActivated ) {
+        if ( testModeActivated ) {
+            this.transactionReportAddress = "mikko.m.suni@gmail.com";
+        } else {
+            this.transactionReportAddress = "lahdenry.laskut@gmail.com";
+        }
+        this.testMode = testModeActivated;
     }
 
     getReportingAddress() {
