@@ -42,7 +42,7 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
-    version = "Kassaversio 1.0.1";
+    version = "Kassaversio 1.0.2";
 
     /*
     paymentInfo = {
