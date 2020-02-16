@@ -122,15 +122,16 @@ export class ShoppingcartProvider {
         return this.shoppingCart;
     }
 
-	hasProduct(productName) {
-		for (var i = 0; i < this.shoppingCart.length; i++) {
-			if (productName === this.shoppingCart[i].productName){
-				return true;
-			}	
-		}
-		return false;
-	}
+    hasProduct( productName ) {
+        for ( var i = 0; i < this.shoppingCart.length; i++ ) {
+            if ( productName === this.shoppingCart[i].productName ) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    // TODO: Remove if not needed
     saveReceipt() {
         console.log( '>> ShoppingcartProvider.saveReceipt' );
         console.log( 'shoppingCart: ' + JSON.stringify( this.shoppingCart ) );
@@ -141,6 +142,7 @@ export class ShoppingcartProvider {
         this.restProvider.sendRequest( "saveReceipt", this.purchase );
     }
 
+    // TODO: rename
     saveReceipt2( receiptData ) {
         console.log( '>> ShoppingcartProvider.saveReceipt2' );
         console.log( 'shoppingCart2: ' + JSON.stringify( this.shoppingCart ) );

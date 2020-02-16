@@ -14,6 +14,7 @@ export class ReportProvider {
 
     reportMessage = { recipient: '', subject: '', content: '', format: '' };
     dbDump = { dbentry: '' };
+    ownPurchaseData = [];
 
     transactionReportAddress = "lahdenry.laskut@gmail.com";
     //transactionReportAddress = "mikko.m.suni@gmail.com";
@@ -51,11 +52,18 @@ export class ReportProvider {
         var giftCard2TransactionCount = 0;
         var cashTransactionCount = 0;
         var cardTransactionCount = 0;
+        var ownPurchaseCount = 0;
 
         var giftCard1PurchaseValue = 0.0;
         var giftCard2PurchaseValue = 0.0;
         var cashPurchaseValue = 0.0;
         var cardPurchaseValue = 0.0;
+        var ownPurchaseValue = 0.0;
+
+        var ownPurchaseTable = "";
+        var ownPurchaseRows = "";
+
+        this.ownPurchaseData.splice( 0, this.ownPurchaseData.length );
 
         for ( var i = 0; i < purchases.length; i++ ) {
             if ( purchases[i].paymentMethod == 0 ) {
@@ -70,6 +78,20 @@ export class ReportProvider {
             } else if ( purchases[i].paymentMethod == 3 ) {
                 cardTransactionCount++;
                 cardPurchaseValue += purchases[i].totalSum;
+            } else if ( purchases[i].paymentMethod == 4 ) {
+                var receiptData = {
+                    handedTo: '',
+                    committee: '',
+                    receiver: '',
+                    totalSum: ''
+                }
+                receiptData.handedTo = purchases[i].handedTo;
+                receiptData.committee = purchases[i].committee;
+                receiptData.receiver = purchases[i].receiver;
+                receiptData.totalSum = purchases[i].totalSum.toFixed( 2 );
+                this.ownPurchaseData.push( receiptData );
+                ownPurchaseCount++;
+                ownPurchaseValue += purchases[i].totalSum;
             }
         }
 
@@ -78,44 +100,35 @@ export class ReportProvider {
         var currentDateTime = currentDate.toString() + "   " + currentTime;
         console.log( 'current date: ' + currentDateTime );
 
-        //        var str = "Tilitysraportti " + currentDate.toString();
-        //
-        //        str += '\n\nKassatapahtumat\n';
-        //        str += '--------------------------------------------------------------\n';
-        //
-        //        str += 'Maksukorttiostojen määrä: ';
-        //        str += '\t\t\t';
-        //        str += cardTransactionCount.toString();
-        //        str += ' kpl, \t arvo: ';
-        //        str += cardPurchaseValue.toFixed( 2 );
-        //        str += ' euroa \n';
-        //
-        //        str += 'Käteisostojen määrä: ';
-        //        str += '\t\t\t\t\t';
-        //        str += cashTransactionCount.toString();
-        //        str += ' kpl, \t arvo: ';
-        //        str += cashPurchaseValue.toFixed( 2 );
-        //        str += ' euroa \n';
-        //
-        //        str += 'Lahden ry:n lahjakorttiostojen määrä: ';
-        //        str += '\t';
-        //        str += giftCard1TransactionCount.toString();
-        //        str += ' kpl, \t arvo: ';
-        //        str += giftCard1PurchaseValue.toFixed( 2 );
-        //        str += ' euroa';
-        //
-        //        str += '\n\nViesti on lähetetty julkaisumyynnin kassajärjestelmästä automaattisesti.'
-        //
-        //        console.log( '*** report: ' + str );
-        //
-        //        return str;
-
         var cardTrCount = cardTransactionCount.toString();
         var cardTrValue = cardPurchaseValue.toFixed( 2 );
         var cashTrCount = cashTransactionCount.toString();
         var cashTrValue = cashPurchaseValue.toFixed( 2 );
         var giftCartTrCount = giftCard1TransactionCount.toString();
         var giftCartTrValue = giftCard1PurchaseValue.toFixed( 2 );
+        var ownPurchaseTrValue = ownPurchaseValue.toFixed( 2 );
+
+        if ( this.ownPurchaseData.length > 0 ) {
+            for ( var i = 0; i < this.ownPurchaseData.length; i++ ) {
+                ownPurchaseRows += "<tr><td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].handedTo + "</td>";
+                ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].committee + "</td>";
+                ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].receiver + "</td>",
+                    ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].totalSum + "</td>",
+                    "</tr>";
+            }
+
+            ownPurchaseTable = [
+                "<h5>Ry:n omien ottojen erittely</h5>",
+                "<table border=\"1\" bordercolor=\"#eeeeee\"><tr>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Kenelle tuote luovutettu</th>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Toimikunta</th>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Tuotteen saaja</th>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Arvo euroina</th>",
+                "</tr>",
+                ownPurchaseRows,
+                "</table>"
+            ].join( '' );
+        }
 
         var str = [
             "<html>",
@@ -123,29 +136,37 @@ export class ReportProvider {
             "<h2>Tilitysraportti</h2><small>",
             currentDateTime,
             "</small><hr>",
-            "<h4>Kassatapahtumat</h4>",
+            "<h3>Kassatapahtumat</h3>",
             "<table>",
             "<tr><th align=\"left\">Maksuväline</th>",
             "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">",
             "Kpl</th><th align=\"left\" style=\"padding:0px 0px 0px 10px\">Arvo euroina</th></tr>",
-            "<td>Maksukorttiostot:</td><td style=\"padding:0px 0px 0px 10px\">",
+
+            "<td>Maksukortti</td><td style=\"padding:0px 0px 0px 10px\">",
             cardTrCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             cardTrValue,
             "</td></tr><tr>",
-            "<td>Käteisostot:</td><td style=\"padding:0px 0px 0px 10px\">",
+
+            "<td>Käteinen</td><td style=\"padding:0px 0px 0px 10px\">",
             cashTrCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             cashTrValue,
-            "</td>",
-            "</tr><tr><td>",
-            "Lahjakorttiostot ry:n lahjakortilla:</td><td style=\"padding:0px 0px 0px 10px\">",
+            "</td></tr><tr><td>",
+
+            "Ry:n lahjakortti</td><td style=\"padding:0px 0px 0px 10px\">",
             giftCartTrCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             giftCartTrValue,
-            "</td>",
-            "</tr>",
-            "</table>",
+            "</td></tr><tr><td>",
+
+            "Ry:n omat otot</td><td style=\"padding:0px 0px 0px 10px\">",
+            ownPurchaseCount,
+            "</td><td style=\"padding:0px 0px 0px 10px\">",
+            ownPurchaseTrValue,
+
+            "</td></tr></table>",
+            ownPurchaseTable,
             "<p>Kassa: ",
             cashier,
             "</p>",
@@ -156,7 +177,7 @@ export class ReportProvider {
 
         ].join( '' );
 
-
+        console.log( str );
         //https://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic
         //https://www.w3schools.com/css/tryit.asp?filename=trycss_table_striped
 

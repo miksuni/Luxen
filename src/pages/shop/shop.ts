@@ -34,7 +34,6 @@ export class ShopPage {
     currentState: any;
     orderList = { products: [] };
     chat = { from: '', message: '' };
-    purchases = { giftCard1: 0.0, giftCard2: 0.0, cash: 0.0, card: 0.0 };
     chatMessages: any;
     chatMessage: string = "";
     //productInfo = { objectId:'', ISBN:'', productName:'', price:'', amountInStock:'', productCode:'', availableFromPublisher:'' };
@@ -81,7 +80,7 @@ export class ShopPage {
     giftCard2AmountAfter: number = 0.0;
     cashPay: number = 0.0;
     cardPay: number = 0.0;
-    payments = [0.0, 0.0, 0.0, 0.0];
+    payments = [0.0, 0.0, 0.0, 0.0, 0.0];
 
     givenAmount = 0;
     cashBack = 0;
@@ -313,6 +312,68 @@ export class ShopPage {
         this.productNumberInitials = "";
     }
 
+    ownPurchase( handedTo, committee, receiver ) {
+        console.log( 'ownPurchase: ' + handedTo + ', ' + committee + ', ' + receiver );
+
+        this.presentLoading( "Talletetaan..." );
+        this.shoppingCart.setCashier( this.cashier );
+        this.receiptContent = Array.from( this.cartContent );
+        this.receiptTotalSumAsString = this.totalSumAsString;
+        this.currentState.lastReceiptNr = this.currentState.lastReceiptNr + 1;
+        console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
+
+        var receiptData = {
+            receiptNr: 0,
+            cashier: '',
+            items: []
+        }
+
+        receiptData.receiptNr = this.currentState.lastReceiptNr;
+        receiptData.cashier = this.cashier;
+
+        this.payments[4] = this.totalSum;
+
+        var receiptItemData = {
+            sum: 0,
+            paymentMethod: 4,
+            giftCard1Type: 0,
+            handedTo: '',
+            committee: '',
+            receiver: '',
+            originator: '',
+            givenDate: '',
+            valueBefore: 0,
+            valueAfter: 0
+        };
+
+        receiptItemData.sum = this.payments[4];
+        receiptItemData.paymentMethod = 4;
+        receiptItemData.handedTo = handedTo;
+        receiptItemData.committee = committee;
+        //receiptItemData.receiver = receiver;
+        receiptItemData.receiver = handedTo + ';' + committee + ';' + receiver;
+        receiptData.items.push( receiptItemData );
+
+        this.shoppingCart.saveReceipt2( receiptData );
+        this.shoppingCart.clearAll();
+        this.clearPayments();
+        this.clearCombinedPaymentData();
+        this.update();
+        document.getElementById( "receipt_view" ).style.visibility = "visible";
+        console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
+
+        setTimeout(() => {
+            this.finishLoading();
+            this.presentLoading( "Haetaan tuotteet..." );
+            setTimeout(() => {
+                this.productList.getProductInfo();
+                this.getCurrentState();
+                this.finishLoading();
+            }, 2000 );
+            this.finishLoading();
+        }, 2000 );
+    }
+
     combinedPaymentGuide() {
         console.log( 'combinedPayment' );
 
@@ -506,7 +567,6 @@ export class ShopPage {
         this.clearCombinedPaymentData();
     }
 
-    // TODO: change so that cm1 value can be more that total sum
     validateCm() {
         console.log( 'validateCm' );
         var currentPayments = 0.0;
@@ -1163,6 +1223,47 @@ export class ShopPage {
                 },
                 {
                     text: 'Peru veloitus',
+                    handler: () => {
+                        console.log( 'Cancel' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+
+    presentPromptOwnPurchase() {
+        let alert = this.alertController.create( {
+            title: 'Ry:n oma osto',
+            message: 'Jos tuote tai tuotteet otetaan Ry:n nimissä (esim lahjaksi annettavaksi) ' +
+            'tai Ry:n käyttöön, kirjaa alle pyydetyt tiedot (toimikunta voi olla sama kuin tuotteen saaja joissain tapauksessa).',
+            inputs: [
+                {
+                    name: 'TakenBy',
+                    type: 'text',
+                    placeholder: 'Tuotteen hakijan nimi'
+                },
+                {
+                    name: 'Committee',
+                    type: 'text',
+                    placeholder: 'Toimikunta'
+                },
+                {
+                    name: 'Receiver',
+                    type: 'text',
+                    placeholder: 'Tuotteen saaja'
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Vahvista',
+                    handler: data => {
+                        console.log( 'Confirm Ok' );
+                        this.ownPurchase( data.TakenBy, data.Committee, data.Receiver );
+                    }
+                },
+                {
+                    text: 'Peru',
                     handler: () => {
                         console.log( 'Cancel' );
                     }

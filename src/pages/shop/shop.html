@@ -275,6 +275,13 @@
 										<ion-icon name="card" item-start> Maksuyhd.</ion-icon>
 									</button>
 								</td>
+								<td style="text-align: center">
+									<button ion-button class="payment_button" id="gift_card_button"
+										[disabled]="checkIfGiftCartPaymentEnabled()"
+										(click)="presentPromptOwnPurchase()">
+										<ion-icon name="contract" item-start> Ry oma osto</ion-icon>
+									</button>
+								</td>
 							</tr>
 						</table>
 					</tr>
