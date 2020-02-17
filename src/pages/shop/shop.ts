@@ -350,11 +350,10 @@ export class ShopPage {
         receiptItemData.paymentMethod = 4;
         receiptItemData.handedTo = handedTo;
         receiptItemData.committee = committee;
-        //receiptItemData.receiver = receiver;
-        receiptItemData.receiver = handedTo + ';' + committee + ';' + receiver;
+        receiptItemData.receiver = receiver;
         receiptData.items.push( receiptItemData );
 
-        this.shoppingCart.saveReceipt2( receiptData );
+        this.shoppingCart.saveReceipt( receiptData );
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -498,7 +497,7 @@ export class ShopPage {
             receiptData.items.push( receiptItemData );
         }
 
-        this.shoppingCart.saveReceipt2( receiptData );
+        this.shoppingCart.saveReceipt( receiptData );
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -808,29 +807,6 @@ export class ShopPage {
         this.restProvider.sendRequest( 'send_email', [] );
     }
 
-    confirmPayment() {
-        console.log( 'confirmPayment' );
-        this.presentLoading( "Talletetaan..." );
-        this.receiptContent = Array.from( this.cartContent );
-        this.receiptTotalSumAsString = this.totalSumAsString;
-        this.shoppingCart.saveReceipt();
-        this.shoppingCart.clearAll();
-        this.update();
-        document.getElementById( "receipt_view" ).style.visibility = "visible";
-        this.cardPaymentEnabled = false;
-        this.cashPaymentEnabled = false;
-        this.combinedPaymentEnabled = false;
-        setTimeout(() => {
-            this.finishLoading();
-            this.presentLoading( "Haetaan tuotteet..." );
-            setTimeout(() => {
-                this.productList.getProductInfo();
-                this.finishLoading();
-            }, 2000 );
-            this.finishLoading();
-        }, 2000 );
-    }
-
     cancelPurchase() {
         console.log( 'cancelPurchase' );
         //document.getElementById( "receipt_view" ).style.visibility = "hidden";
@@ -988,7 +964,6 @@ export class ShopPage {
                     text: 'Ok',
                     handler: () => {
                         console.log( 'Confirm card payment Ok' );
-                        //this.confirmPayment();
                         this.payments[3] = this.totalSum;
                         this.combinedPayment();
                     }
@@ -1025,7 +1000,6 @@ export class ShopPage {
                         if ( this.moneyGiven > this.totalSum ) {
                             this.showPrompt2( this.moneyGiven - this.totalSum );
                         } else if ( this.moneyGiven == this.totalSum ) {
-                            //this.confirmPayment();
                             this.payments[2] = this.totalSum;
                             this.combinedPayment();
                         } else {
@@ -1062,8 +1036,6 @@ export class ShopPage {
                     handler: data => {
                         this.moneyGiven = data.Money;
                         console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
-                        //this.showPrompt2(this.moneyBackAsFloat - this.totalSum);
-                        //this.confirmPayment();
                         this.payments[2] = this.totalSum;
                         this.combinedPayment();
                     },
@@ -1086,8 +1058,6 @@ export class ShopPage {
                 {
                     text: 'OK',
                     handler: data => {
-                        //console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
-                        //this.confirmPayment();
                         this.payments[2] = this.totalSum;
                         this.combinedPayment();
                     }

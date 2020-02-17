@@ -164,8 +164,8 @@ export class ReportProvider {
             ownPurchaseCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             ownPurchaseTrValue,
-
             "</td></tr></table>",
+
             ownPurchaseTable,
             "<p>Kassa: ",
             cashier,

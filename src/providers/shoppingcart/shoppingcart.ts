@@ -131,20 +131,8 @@ export class ShoppingcartProvider {
         return false;
     }
 
-    // TODO: Remove if not needed
-    saveReceipt() {
+    saveReceipt( receiptData ) {
         console.log( '>> ShoppingcartProvider.saveReceipt' );
-        console.log( 'shoppingCart: ' + JSON.stringify( this.shoppingCart ) );
-        console.log( 'receipt: ' + JSON.stringify( this.receipt ) );
-        this.receipt.receiptNr = 1;
-        this.purchase.productList = this.shoppingCart;
-        this.purchase.total = this.receipt;
-        this.restProvider.sendRequest( "saveReceipt", this.purchase );
-    }
-
-    // TODO: rename
-    saveReceipt2( receiptData ) {
-        console.log( '>> ShoppingcartProvider.saveReceipt2' );
         console.log( 'shoppingCart2: ' + JSON.stringify( this.shoppingCart ) );
         console.log( 'receiptData: ' + JSON.stringify( receiptData ) );
         this.purchaseData.productList = this.shoppingCart;
@@ -163,7 +151,6 @@ export class ShoppingcartProvider {
 
     connectToPT() {
         console.log( '>> ShoppingcartProvider.purhase' );
-
 
         var id_counter = 0;
         var obj = {

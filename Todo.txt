@@ -1,0 +1,8 @@
+Ryn: oma osto valmiiksi
+Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
+MobilePay tuki
+
+Fix:
+Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
+
+
