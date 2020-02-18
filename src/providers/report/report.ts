@@ -14,7 +14,7 @@ export class ReportProvider {
 
     reportMessage = { recipient: '', subject: '', content: '', format: '' };
     dbDump = { dbentry: '' };
-    ownPurchaseData = [];
+    //ownPurchaseData = [];
 
     transactionReportAddress = "lahdenry.laskut@gmail.com";
     //transactionReportAddress = "mikko.m.suni@gmail.com";
@@ -62,11 +62,21 @@ export class ReportProvider {
 
         var ownPurchaseTable = "";
         var ownPurchaseRows = "";
+        var ownPurchaseData = [];
 
-        this.ownPurchaseData.splice( 0, this.ownPurchaseData.length );
+        var giftCard1Table = "";
+        var giftCard1Rows = "";
+        var giftCard1Data = [];
+
+        //this.ownPurchaseData.splice( 0, this.ownPurchaseData.length );
 
         for ( var i = 0; i < purchases.length; i++ ) {
             if ( purchases[i].paymentMethod == 0 ) {
+                var giftCardData = { giftCardType: '', receiver: '', value: '' };
+                giftCardData.giftCardType = purchases[i].giftCard1Type === 0 ? "Vauva" : "Merkkipäivä";
+                giftCardData.receiver = purchases[i].receiver;
+                giftCardData.value = purchases[i].totalSum.toFixed( 2 );
+                giftCard1Data.push( giftCardData );
                 giftCard1TransactionCount++;
                 giftCard1PurchaseValue += purchases[i].totalSum;
             } else if ( purchases[i].paymentMethod == 1 ) {
@@ -89,7 +99,7 @@ export class ReportProvider {
                 receiptData.committee = purchases[i].committee;
                 receiptData.receiver = purchases[i].receiver;
                 receiptData.totalSum = purchases[i].totalSum.toFixed( 2 );
-                this.ownPurchaseData.push( receiptData );
+                ownPurchaseData.push( receiptData );
                 ownPurchaseCount++;
                 ownPurchaseValue += purchases[i].totalSum;
             }
@@ -108,12 +118,32 @@ export class ReportProvider {
         var giftCartTrValue = giftCard1PurchaseValue.toFixed( 2 );
         var ownPurchaseTrValue = ownPurchaseValue.toFixed( 2 );
 
-        if ( this.ownPurchaseData.length > 0 ) {
-            for ( var i = 0; i < this.ownPurchaseData.length; i++ ) {
-                ownPurchaseRows += "<tr><td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].handedTo + "</td>";
-                ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].committee + "</td>";
-                ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].receiver + "</td>",
-                    ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + this.ownPurchaseData[i].totalSum + "</td>",
+        if ( giftCard1Data.length > 0 ) {
+            for ( var i = 0; i < giftCard1Data.length; i++ ) {
+                giftCard1Rows += "<tr><td style=\"padding:0px 10px 0px 10px\">" + giftCard1Data[i].receiver + "</td>";
+                giftCard1Rows += "<td style=\"padding:0px 10px 0px 10px\">" + giftCard1Data[i].giftCardType + "</td>";
+                giftCard1Rows += "<td style=\"padding:0px 10px 0px 10px\">" + giftCard1Data[i].value + "</td>",
+                    "</tr>";
+            }
+
+            giftCard1Table = [
+                "<h5>Ry:n lahjakorttien erittely</h5>",
+                "<table border=\"1\" bordercolor=\"#eeeeee\"><tr>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Saaja</th>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Laji</th>",
+                "<th align=\"left\" style=\"padding:0px 10px 0px 10px\">Arvo euroina</th>",
+                "</tr>",
+                giftCard1Rows,
+                "</table>"
+            ].join( '' );
+        }
+
+        if ( ownPurchaseData.length > 0 ) {
+            for ( var i = 0; i < ownPurchaseData.length; i++ ) {
+                ownPurchaseRows += "<tr><td style=\"padding:0px 10px 0px 10px\">" + ownPurchaseData[i].handedTo + "</td>";
+                ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + ownPurchaseData[i].committee + "</td>";
+                ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + ownPurchaseData[i].receiver + "</td>",
+                    ownPurchaseRows += "<td style=\"padding:0px 10px 0px 10px\">" + ownPurchaseData[i].totalSum + "</td>",
                     "</tr>";
             }
 
@@ -167,6 +197,7 @@ export class ReportProvider {
             "</td></tr></table>",
 
             ownPurchaseTable,
+            giftCard1Table,
             "<p>Kassa: ",
             cashier,
             "</p>",
@@ -218,10 +249,8 @@ export class ReportProvider {
             this.reportMessage.content = this.makeTransactionReportMessage( receipts, cashier );
             this.reportMessage.recipient = this.transactionReportAddress;
             this.reportMessage.format = "text/html";
-            //this.reportMessage.format = "text/plain";
             this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
                 console.log( 'report mail sent' );
-                //this.sendToBeOrderedReport();
             }, ( err ) => {
                 console.log( err );
             } );
