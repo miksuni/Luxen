@@ -225,6 +225,20 @@
 									(ngModelChange)="cm41Listener($event)"></td>
 								<td></td>
 							</tr>
+
+							<!-- MobilePay -->
+							<tr class="cm_5">
+								<td colspan=6><input id="cm5" type="checkbox"
+									(change)="cm50Listener()"> <b>MobilePay</b></td>
+							</tr>
+							<tr class="cm_5">
+								<td>Veloitus:</td>
+								<td><input class="cm_number" id="cm51" type="number"
+									[(ngModel)]="MobilePay"
+									(ngModelChange)="cm51Listener($event)"></td>
+								<td></td>
+							</tr>
+							
 							<tr>
 								<td>Puuttuu:</td>
 								<td><input class="cm_number" type="number"

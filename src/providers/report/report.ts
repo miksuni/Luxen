@@ -52,12 +52,14 @@ export class ReportProvider {
         var giftCard2TransactionCount = 0;
         var cashTransactionCount = 0;
         var cardTransactionCount = 0;
+        var mobilePayTransactionCount = 0;
         var ownPurchaseCount = 0;
 
         var giftCard1PurchaseValue = 0.0;
         var giftCard2PurchaseValue = 0.0;
         var cashPurchaseValue = 0.0;
         var cardPurchaseValue = 0.0;
+        var mobilePayPurchaseValue = 0.0;
         var ownPurchaseValue = 0.0;
 
         var ownPurchaseTable = "";
@@ -89,6 +91,9 @@ export class ReportProvider {
                 cardTransactionCount++;
                 cardPurchaseValue += purchases[i].totalSum;
             } else if ( purchases[i].paymentMethod == 4 ) {
+                mobilePayTransactionCount++;
+                mobilePayPurchaseValue += purchases[i].totalSum;
+            } else if ( purchases[i].paymentMethod == 5 ) {
                 var receiptData = {
                     handedTo: '',
                     committee: '',
@@ -112,7 +117,10 @@ export class ReportProvider {
 
         var cardTrCount = cardTransactionCount.toString();
         var cardTrValue = cardPurchaseValue.toFixed( 2 );
+        var mobilePayTrCount = mobilePayTransactionCount.toString();
+        var mobilePayTrValue = mobilePayPurchaseValue.toFixed( 2 );
         var cashTrCount = cashTransactionCount.toString();
+        var cashTrValue = cashPurchaseValue.toFixed( 2 );
         var cashTrValue = cashPurchaseValue.toFixed( 2 );
         var giftCartTrCount = giftCard1TransactionCount.toString();
         var giftCartTrValue = giftCard1PurchaseValue.toFixed( 2 );
@@ -176,6 +184,12 @@ export class ReportProvider {
             cardTrCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             cardTrValue,
+            "</td></tr><tr>",
+
+            "<td>MobilePay</td><td style=\"padding:0px 0px 0px 10px\">",
+            mobilePayTrCount,
+            "</td><td style=\"padding:0px 0px 0px 10px\">",
+            mobilePayTrValue,
             "</td></tr><tr>",
 
             "<td>Käteinen</td><td style=\"padding:0px 0px 0px 10px\">",

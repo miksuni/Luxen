@@ -42,7 +42,7 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
-    version = "Kassaversio 1.0.2";
+    version = "Kassaversio 1.0.3";
 
     /*
     paymentInfo = {
@@ -80,7 +80,7 @@ export class ShopPage {
     giftCard2AmountAfter: number = 0.0;
     cashPay: number = 0.0;
     cardPay: number = 0.0;
-    payments = [0.0, 0.0, 0.0, 0.0, 0.0];
+    payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
     givenAmount = 0;
     cashBack = 0;
@@ -131,6 +131,8 @@ export class ShopPage {
         ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
+        ( <HTMLInputElement>document.getElementById( "cm51" ) ).disabled = true;
+        ( <HTMLInputElement>document.getElementById( "cm51" ) ).value = "0";
         this.productList.getProductInfo();
         this.shoppingCart.clearAll();
         this.cartContent = this.shoppingCart.getProducts();
@@ -331,11 +333,11 @@ export class ShopPage {
         receiptData.receiptNr = this.currentState.lastReceiptNr;
         receiptData.cashier = this.cashier;
 
-        this.payments[4] = this.totalSum;
+        this.payments[5] = this.totalSum;
 
         var receiptItemData = {
             sum: 0,
-            paymentMethod: 4,
+            paymentMethod: 5,
             giftCard1Type: 0,
             handedTo: '',
             committee: '',
@@ -346,8 +348,8 @@ export class ShopPage {
             valueAfter: 0
         };
 
-        receiptItemData.sum = this.payments[4];
-        receiptItemData.paymentMethod = 4;
+        receiptItemData.sum = this.payments[5];
+        receiptItemData.paymentMethod = 5;
         receiptItemData.handedTo = handedTo;
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
@@ -394,7 +396,10 @@ export class ShopPage {
             str += ( count++ + ". Suorita käteisveloitus<br>" );
         }
         if ( this.payments[3] > 0 ) {
-            str += ( count++ + ". Suorita pankkikorttiveloitus<br><br>" );
+            str += ( count++ + ". Suorita pankkikorttiveloitus<br>" );
+        }
+        if ( this.payments[4] > 0 ) {
+            str += ( count++ + ". Pyydä asiakasta suorttamaan MobilePay maksu, selitteeksi 'Julkaisumyynti'<br><br>" );
         }
         str += "Kun toimenpiteet suoritettu, paina \"Veloitukset suoritettu\"";
 
@@ -469,7 +474,7 @@ export class ShopPage {
         if ( this.payments[2] > 0 ) {
             var receiptItemData = {
                 sum: 0,
-                paymentMethod: 1,
+                paymentMethod: 2,
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -484,7 +489,7 @@ export class ShopPage {
         if ( this.payments[3] > 0 ) {
             var receiptItemData = {
                 sum: 0,
-                paymentMethod: 1,
+                paymentMethod: 3,
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -494,6 +499,21 @@ export class ShopPage {
             };
             receiptItemData.sum = this.payments[3];
             receiptItemData.paymentMethod = 3;
+            receiptData.items.push( receiptItemData );
+        }
+        if ( this.payments[4] > 0 ) {
+            var receiptItemData = {
+                sum: 0,
+                paymentMethod: 4,
+                giftCard1Type: 0,
+                receiver: '',
+                originator: '',
+                givenDate: '',
+                valueBefore: 0,
+                valueAfter: 0
+            };
+            receiptItemData.sum = this.payments[4];
+            receiptItemData.paymentMethod = 4;
             receiptData.items.push( receiptItemData );
         }
 
@@ -544,12 +564,13 @@ export class ShopPage {
         this.giftCard2AmountAfter = 0.0;
         this.cashPay = 0.0;
         this.cardPay = 0.0;
-        this.payments = [0.0, 0.0, 0.0, 0.0];
+        this.payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
         ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked = false;
         ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked = false;
         ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked = false;
         ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked = false;
+        ( <HTMLInputElement>document.getElementById( "cm5" ) ).checked = false;
     }
 
     cancelCombinedPayment() {
@@ -792,6 +813,29 @@ export class ShopPage {
     cm41Listener( $event ) {
         console.log( 'cm41Listener ' + $event );
         this.payments[3] = parseFloat( $event );
+        this.validateCm();
+    }
+
+    /******************************************************************************************/
+    /*** CM 5 ***/
+
+    cm50Listener() {
+        var selected = ( <HTMLInputElement>document.getElementById( "cm5" ) ).checked;
+        console.log( 'cm50Listener ' + selected );
+        if ( selected ) {
+            ( <HTMLInputElement>document.getElementById( "cm51" ) ).disabled = false;
+        } else {
+            ( <HTMLInputElement>document.getElementById( "cm51" ) ).disabled = true;
+            ( <HTMLInputElement>document.getElementById( "cm51" ) ).value = "0";
+            this.payments[4] = 0;
+
+        }
+        this.validateCm();
+    }
+
+    cm51Listener( $event ) {
+        console.log( 'cm51Listener ' + $event );
+        this.payments[4] = parseFloat( $event );
         this.validateCm();
     }
 
