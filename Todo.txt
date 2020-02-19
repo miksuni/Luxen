@@ -1,8 +1,11 @@
-Ryn: oma osto valmiiksi
-Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
-MobilePay tuki
+Done Ryn: oma osto valmiiksi
+Done Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
+Done MobilePay tuki
 
-Fix:
+OK Käynnistettäessä ilmoitus: odota
+Admin Raporttinäkymään ko. päivänä myydyt tuotteet
+Jos ei myyntiä -> ei raporttia (ohjetekstistä voi ottaa ko. osuuden pois)
+
 Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
 
 

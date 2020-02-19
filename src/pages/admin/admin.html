@@ -16,11 +16,12 @@
 		<ion-toggle [(ngModel)]="testMode" (ionChange)="onTestModeChanged()"></ion-toggle>
   	</ion-item>
 </ion-list>
-<button ion-button round full (click)="getProductsToBeOrdered()">Loppumassa olevat tuotteet</button>
-<button ion-button round full (click)="getProductsNotKeptInStock()">Tuotteet joita ei pidetä varastossa</button>
-<button ion-button round full (click)="initProductListBu()">Varmuuskopioi tuotetietokanta</button>
-<button ion-button round full (click)="initSoldProductsBu()">Varmuuskopioi tiedot ostoista</button>
-<button ion-button round full (click)="initReceiptsBu()">Varmuuskopioi kuitit</button>
+<button ion-button round  (click)="getSoldItems()">Tänään myydyt</button>
+<button ion-button round  (click)="getProductsToBeOrdered()">Loppumassa olevat tuotteet</button>
+<button ion-button round  (click)="getProductsNotKeptInStock()">Tuotteet joita ei pidetä varastossa</button>
+<button ion-button round  (click)="initProductListBu()">Varmuuskopioi tuotetietokanta</button>
+<button ion-button round  (click)="initSoldProductsBu()">Varmuuskopioi tiedot ostoista</button>
+<button ion-button round  (click)="initReceiptsBu()">Varmuuskopioi kuitit</button>
 <br>
 <div id=productTable>
 	<table class="products">
@@ -38,6 +39,26 @@
 				<td>{{element.productName}}</td>
 				<td id="tdInShelf">{{element.amountInStock}}</td>
 				<td id="tdSKC">{{element.stockKeepingCount}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id=soldItems>
+	<table class="products">
+		<caption>Tänään myydyt tuotteet</caption>
+		<thead>
+			<tr>
+				<th id="thProductName">Tuotenimi</th>
+				<th id="thInShelf">Määrä</th>
+				<th id="thSKC">Kuitti nr</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let element of soldItems; let i = index" [ngClass]="{'odd': 0 !== i % 2}"
+				(click)="onProductSelected(element.productName, i)">
+				<td>{{element.productName}}</td>
+				<td id="tdInShelf">{{element.quantity}}</td>
+				<td id="tdSKC">{{element.receiptNr}}</td>
 			</tr>
 		</tbody>
 	</table>

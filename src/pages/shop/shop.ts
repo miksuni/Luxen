@@ -123,6 +123,7 @@ export class ShopPage {
     ionViewDidLoad() {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
+        this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
         //document.getElementById( "receipt_view" ).style.visibility = "hidden";
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
@@ -152,6 +153,7 @@ export class ShopPage {
             console.log( '>> result received' );
             this.cashiers = JSON.parse( result.result );
             console.log( 'cashiers: ' + JSON.stringify( this.cashiers ) );
+            this.finishLoading();
         }, ( err ) => {
             console.log( err );
         } );
