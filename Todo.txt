@@ -3,7 +3,7 @@ Done Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
 Done MobilePay tuki
 
 OK Käynnistettäessä ilmoitus: odota
-Admin Raporttinäkymään ko. päivänä myydyt tuotteet
+OK Admin Raporttinäkymään ko. päivänä myydyt tuotteet
 Jos ei myyntiä -> ei raporttia (ohjetekstistä voi ottaa ko. osuuden pois)
 
 Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu

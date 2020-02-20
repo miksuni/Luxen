@@ -599,6 +599,17 @@ export class ShopPage {
         this.confirmedPaymentEnabled = ( ( this.toBePaid == 0 ) &&
             this.cm1Valid() &&
             this.cm2Valid() );
+        //var tbp = ( <HTMLInputElement>document.getElementById( "to_be_paid" ) ).value;
+        //console.log( 'tbp: ' + tbp + ', this.toBePaid: ' + this.toBePaid );
+        if ( this.toBePaid > 0 ) {
+            document.getElementById( "to_be_paid" ).style.backgroundColor = "Red";
+            document.getElementById( "to_be_paid_guide" ).style.color = "Red";
+            document.getElementById( "to_be_paid_guide" ).style.fontWeight = "Bold";
+        } else {
+            document.getElementById( "to_be_paid" ).style.backgroundColor = "GreenYellow";
+            document.getElementById( "to_be_paid_guide" ).style.color = "Black";
+            document.getElementById( "to_be_paid_guide" ).style.fontWeight = "Normal";
+        }
     }
 
     disableCombinedPaymentFields() {
@@ -927,11 +938,12 @@ export class ShopPage {
             //console.log('chat messages: ' + JSON.stringify(this.chatMessages));
             //console.log('count: ' + this.chatMessages.length);
             setTimeout(() => {
-                this.presentLoading( "Haetaan..." );
+                //this.presentLoading( "Haetaan..." );
                 this.scrollToEnd();
                 this.finishLoading();
             }, 1000 );
         }, ( err ) => {
+            this.finishLoading();
             console.log( err );
         } );
     }
