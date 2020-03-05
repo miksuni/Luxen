@@ -42,7 +42,7 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
-    version = "Kassaversio 1.0.3";
+    version = "Kassaversio 1.0.4";
 
     /*
     paymentInfo = {
@@ -213,14 +213,14 @@ export class ShopPage {
     }
 
     onProductNumberUpdated() {
-        console.log( '>> shop.onProductNumberUpdated: ' + this.productNumberInitials );
-        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
-        if ( this.productNumberInitials.length > 0 ) {
-            var found = this.productList.getProductProgressivelyByNumber( this.productNumberInitials );
-            this.searchResult = found;
-            console.log( '>> found: ' + found.length );
-            //console.log( '>> json: ' + JSON.stringify( found ) );
-        }
+        //        console.log( '>> shop.onProductNumberUpdated: ' + this.productNumberInitials );
+        //        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        //        if ( this.productNumberInitials.length > 0 ) {
+        //            var found = this.productList.getProductProgressivelyByNumber( this.productNumberInitials );
+        //            this.searchResult = found;
+        //            console.log( '>> found: ' + found.length );
+        //            //console.log( '>> json: ' + JSON.stringify( found ) );
+        //        }
     }
 
     onProductNameUpdated() {
@@ -323,7 +323,7 @@ export class ShopPage {
         this.shoppingCart.setCashier( this.cashier );
         this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
-        this.currentState.lastReceiptNr = this.currentState.lastReceiptNr + 1;
+        this.currentState.lastReceiptNr++;
         console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
@@ -370,7 +370,7 @@ export class ShopPage {
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
                 this.productList.getProductInfo();
-                this.getCurrentState();
+                //this.getCurrentState();
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();
@@ -423,7 +423,7 @@ export class ShopPage {
         this.shoppingCart.setCashier( this.cashier );
         this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
-        this.currentState.lastReceiptNr = this.currentState.lastReceiptNr + 1;
+        this.currentState.lastReceiptNr++;
         console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
@@ -532,7 +532,7 @@ export class ShopPage {
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
                 this.productList.getProductInfo();
-                this.getCurrentState();
+                //this.getCurrentState();
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();

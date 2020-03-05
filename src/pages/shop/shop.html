@@ -92,10 +92,8 @@
 												placeholder="Tuotenumero" (click)="onInputClicked()"
 												(ionChange)="onProductNumberUpdated()" name="productNumber"></ion-input>
 										</td>
-										<td width="80px"><ion-input placeholder="Hinta"
-												[disabled]="true"></ion-input></td>
-										<td width="80px"><ion-input placeholder="Saldo"
-												[disabled]="true"></ion-input></td>
+										<td width="80px">Hinta</td>
+										<td width="80px">Saldo</td>
 									</tr>
 									<tr *ngFor="let element of searchResult; let i = index"
 										(click)="onProductSelected(element.productName, i)">

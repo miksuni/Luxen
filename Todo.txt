@@ -1,11 +1,19 @@
-Done Ryn: oma osto valmiiksi
-Done Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
-Done MobilePay tuki
-
-OK Käynnistettäessä ilmoitus: odota
-OK Admin Raporttinäkymään ko. päivänä myydyt tuotteet
-Jos ei myyntiä -> ei raporttia (ohjetekstistä voi ottaa ko. osuuden pois)
+Featuret
+========
+Done	(1.0.3) Ryn: oma osto valmiiksi
+Done	(1.0.3) Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
+Done	(1.0.3) MobilePay tuki
+Done 	(1.0.3) Käynnistettäessä ilmoitus: odota
+Done	(1.0.3) Admin Raporttinäkymään ko. päivänä myydyt tuotteet
+Done	(1.0.3) Jos ei myyntiä -> ei raporttia (ohjetekstistä voi ottaa ko. osuuden pois)
 
 Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
 
 
+Bugit
+========
+Done 	(1.0.4) Kuittinumeroa ei kasvatettu 1.3.2020 ostoissa (kuittinumero syynä uloskirjautuminen
+		ja/tai raportin lähettäminen välillä?) Testattu kotona samanlainen tilanne, toimi. Varmaa syytä
+	 	ei löytynyt, ehkä kuittinumeroa ei oltu ehditty tallettaa kantaan ennen kuin oston jälkeen päivitettiin
+	 	currentstate. Fixattu niin että currentstatea ei haeta kannasta oston jälkeen vaan ainosastaan kun view
+	 	ladataan. Lisäksi korjattu kuittinumero kantaan käsin.
