@@ -42,7 +42,11 @@ export class ShopPage {
     totalSumAsString: string = "";
     receiptTotalSumAsString: string = "";
 
-    version = "Kassaversio 1.0.4";
+    shoppingCartReturnBasket = "";
+    productReturnValue = 0;
+    productsInReturnBasket = 0;
+
+    version = "Kassaversio 1.0.5";
 
     /*
     paymentInfo = {
@@ -134,12 +138,13 @@ export class ShopPage {
         ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm51" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "cm51" ) ).value = "0";
+        ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         this.productList.getProductInfo();
         this.shoppingCart.clearAll();
         this.cartContent = this.shoppingCart.getProducts();
         this.getCurrentState();
         this.getCashiers();
-        this.getChat();
+        //this.getChat();
         this.update();
     }
 
@@ -182,6 +187,16 @@ export class ShopPage {
     //    this.shoppingCart.setCashier(this.cashier);
     //}
 
+    onCashierSelected( $event ) {
+        console.log( 'onCashierSelected' );
+        var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
+        console.log( "selected index: " + e.selectedIndex );
+        if ( e.selectedIndex > 0 ) {
+            //e.disabled = false; // does now work
+            ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
+        }
+    }
+
     onLogout() {
         console.log( '>> shop.onLogout' );
         if ( this.shoppingCart.hasContent() ) {
@@ -189,6 +204,7 @@ export class ShopPage {
         } else {
             var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
             e.selectedIndex = 0;
+            ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         }
 
         this.presentPromptSendReport();
@@ -233,7 +249,9 @@ export class ShopPage {
     onProductSelected( productName, index ) {
         console.log( '>> shop.onProductSelected: ' + productName + ' index: ' + index );
         this.checkConditions( this.searchResult[index] );
-        this.searchResult.splice( 0, this.searchResult.length )
+        // clear search result list
+        this.searchResult.splice( 0, this.searchResult.length );
+        this.productNameInitials = "";
     }
 
     addToShoppingCart( productInfo ) {
@@ -285,12 +303,12 @@ export class ShopPage {
 
     decrease( item, i ) {
         console.log( 'decreaseItem: ' + item.productName + ", index: " + i );
-        if ( item.quantity < 2 ) {
-            this.presentPromptRemoveProduct( i );
-        } else {
-            this.shoppingCart.decrease( i );
-            this.update();
-        }
+        //if ( item.quantity < 2 ) {
+        //    this.presentPromptRemoveProduct( i );
+        //} else {
+        this.shoppingCart.decrease( i );
+        this.update();
+        //}
     }
 
     cashPayment() {
@@ -362,7 +380,7 @@ export class ShopPage {
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
-        document.getElementById( "receipt_view" ).style.visibility = "visible";
+        /// !!!! document.getElementById( "receipt_view" ).style.visibility = "visible";
         console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -524,7 +542,7 @@ export class ShopPage {
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
-        document.getElementById( "receipt_view" ).style.visibility = "visible";
+        // !!!! document.getElementById( "receipt_view" ).style.visibility = "visible";
         console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -891,17 +909,39 @@ export class ShopPage {
 
     update() {
         console.log( 'update' );
-        this.productsInCart = this.shoppingCart.productsInCart;
+        this.productsInCart = 0;
+        this.productsInReturnBasket = 0;
+        this.productReturnValue = 0;
         this.totalSum = this.shoppingCart.totalSum;
         this.totalSumAsString = this.shoppingCart.totalSum.toFixed( 2 );
+
+        for ( var i = 0; i < this.cartContent.length; i++ ) {
+            console.log( 'cart content ' + JSON.stringify( this.cartContent[i] ) );
+            if ( this.cartContent[i].total > 0 ) {
+                this.productsInCart++;
+            } else if ( this.cartContent[i].total < 0 ) {
+                this.productReturnValue += this.cartContent[i].total;
+                this.productsInReturnBasket++;
+            }
+        }
+
         if ( this.totalSum > 0 ) {
             this.cardPaymentEnabled = true;
             this.cashPaymentEnabled = true;
             this.combinedPaymentEnabled = true;
+            this.shoppingCartReturnBasket = "";
         } else {
             this.cardPaymentEnabled = false;
             this.cashPaymentEnabled = false;
             this.combinedPaymentEnabled = false;
+            this.shoppingCartReturnBasket = "";
+        }
+        if ( this.productsInReturnBasket > 0 ) {
+            this.shoppingCartReturnBasket = "Palautettavia tuotteita: " +
+                this.productsInReturnBasket + " kpl, palautuksen arvo: " +
+                ( 0 - this.productReturnValue ).toFixed( 2 ) + " euroa";
+        } else {
+            this.shoppingCartReturnBasket = "";
         }
     }
 

@@ -21,16 +21,15 @@
 			<!-- HEADER -->
 			<td class="table_main_header">Ostoskorissa {{productsInCart}}
 				tuotetta, yhteensä {{totalSumAsString}} euroa</td>
+			
 			<td class="cashier_field" style="text-align: center">Kassa: <select
-				id="current_cashier" class="cashier_button">
+				id="current_cashier" class="cashier_button" (change)="onCashierSelected($event)">
 					<option></option>
 					<option *ngFor="let cashier of cashiers">{{cashier.firstName}}</option>
 			</select>
-			</td>
-			<td style="text-align: center" td width="50px">
-				<button ion-button class="product_line_button" (click)="onLogout()">
-					Kirjaudu ulos</button>
-			</td>
+		</tr>
+		<tr>
+			<td class="table_main_header">{{shoppingCartReturnBasket}}</td>
 		</tr>
 		<tr>
 
@@ -258,7 +257,13 @@
 			</td>
 
 			<!-- *** RIGHT PANEL *** -->
-			<td class="table_right_column" colspan="2">
+			<td class="table_right_column" colspan="1">
+				<tr>
+					<td style="text-align: center">
+						<button id="logout_button" ion-button class="product_line_button" (click)="onLogout()">
+						Kirjaudu ulos</button>
+					</td>
+				</tr>
 				<!-- PAYMENT BUTTONS start -->
 				<table class="right_panel" style="width: 100%">
 					<tr>
@@ -271,6 +276,8 @@
 										<ion-icon name="card" item-start> Korttimaksu</ion-icon>
 									</button>
 								</td>
+							</tr>
+							<tr>
 								<td style="text-align: center">
 									<button ion-button class="payment_button" id="cash_button"
 										[disabled]="checkIfCashPaymentEnabled()"
@@ -287,6 +294,8 @@
 										<ion-icon name="card" item-start> Maksuyhd.</ion-icon>
 									</button>
 								</td>
+							</tr>
+							<tr>
 								<td style="text-align: center">
 									<button ion-button class="payment_button" id="gift_card_button"
 										[disabled]="checkIfGiftCartPaymentEnabled()"
@@ -300,6 +309,7 @@
 					<!-- PAYMENT BUTTONS end -->
 
 					<!-- CHAT start -->
+					<!-- 
 					<tr>
 						<td colspan="2">
 							<table class="chat_view">
@@ -337,6 +347,7 @@
 					<!-- CHAT end -->
 
 					<!-- RECEIPT start -->
+					<!--
 					<tr>
 						<div id="receipt_view">
 							<table class="receipt">

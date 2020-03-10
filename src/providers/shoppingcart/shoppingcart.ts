@@ -108,13 +108,13 @@ export class ShoppingcartProvider {
         this.productsInCart--;
         this.totalSum -= this.shoppingCart[i].price;
         this.receipt.totalSum = this.totalSum;
-        if ( this.shoppingCart[i].quantity > 1 ) {
-            this.shoppingCart[i].quantity--;
-            this.shoppingCart[i].total -= this.shoppingCart[i].price;
-            this.shoppingCart[i].totalAsString = this.shoppingCart[i].total.toFixed( 2 );
-        } else {
-            this.shoppingCart.splice( i, 1 );
-        }
+        //if ( this.shoppingCart[i].quantity > 1 ) {
+        this.shoppingCart[i].quantity--;
+        this.shoppingCart[i].total -= this.shoppingCart[i].price;
+        this.shoppingCart[i].totalAsString = this.shoppingCart[i].total.toFixed( 2 );
+        //} else {
+        //    this.shoppingCart.splice( i, 1 );
+        //}
     }
 
     getProducts() {
