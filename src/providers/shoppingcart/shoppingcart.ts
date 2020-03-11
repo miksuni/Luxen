@@ -48,14 +48,6 @@ export class ShoppingcartProvider {
         this.receipt.cashier = cashier;
     }
 
-    setPaymentMethods( paymentMethods ) {
-        console.log( 'setPaymentMethod' );
-        this.paymentMethod1 = paymentMethods[0];
-        this.paymentMethod2 = paymentMethods[1];
-        this.receipt.paymentMethod1 = this.paymentMethod1;
-        this.receipt.paymentMethod2 = this.paymentMethod2;
-    }
-
     addProduct( productInfo ) {
         console.log( '>> ShoppingcartProvider.addProduct' );
         productInfo.quantity = 1;
