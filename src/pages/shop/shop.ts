@@ -128,7 +128,7 @@ export class ShopPage {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
         this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
-        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        document.getElementById( "receipt_view" ).style.visibility = "hidden";
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
@@ -312,6 +312,19 @@ export class ShopPage {
         //}
     }
 
+    cashPayment() {
+        console.log( 'cashPayment' );
+        this.shoppingCart.setCashier( this.cashier );
+        this.showPrompt( this.totalSum );
+        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
+    }
+
+    cardPayment() {
+        console.log( 'cardPayment' );
+        this.shoppingCart.setCashier( this.cashier );
+        this.presentPromptPaymentCardInstructions();
+    }
+
     clearPayments() {
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
@@ -366,7 +379,7 @@ export class ShopPage {
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
-        /// !!!! document.getElementById( "receipt_view" ).style.visibility = "visible";
+        document.getElementById( "receipt_view" ).style.visibility = "visible";
         console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -559,7 +572,7 @@ export class ShopPage {
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
-        // !!!! document.getElementById( "receipt_view" ).style.visibility = "visible";
+        document.getElementById( "receipt_view" ).style.visibility = "visible";
         console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -901,7 +914,7 @@ export class ShopPage {
 
     cancelPurchase() {
         console.log( 'cancelPurchase' );
-        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
+        document.getElementById( "receipt_view" ).style.visibility = "hidden";
         this.shoppingCart.clearAll();
         this.update();
     }
