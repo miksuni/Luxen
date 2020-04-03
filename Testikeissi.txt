@@ -1,0 +1,31 @@
+OK Mikon testituote 3: saldo lisätään	4 -> 5 (palautus 1 kpl)
+OK Mikon testituote 2: saldo vähennetään	4 -> 3 (osto 1 kpl)
+OK Mikon testituote 1: saldo vähennetään	4 -> 3 (osto 1 kpl)
+
+OK 1 Kuitti maksutavalla 6, summa 30
+OK 1 Sold item määrällä -1, summa 30 kuittinumero 85
+OK 1 Sold item määrällä 1, summa 20 kuittinumero 85
+OK 1 Sold item määrällä 1, summa 10 kuittinumero 85
+
+---------------------------
+OK Mikon testituote 2: saldo lisätään	3 -> 4 (palautus 1 kpl)
+OK Mikon testituote 1: saldo vähennetään	3 -> 2 (osto 1 kpl)
+
+1 Kuitti maksutavalla 6, summa 20
+1 Sold item määrällä -1, summa 20 kuittinumero 86
+1 Sold item määrällä 1, summa 10 kuittinumero 86
+
+---------------------------
+Mikon testituote 1: saldo lisätään	2 -> 3 (palautus 1 kpl)
+Mikon testituote 2: saldo vähennetään   4 -> 2 (osto 2 kpl)
+
+OK 1 Kuitti maksutavalla 6, summa 10
+OK Kuitit kaikilla muilla maksutavoilla (20,4,2,2,2)
+OK 1 Sold item määrällä -1, summa 10 kuittinumero 87
+OK 1 Sold item määrällä 2, summa 20 kuittinumero 87
+
+----------------------------
+Mikon testituote 2: saldo lisätään 	2 -> 3 (palautus 1 kpl)
+
+1 Kuitti maksutavalla 6, summa 20
+1 Sold item määrällä -1, summa 20 kuittinumero 88

@@ -14,10 +14,9 @@ export class ReportProvider {
 
     reportMessage = { recipient: '', subject: '', content: '', format: '' };
     dbDump = { dbentry: '' };
-    //ownPurchaseData = [];
 
-    transactionReportAddress = "lahdenry.laskut@gmail.com";
-    //transactionReportAddress = "mikko.m.suni@gmail.com";
+    //transactionReportAddress = "lahdenry.laskut@gmail.com";
+    transactionReportAddress = "mikko.m.suni@gmail.com";
     productsToBeOrderedReportAddress = "mikko.m.suni@gmail.com";
     adminEmail = "mikko.m.suni@gmail.com";
 
@@ -35,7 +34,8 @@ export class ReportProvider {
         if ( testModeActivated ) {
             this.transactionReportAddress = "mikko.m.suni@gmail.com";
         } else {
-            this.transactionReportAddress = "lahdenry.laskut@gmail.com";
+            //this.transactionReportAddress = "lahdenry.laskut@gmail.com";
+            this.transactionReportAddress = "mikko.m.suni@gmail.com";
         }
         this.testMode = testModeActivated;
     }
@@ -69,8 +69,6 @@ export class ReportProvider {
         var giftCard1Table = "";
         var giftCard1Rows = "";
         var giftCard1Data = [];
-
-        //this.ownPurchaseData.splice( 0, this.ownPurchaseData.length );
 
         for ( var i = 0; i < purchases.length; i++ ) {
             if ( purchases[i].paymentMethod == 0 ) {
@@ -223,8 +221,6 @@ export class ReportProvider {
         ].join( '' );
 
         console.log( str );
-        //https://www.w3schools.com/html/tryit.asp?filename=tryhtml_basic
-        //https://www.w3schools.com/css/tryit.asp?filename=trycss_table_striped
 
         return str;
     }
@@ -252,7 +248,7 @@ export class ReportProvider {
     }
 
     sendReports() {
-        this.restProvider.sendRequest( 'receipts', [] ).then(( result: any ) => {
+        this.restProvider.sendRequest( 'not_reported_receipts', [] ).then(( result: any ) => {
             var receipts = JSON.parse( result.result );
             var cashier = "";
             console.log( 'receipts: ' + JSON.stringify( receipts ) );
@@ -265,6 +261,11 @@ export class ReportProvider {
             this.reportMessage.format = "text/html";
             this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
                 console.log( 'report mail sent' );
+                this.restProvider.sendRequest( 'set_as_reported', receipts ).then(( result: any ) => {
+                    console.log( 'receipts updated' );
+                }, ( err ) => {
+                    console.log( err );
+                } );
             }, ( err ) => {
                 console.log( err );
             } );
