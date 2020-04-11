@@ -46,6 +46,8 @@ export class ShopPage {
     productReturnValue = 0;
     productsInReturnBasket = 0;
 
+	wsLog = "...";
+
     version = "Kassaversio 1.0.5";
 
     /*
@@ -108,6 +110,7 @@ export class ShopPage {
         public restProvider: RestProvider,
         private alertController: AlertController,
         public loadingCtrl: LoadingController ) {
+	    console.log('shop page constructor');
     }
 
     //    ngAfterViewInit() {
@@ -169,7 +172,6 @@ export class ShopPage {
         console.log( '>> home.getCurrentState' );
         this.restProvider.sendRequest( 'current_state', [] ).then(( result: any ) => {
             console.log( '>> result received' );
-            //this.currentState = JSON.parse( result.result );
             var currentState = JSON.parse( result.result );
             if ( currentState.length > 0 ) {
                 this.currentState = currentState[0];
@@ -177,8 +179,11 @@ export class ShopPage {
             console.log( 'currentState: ' + JSON.stringify( this.currentState ) );
 
         }, ( err ) => {
-            console.log( err );
-        } );
+            console.log( 'error in getting current state: ' + err );
+        } )
+		.catch((result:any) => {
+			console.log('getting current state failed');
+		} )
     }
 
     // Works only wiht ion-select
@@ -322,7 +327,28 @@ export class ShopPage {
     cardPayment() {
         console.log( 'cardPayment' );
         this.shoppingCart.setCashier( this.cashier );
-        this.presentPromptPaymentCardInstructions();
+        //this.presentPromptPaymentCardInstructions();
+        this.payments[3] = this.totalSum;
+		//var paymentData = {"amount": this.totalSum,
+		//                   "receiptId": this.currentState.lastReceiptNr };
+		this.restProvider.sendRequest( 'purchase',
+									 { "amount": this.totalSum,
+		                   			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
+            console.log( '>> result received' );
+        }, ( err ) => {
+            console.log( 'error in purchase: ' + err );
+        } )
+	    .catch((result:any) => {
+	        console.log('catch in purchase');
+	    } )
+
+		/*setTimeout(() => {
+            this.restProvider.sendRequest('get_transcation_status', []).then(( result: any ) => {
+            console.log( '>> result received: ' +  JSON.parse( result.result ));
+        	}, ( err ) => {
+            	console.log( err );
+        	} );
+        }, 2000 );*/
     }
 
     clearPayments() {
@@ -909,7 +935,14 @@ export class ShopPage {
 
     sendEmail() {
         console.log( 'sendEmail' );
-        this.restProvider.sendRequest( 'send_email', [] );
+        this.restProvider.sendRequest( 'send_email', [] ).then(( result: any ) => {
+            console.log( '>> mail sent' );
+        }, ( err ) => {
+            console.log( 'error in sending mail: ' + err );
+        } )
+		.catch((result:any) => {
+	    	console.log('catch in seding email: ' + result.result);
+		} )
     }
 
     cancelPurchase() {
@@ -988,7 +1021,14 @@ export class ShopPage {
             entry.from = this.chat.from;
             entry.message = this.chat.message;
             this.chatMessages.push( entry );
-            this.restProvider.sendRequest( 'addchat', this.chat );
+            this.restProvider.sendRequest( 'addchat', this.chat ).then(( result: any ) => {
+            	console.log( '>> chat sent' );
+        	}, ( err ) => {
+            	console.log( 'error in sending chat: ' + err );
+        	} )
+			.catch((result:any) => {
+	    		console.log('catch in sending chat: ' + result.result);
+			} );
             setTimeout(() => {
                 this.presentLoading( "Haetaan..." );
                 this.scrollToEnd();

@@ -137,4 +137,9 @@ export class AdminPage {
         } );
         alert.present();
     }
+
+    connectToPT() {
+        console.log('connconnectToPT');
+        this.restProvider.connectToPT();
+    }
 }
