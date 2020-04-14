@@ -46,6 +46,9 @@ export class ShopPage {
     productReturnValue = 0;
     productsInReturnBasket = 0;
 
+	transactionStatus = 0;
+
+	ptStatusIcon = "alert";
 	wsLog = "...";
 
     version = "Kassaversio 1.0.5";
@@ -148,6 +151,7 @@ export class ShopPage {
         this.cartContent = this.shoppingCart.getProducts();
         this.getCurrentState();
         this.getCashiers();
+		this.getPTStatus();
         //this.getChat();
         this.update();
     }
@@ -324,12 +328,13 @@ export class ShopPage {
         console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
     }
 
-    cardPayment() {
-        console.log( 'cardPayment' );
-        this.shoppingCart.setCashier( this.cashier );
-        //this.presentPromptPaymentCardInstructions();
+    async cardPayment() {
+        console.log( 'cardPayment' ); // orig
+        this.transactionStatus = -1;
+        this.shoppingCart.setCashier( this.cashier );  // orig
+        //this.presentPromptPaymentCardInstructions(); // orig
         this.payments[3] = this.totalSum;
-		//var paymentData = {"amount": this.totalSum,
+		//var paymentData = {"amount": this.totalSum,  // orig
 		//                   "receiptId": this.currentState.lastReceiptNr };
 		this.restProvider.sendRequest( 'purchase',
 									 { "amount": this.totalSum,
@@ -349,6 +354,32 @@ export class ShopPage {
             	console.log( err );
         	} );
         }, 2000 );*/
+        for (let i = 0; i < 5; i ++) {
+	        console.log( '>> loop ' + i);
+	        //await this.abc();
+            //this.firstAsync();
+        }
+        this.waitForCardPayment();
+        console.log('after call');
+    }
+
+    async abc() {
+	    setTimeout(() => {
+            console.log( '>> timer expired ');
+        }, 2000 );
+    }
+
+    async waitForCardPayment() {
+	  for (let i = 0; i < 50 && this.transactionStatus !== 0; i++) {
+         let promise = new Promise((res, rej) => {
+             setTimeout(() => res("loop"), 2000)
+          });
+
+          // wait until the promise returns us a value
+          let result = await promise; 
+  		  this.getPTStatus();
+          console.log("loop");
+        }
     }
 
     clearPayments() {
@@ -1435,4 +1466,38 @@ export class ShopPage {
     finishLoading() {
         this.loadingIndicator.dismiss();
     }
+
+	getPTStatus() {
+		console.log( 'setPTStatus' );
+        this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
+            console.log( '>> PT status received: ' + result.result);
+			this.wsLog = result.result;
+			const ptStatus = JSON.parse(result.result);
+			const ptConnectionStatus = ptStatus.wsstatus;
+			this.transactionStatus = ptStatus.transactionStatus;
+			console.log("ptConnectionStatus: " + ptConnectionStatus);
+			switch (ptConnectionStatus) {
+				case -1:
+					this.ptStatusIcon = "remove-circle";
+					break;
+				case 0:
+					this.ptStatusIcon = "more";
+					break;
+				case 1:
+					this.ptStatusIcon = "swap";
+					break;
+				case 2:
+					this.ptStatusIcon = "close-circle";
+					break;
+				case 3:
+					this.ptStatusIcon = "close-circle";
+					break;
+			}
+        }, ( err ) => {
+            console.log( 'error in getting PT status: ' + err );
+        } )
+		.catch((result:any) => {
+	    	console.log('catch in getting PT status: ' + result.result);
+		} )
+	}
 }

@@ -140,6 +140,25 @@ export class AdminPage {
 
     connectToPT() {
         console.log('connconnectToPT');
-        this.restProvider.connectToPT();
+        this.restProvider.connectToPT().then(( result: any ) => {
+            console.log( '>> result received' );
+        }, ( err ) => {
+            console.log( 'error in connect: ' + err );
+        } )
+	    .catch((result:any) => {
+	        console.log('catch in connect');
+	    } )
+    }
+
+    disconnectPT() {
+        console.log('disconnectPT');
+        this.restProvider.disconnectPT().then(( result: any ) => {
+            console.log( '>> result received' );
+        }, ( err ) => {
+            console.log( 'error in disconnect: ' + err );
+        } )
+	    .catch((result:any) => {
+	        console.log('catch in disconnect');
+	    } )
     }
 }

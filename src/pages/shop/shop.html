@@ -6,15 +6,21 @@
   Ionic pages and navigation.
 -->
 <ion-header> <ion-navbar>
-<button ion-button menuToggle>
-	<ion-icon name="menu"></ion-icon>
-</button>
+	<button ion-button menuToggle>
+		<ion-icon name="menu"></ion-icon>
+	</button>
+	
+    <ion-buttons end>
+    	<button icon-only class="cart_button">
+        	<ion-icon name={{ptStatusIcon}}></ion-icon>
+    	</button>
+    </ion-buttons>
 <ion-title>Julkaisumyynti</ion-title> </ion-navbar> </ion-header>
 
 
 <ion-content padding class="shop">
 <div class="row">
-<p id="wslog">...</p>
+<p>{{wsLog}}</p>
 	<table class="table_main_frame">
 		<tr>
 

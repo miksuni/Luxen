@@ -135,4 +135,21 @@ export class RestProvider {
 			});
 		});
 	}
+	
+	disconnectPT() {
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Content-Type':  'application/json',
+				'X-Parse-Application-Id': '365_ghg_867_fhj'
+			})
+		};
+		return new Promise((resolve, reject) => {
+			this.http.post(this.herokuUrl + '/close_pt_connection', '[]', httpOptions)
+				.subscribe(res => {
+				resolve(res);
+			}, (err) => {
+				reject(err);
+			});
+		});
+	}
 }
