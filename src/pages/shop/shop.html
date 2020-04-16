@@ -11,7 +11,7 @@
 	</button>
 	
     <ion-buttons end>
-    	<button icon-only class="cart_button">
+    	<button ion-button color={{ptStatusIconColor}} icon-only class="cart_button">
         	<ion-icon name={{ptStatusIcon}}></ion-icon>
     	</button>
     </ion-buttons>
@@ -20,7 +20,12 @@
 
 <ion-content padding class="shop">
 <div class="row">
-<p>{{wsLog}}</p>
+<p>{{result}}</p>
+
+<button ion-button class="payment_button" (click)="startWorker()">Start Worker
+</button>
+<button ion-button class="payment_button" (click)="stopWorker()">Stop Worker
+</button>
 	<table class="table_main_frame">
 		<tr>
 
@@ -36,6 +41,9 @@
 		</tr>
 		<tr>
 			<td class="table_main_header">{{shoppingCartReturnBasket}}</td>
+		</tr>
+		<tr>
+			<td class="pt_message">{{ptStatusMessage}}</td>
 		</tr>
 		<tr>
 

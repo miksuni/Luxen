@@ -6,6 +6,7 @@ import { ReportProvider } from '../../providers/report/report';
 import { RestProvider } from '../../providers/rest/rest';
 import { AlertController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
+import { InlineWorker } from '../shop/inlineworker';
 import * as $ from "jquery";
 
 /**
@@ -49,7 +50,8 @@ export class ShopPage {
 	transactionStatus = 0;
 
 	ptStatusIcon = "alert";
-	wsLog = "...";
+	ptStatusIconColor = "dark";
+	ptStatusMessage = "...";
 
     version = "Kassaversio 1.0.5";
 
@@ -347,20 +349,7 @@ export class ShopPage {
 	        console.log('catch in purchase');
 	    } )
 
-		/*setTimeout(() => {
-            this.restProvider.sendRequest('get_transcation_status', []).then(( result: any ) => {
-            console.log( '>> result received: ' +  JSON.parse( result.result ));
-        	}, ( err ) => {
-            	console.log( err );
-        	} );
-        }, 2000 );*/
-        for (let i = 0; i < 5; i ++) {
-	        console.log( '>> loop ' + i);
-	        //await this.abc();
-            //this.firstAsync();
-        }
         this.waitForCardPayment();
-        console.log('after call');
     }
 
     async abc() {
@@ -379,7 +368,8 @@ export class ShopPage {
           let result = await promise; 
   		  this.getPTStatus();
           console.log("loop");
-        }
+       }
+       this.ptStatusMessage = "";
     }
 
     clearPayments() {
@@ -1471,26 +1461,32 @@ export class ShopPage {
 		console.log( 'setPTStatus' );
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
             console.log( '>> PT status received: ' + result.result);
-			this.wsLog = result.result;
+			//this.ptStatusMessage = result.result;
 			const ptStatus = JSON.parse(result.result);
 			const ptConnectionStatus = ptStatus.wsstatus;
 			this.transactionStatus = ptStatus.transactionStatus;
+			this.ptStatusMessage = ptStatus.posMessage;
 			console.log("ptConnectionStatus: " + ptConnectionStatus);
 			switch (ptConnectionStatus) {
-				case -1:
+				case -1: // unknown
 					this.ptStatusIcon = "remove-circle";
+					this.ptStatusIconColor = "dark";
 					break;
-				case 0:
+				case 0: // connecting
 					this.ptStatusIcon = "more";
+					this.ptStatusIconColor = "dark";
 					break;
-				case 1:
+				case 1: // connected
 					this.ptStatusIcon = "swap";
+					this.ptStatusIconColor = "secondary";
 					break;
-				case 2:
+				case 2: // closing
 					this.ptStatusIcon = "close-circle";
+					this.ptStatusIconColor = "danger";
 					break;
-				case 3:
+				case 3: // closed
 					this.ptStatusIcon = "close-circle";
+					this.ptStatusIconColor = "danger";
 					break;
 			}
         }, ( err ) => {
@@ -1500,4 +1496,50 @@ export class ShopPage {
 	    	console.log('catch in getting PT status: ' + result.result);
 		} )
 	}
+	
+  w:any;
+
+  /*startWorker() {
+  	if(typeof(Worker) !== "undefined") {
+      if(typeof(this.w) == "undefined") {
+      	this.w = new Worker("../assets/check_connection.js");
+      }
+      this.w.onmessage = function(event) {
+        document.getElementById("result").innerHTML = event.data;
+      };
+    } else {
+      document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+    }
+  }
+
+  stopWorker() { 
+    this.w.terminate();
+    //this.w = undefined;
+  }*/
+  result = 0;
+  startWorker() {
+    const worker = new InlineWorker(() => {
+      // START OF WORKER THREAD CODE
+      console.log('Start worker thread, wait for postMessage: ');
+
+      // @ts-ignore
+      this.onmessage = (evt) => {
+        console.log('Calculation started: ' + new Date());
+      };
+      // END OF WORKER THREAD CODE
+    });
+
+    //worker.postMessage({ limit: 2000 });
+
+    worker.onmessage().subscribe((data) => {
+      console.log('Calculation done: ', new Date() + ' ' + data.data);
+      this.result = data.data.primeNumbers;
+      this.getPTStatus();
+      //worker.terminate();
+    });
+
+    worker.onerror().subscribe((data) => {
+      console.log(data);
+    });
+  }
 }
