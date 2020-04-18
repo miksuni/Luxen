@@ -206,6 +206,7 @@ export class ShopPage {
         if ( e.selectedIndex > 0 ) {
             //e.disabled = false; // does now work
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
+            this.connectPt();
         }
     }
 
@@ -218,7 +219,7 @@ export class ShopPage {
             e.selectedIndex = 0;
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         }
-
+        this.disconnectPt();
         this.presentPromptSendReport();
         //this.reportProvider.sendToBeOrderedReport();
         // TODO: ACTIVATE IN PRODUCTION
@@ -949,10 +950,10 @@ export class ShopPage {
 
     /******************************************************************************************/
 
-    connectToPT() {
+    /*connectToPT() {
         console.log( 'connectToPT' );
         this.shoppingCart.connectToPT();
-    }
+    }*/
 
     sendEmail() {
         console.log( 'sendEmail' );
@@ -1457,6 +1458,39 @@ export class ShopPage {
         this.loadingIndicator.dismiss();
     }
 
+	connectPt() {
+	  setTimeout(() => {
+        console.log('connectPt');
+        this.restProvider.connectToPT().then(( result: any ) => {
+          console.log( '>> result received' );
+          this.startWorker();
+        }, ( err ) => {
+          console.log( 'error in connect: ' + err );
+        } )
+	    .catch((result:any) => {
+	        console.log('catch in connect');
+	    } )
+      }, 5000 );
+	}
+	
+	disconnectPt() {
+      console.log('disconnectPt');
+      this.restProvider.disconnectPT().then(( result: any ) => {
+        console.log( '>> result received' );
+        this.stopWorker();
+        // update connection status only after timeout to give time for state change
+	    setTimeout(() => {
+          console.log('connectPt');
+          this.getPTStatus();
+        }, 5000 );
+      }, ( err ) => {
+        console.log( 'error in disconnect: ' + err );
+      } )
+	  .catch((result:any) => {
+	    console.log('catch in disconnect');
+	  } )
+    }
+
 	getPTStatus() {
 		console.log( 'setPTStatus' );
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
@@ -1497,28 +1531,12 @@ export class ShopPage {
 		} )
 	}
 	
-  w:any;
+  worker:any;
 
-  /*startWorker() {
-  	if(typeof(Worker) !== "undefined") {
-      if(typeof(this.w) == "undefined") {
-      	this.w = new Worker("../assets/check_connection.js");
-      }
-      this.w.onmessage = function(event) {
-        document.getElementById("result").innerHTML = event.data;
-      };
-    } else {
-      document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
-    }
-  }
-
-  stopWorker() { 
-    this.w.terminate();
-    //this.w = undefined;
-  }*/
   result = 0;
   startWorker() {
-    const worker = new InlineWorker(() => {
+	console.log('shop: starWorker');
+    this.worker = new InlineWorker(() => {
       // START OF WORKER THREAD CODE
       console.log('Start worker thread, wait for postMessage: ');
 
@@ -1531,15 +1549,23 @@ export class ShopPage {
 
     //worker.postMessage({ limit: 2000 });
 
-    worker.onmessage().subscribe((data) => {
+    this.worker.onmessage().subscribe((data) => {
       console.log('Calculation done: ', new Date() + ' ' + data.data);
       this.result = data.data.primeNumbers;
       this.getPTStatus();
       //worker.terminate();
     });
 
-    worker.onerror().subscribe((data) => {
+    this.worker.onerror().subscribe((data) => {
       console.log(data);
     });
+  }
+
+  stopWorker() {
+	console.log('shop: starWorker 1');
+	if (this.worker) {
+		console.log('shop: starWorker 2');
+		this.worker.terminate();
+	}
   }
 }
