@@ -51,9 +51,11 @@ export class ShopPage {
 
 	ptStatusIcon = "alert";
 	ptStatusIconColor = "dark";
-	ptStatusMessage = "...";
+	ptStatusMessage = "";
+	ptConnectionInitiated = false;
+	ptConnectionTerminated = false;
 
-    version = "Kassaversio 1.0.5";
+    version = "Kassaversio 1.1.0";
 
     /*
     paymentInfo = {
@@ -153,7 +155,7 @@ export class ShopPage {
         this.cartContent = this.shoppingCart.getProducts();
         this.getCurrentState();
         this.getCashiers();
-		this.getPTStatus();
+		//this.getPTStatus();
         //this.getChat();
         this.update();
     }
@@ -1459,40 +1461,51 @@ export class ShopPage {
     }
 
 	connectPt() {
-	  setTimeout(() => {
-        console.log('connectPt');
-        this.restProvider.connectToPT().then(( result: any ) => {
-          console.log( '>> result received' );
-          this.startWorker();
-        }, ( err ) => {
-          console.log( 'error in connect: ' + err );
-        } )
-	    .catch((result:any) => {
-	        console.log('catch in connect');
-	    } )
-      }, 5000 );
+		if (!this.ptConnectionInitiated) {
+			this.ptConnectionInitiated = true;
+			this.ptConnectionTerminated = false;
+			console.log('connectPt')
+	    	setTimeout(() => {
+          		this.restProvider.connectToPT().then(( result: any ) => {
+            		console.log( '********* START WORKER ***' );
+					if (!this.ptConnectionTerminated) {
+            			this.startWorker();
+					}
+          		}, ( err ) => {
+            		console.log( 'error in connect: ' + err );
+          		} )
+	      		.catch((result:any) => {
+	        		console.log('catch in connect');
+	      		} )
+        	}, 5000 );
+      	}
 	}
-	
+ 
 	disconnectPt() {
-      console.log('disconnectPt');
-      this.restProvider.disconnectPT().then(( result: any ) => {
-        console.log( '>> result received' );
-        this.stopWorker();
-        // update connection status only after timeout to give time for state change
-	    setTimeout(() => {
-          console.log('connectPt');
-          this.getPTStatus();
-        }, 5000 );
-      }, ( err ) => {
-        console.log( 'error in disconnect: ' + err );
-      } )
-	  .catch((result:any) => {
-	    console.log('catch in disconnect');
-	  } )
+		if (this.ptConnectionInitiated) {
+    		console.log('disconnectPt');
+            console.log( '********* STOP WORKER ***' );
+            this.stopWorker();
+            this.ptConnectionInitiated = false;
+		    this.ptConnectionTerminated = true;
+    		this.restProvider.disconnectPT().then(( result: any ) => {
+        		console.log( '>> result received' );
+        		// update connection status only after timeout to give time for state change
+	    		setTimeout(() => {
+          			console.log('connectPt');
+          			this.getPTStatus();
+        		}, 5000 );
+      		}, ( err ) => {
+        		console.log( 'error in disconnect: ' + err );
+      		})
+	  		.catch((result:any) => {
+	    		console.log('catch in disconnect');
+	  		})
+		}
     }
 
 	getPTStatus() {
-		console.log( 'setPTStatus' );
+		console.log( 'getPTStatus' );
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
             console.log( '>> PT status received: ' + result.result);
 			//this.ptStatusMessage = result.result;
@@ -1535,7 +1548,7 @@ export class ShopPage {
 
   result = 0;
   startWorker() {
-	console.log('shop: starWorker');
+	console.log('shop: startWorker');
     this.worker = new InlineWorker(() => {
       // START OF WORKER THREAD CODE
       console.log('Start worker thread, wait for postMessage: ');
@@ -1552,8 +1565,7 @@ export class ShopPage {
     this.worker.onmessage().subscribe((data) => {
       console.log('Calculation done: ', new Date() + ' ' + data.data);
       this.result = data.data.primeNumbers;
-      this.getPTStatus();
-      //worker.terminate();
+      //this.getPTStatus();
     });
 
     this.worker.onerror().subscribe((data) => {
@@ -1562,9 +1574,9 @@ export class ShopPage {
   }
 
   stopWorker() {
-	console.log('shop: starWorker 1');
+	console.log('shop: stopWorker 1');
 	if (this.worker) {
-		console.log('shop: starWorker 2');
+		console.log('shop: stopWorker 2');
 		this.worker.terminate();
 	}
   }

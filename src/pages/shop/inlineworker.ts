@@ -32,10 +32,10 @@ export class InlineWorker {
     }
   }
 
-  postMessage(data) {
+  /*postMessage(data) {
 	console.log('InlineWorker.postMessage: ' + JSON.stringify(data));
     this.worker.postMessage(data);
-  }
+  }*/
 
   onmessage(): Observable<MessageEvent> {
 	console.log('InlineWorker.postMessage');
@@ -54,18 +54,4 @@ export class InlineWorker {
       this.worker.terminate();
     }
   }
-
-    /*async waitForCardPayment() {
-	  for (let i = 0; i < 5; i++) {
-         let promise = new Promise((res, rej) => {
-             setTimeout(() => res("loop"), 10000)
-          });
-
-          // wait until the promise returns us a value
-          let result = await promise; 
-          console.log("loop");
-          this.postMessage(i);
-       }
-    }*/
-
 }
