@@ -54,6 +54,7 @@ export class ReportProvider {
         var cardTransactionCount = 0;
         var mobilePayTransactionCount = 0;
         var ownPurchaseCount = 0;
+        var invoiceTranscationCount = 0;
 
         var giftCard1PurchaseValue = 0.0;
         var giftCard2PurchaseValue = 0.0;
@@ -61,6 +62,7 @@ export class ReportProvider {
         var cardPurchaseValue = 0.0;
         var mobilePayPurchaseValue = 0.0;
         var ownPurchaseValue = 0.0;
+		var invoiceValue = 0.0;
 
         var ownPurchaseTable = "";
         var ownPurchaseRows = "";
@@ -105,6 +107,9 @@ export class ReportProvider {
                 ownPurchaseData.push( receiptData );
                 ownPurchaseCount++;
                 ownPurchaseValue += purchases[i].totalSum;
+            } else if ( purchases[i].paymentMethod == 6 ) {
+                invoiceTranscationCount++;
+                invoiceValue += purchases[i].totalSum;
             }
         }
 
@@ -123,6 +128,8 @@ export class ReportProvider {
         var giftCartTrCount = giftCard1TransactionCount.toString();
         var giftCartTrValue = giftCard1PurchaseValue.toFixed( 2 );
         var ownPurchaseTrValue = ownPurchaseValue.toFixed( 2 );
+        var invoiceTrCount = invoiceTranscationCount.toString();
+        var invoiceTrValue = invoiceValue.toFixed( 2 );
 
         if ( giftCard1Data.length > 0 ) {
             for ( var i = 0; i < giftCard1Data.length; i++ ) {
@@ -194,6 +201,12 @@ export class ReportProvider {
             cashTrCount,
             "</td><td style=\"padding:0px 0px 0px 10px\">",
             cashTrValue,
+            "</td></tr><tr>",
+
+            "<td>Lasku</td><td style=\"padding:0px 0px 0px 10px\">",
+            invoiceTrCount,
+            "</td><td style=\"padding:0px 0px 0px 10px\">",
+            invoiceTrValue,
             "</td></tr><tr><td>",
 
             "Ry:n lahjakortti</td><td style=\"padding:0px 0px 0px 10px\">",

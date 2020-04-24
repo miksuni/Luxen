@@ -1469,7 +1469,8 @@ export class ShopPage {
           		this.restProvider.connectToPT().then(( result: any ) => {
             		console.log( '********* START WORKER ***' );
 					if (!this.ptConnectionTerminated) {
-            			this.startWorker();
+            			//this.startWorker();
+                        this.startPtPoll();
 					}
           		}, ( err ) => {
             		console.log( 'error in connect: ' + err );
@@ -1485,7 +1486,7 @@ export class ShopPage {
 		if (this.ptConnectionInitiated) {
     		console.log('disconnectPt');
             console.log( '********* STOP WORKER ***' );
-            this.stopWorker();
+            //this.stopWorker();
             this.ptConnectionInitiated = false;
 		    this.ptConnectionTerminated = true;
     		this.restProvider.disconnectPT().then(( result: any ) => {
@@ -1563,9 +1564,9 @@ export class ShopPage {
     //worker.postMessage({ limit: 2000 });
 
     this.worker.onmessage().subscribe((data) => {
-      console.log('Calculation done: ', new Date() + ' ' + data.data);
+      console.log('worker.onmessage ' + data.data);
       this.result = data.data.primeNumbers;
-      //this.getPTStatus();
+      this.getPTStatus();
     });
 
     this.worker.onerror().subscribe((data) => {
@@ -1579,5 +1580,12 @@ export class ShopPage {
 		console.log('shop: stopWorker 2');
 		this.worker.terminate();
 	}
+  }
+  
+  startPtPoll() {
+    setInterval(() => {
+      console.log( '>> Pt poll ');
+      this.getPTStatus();
+    }, 10000 );
   }
 }
