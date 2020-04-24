@@ -6,7 +6,6 @@ import { ReportProvider } from '../../providers/report/report';
 import { RestProvider } from '../../providers/rest/rest';
 import { AlertController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
-import { InlineWorker } from '../shop/inlineworker';
 import * as $ from "jquery";
 
 /**
@@ -54,6 +53,8 @@ export class ShopPage {
 	ptStatusMessage = "";
 	ptConnectionInitiated = false;
 	ptConnectionTerminated = false;
+    
+    ptPollTimer;
 
     version = "Kassaversio 1.1.0";
 
@@ -353,12 +354,6 @@ export class ShopPage {
 	    } )
 
         this.waitForCardPayment();
-    }
-
-    async abc() {
-	    setTimeout(() => {
-            console.log( '>> timer expired ');
-        }, 2000 );
     }
 
     async waitForCardPayment() {
@@ -1467,9 +1462,7 @@ export class ShopPage {
 			console.log('connectPt')
 	    	setTimeout(() => {
           		this.restProvider.connectToPT().then(( result: any ) => {
-            		console.log( '********* START WORKER ***' );
 					if (!this.ptConnectionTerminated) {
-            			//this.startWorker();
                         this.startPtPoll();
 					}
           		}, ( err ) => {
@@ -1485,8 +1478,7 @@ export class ShopPage {
 	disconnectPt() {
 		if (this.ptConnectionInitiated) {
     		console.log('disconnectPt');
-            console.log( '********* STOP WORKER ***' );
-            //this.stopWorker();
+            this.stopPoll();
             this.ptConnectionInitiated = false;
 		    this.ptConnectionTerminated = true;
     		this.restProvider.disconnectPT().then(( result: any ) => {
@@ -1527,6 +1519,7 @@ export class ShopPage {
 				case 1: // connected
 					this.ptStatusIcon = "swap";
 					this.ptStatusIconColor = "secondary";
+                    this.stopPtPoll();
 					break;
 				case 2: // closing
 					this.ptStatusIcon = "close-circle";
@@ -1544,48 +1537,21 @@ export class ShopPage {
 	    	console.log('catch in getting PT status: ' + result.result);
 		} )
 	}
-	
-  worker:any;
 
-  result = 0;
-  startWorker() {
-	console.log('shop: startWorker');
-    this.worker = new InlineWorker(() => {
-      // START OF WORKER THREAD CODE
-      console.log('Start worker thread, wait for postMessage: ');
 
-      // @ts-ignore
-      this.onmessage = (evt) => {
-        console.log('Calculation started: ' + new Date());
-      };
-      // END OF WORKER THREAD CODE
-    });
-
-    //worker.postMessage({ limit: 2000 });
-
-    this.worker.onmessage().subscribe((data) => {
-      console.log('worker.onmessage ' + data.data);
-      this.result = data.data.primeNumbers;
-      this.getPTStatus();
-    });
-
-    this.worker.onerror().subscribe((data) => {
-      console.log(data);
-    });
-  }
-
-  stopWorker() {
-	console.log('shop: stopWorker 1');
-	if (this.worker) {
-		console.log('shop: stopWorker 2');
-		this.worker.terminate();
-	}
+  startPtPoll() {
+    if (!this.ptPollTimer) {
+      console.log('startPtPoll');
+      this.ptPollTimer = setInterval(() => {
+        console.log( '>> Pt poll ');
+        this.getPTStatus();
+      }, 10000 );
+    }
   }
   
-  startPtPoll() {
-    setInterval(() => {
-      console.log( '>> Pt poll ');
-      this.getPTStatus();
-    }, 10000 );
+  stopPtPoll() {
+    console.log('stopPtPoll');
+    clearInterval(this.ptPollTimer);
+    this.ptPollTimer = null;
   }
 }
