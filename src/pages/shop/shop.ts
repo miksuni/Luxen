@@ -47,6 +47,7 @@ export class ShopPage {
     productsInReturnBasket = 0;
 
 	transactionStatus = 0;
+    cardPaymentStatus = 0;
 
 	ptStatusIcon = "alert";
 	ptStatusIconColor = "dark";
@@ -335,13 +336,10 @@ export class ShopPage {
     }
 
     async cardPayment() {
-        console.log( 'cardPayment' ); // orig
+        console.log( 'cardPayment' );
         this.transactionStatus = -1;
-        this.shoppingCart.setCashier( this.cashier );  // orig
-        //this.presentPromptPaymentCardInstructions(); // orig
-        this.payments[3] = this.totalSum;
-		//var paymentData = {"amount": this.totalSum,  // orig
-		//                   "receiptId": this.currentState.lastReceiptNr };
+        this.shoppingCart.setCashier( this.cashier );
+        //this.presentPromptPaymentCardInstructions(); // to be used only with old card reader
 		this.restProvider.sendRequest( 'purchase',
 									 { "amount": this.totalSum,
 		                   			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
@@ -1478,7 +1476,7 @@ export class ShopPage {
 	disconnectPt() {
 		if (this.ptConnectionInitiated) {
     		console.log('disconnectPt');
-            this.stopPoll();
+            this.stopPtPoll();
             this.ptConnectionInitiated = false;
 		    this.ptConnectionTerminated = true;
     		this.restProvider.disconnectPT().then(( result: any ) => {
@@ -1506,6 +1504,9 @@ export class ShopPage {
 			const ptConnectionStatus = ptStatus.wsstatus;
 			this.transactionStatus = ptStatus.transactionStatus;
 			this.ptStatusMessage = ptStatus.posMessage;
+            this.cardPaymentStatus = ptStatus.paymentStatus;
+            
+            // connection status
 			console.log("ptConnectionStatus: " + ptConnectionStatus);
 			switch (ptConnectionStatus) {
 				case -1: // unknown
@@ -1530,6 +1531,17 @@ export class ShopPage {
 					this.ptStatusIconColor = "danger";
 					break;
 			}
+            
+            // payment status
+            switch(this.cardPaymentStatus) {
+                case -1:
+                break;
+                case 0:
+                    this.payments[3] = this.totalSum;
+                    this.combinedPayment();
+                break;
+            }
+            
         }, ( err ) => {
             console.log( 'error in getting PT status: ' + err );
         } )
