@@ -1535,10 +1535,14 @@ export class ShopPage {
             // payment status
             switch(this.cardPaymentStatus) {
                 case -1:
+                    console.log("card payment failed");
                 break;
                 case 0:
                     this.payments[3] = this.totalSum;
                     this.combinedPayment();
+                break;
+                case 1:
+                    console.log("processing card payment...");
                 break;
             }
             
