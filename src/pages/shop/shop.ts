@@ -56,6 +56,7 @@ export class ShopPage {
 	ptConnectionTerminated = false;
     
     ptPollTimer;
+    cardPurchaseGoingOn = false;
 
     version = "Kassaversio 1.1.0";
 
@@ -343,7 +344,8 @@ export class ShopPage {
 		this.restProvider.sendRequest( 'purchase',
 									 { "amount": this.totalSum,
 		                   			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
-            console.log( '>> result received' );
+            console.log( '>> card payment result received' );
+            this.cardPurchaseGoingOn = true;
         }, ( err ) => {
             console.log( 'error in purchase: ' + err );
         } )
@@ -365,7 +367,7 @@ export class ShopPage {
   		  this.getPTStatus();
           console.log("loop");
        }
-       this.ptStatusMessage = "";
+       //this.ptStatusMessage = "";
     }
 
     clearPayments() {
@@ -1535,11 +1537,15 @@ export class ShopPage {
             // payment status
             switch(this.cardPaymentStatus) {
                 case -1:
-                    console.log("card payment failed");
+                    console.log("card payment ");
                 break;
                 case 0:
-                    this.payments[3] = this.totalSum;
-                    this.combinedPayment();
+                    console.log("card payment ok");
+                    if (this.cardPurchaseGoingOn) {
+                        this.cardPurchaseGoingOn = false;
+                        this.payments[3] = this.totalSum;
+                        this.combinedPayment();
+                    }
                 break;
                 case 1:
                     console.log("processing card payment...");
