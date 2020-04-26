@@ -132,36 +132,16 @@ export class ShoppingcartProvider {
         console.log( 'purchaseData: ' + JSON.stringify( this.purchaseData ) );
         this.restProvider.sendRequest( "save_purchase_data", this.purchaseData );
     }
+    
+    getPurchaseData() {
+        return this.purchaseData;
+    }
 
     // JSON data must be encoded in ASCII which also means character and byte
     // length will match.
     jsonStringifyAscii( val ) {
         return JSON.stringify( val ).replace( /[\u007f-\uffff]/g, function( x ) {
             return '\\u' + ( '0000' + x.charCodeAt( 0 ).toString( 16 ) ).substr( -4 );
-        } );
-    }
-
-    connectToPT() {
-        console.log( '>> ShoppingcartProvider.purhase' );
-
-        var id_counter = 0;
-        var obj = {
-            jsonrpc: '2.0',
-            method: 'ExampleMethod',
-            params: { argument: 'value', nonascii: 'foo\u1234bar' },
-            id: 'req-' + ( ++id_counter )
-        };
-
-        var jsonData = this.jsonStringifyAscii( obj );
-        var frame = ( '00000000' + jsonData.length.toString( 16 ) ).substr( -8 ) +
-            ':' + jsonData + '\n';// Write 'frame' (which is pure ASCII) to the socket.
-
-        console.log( frame );
-
-        this.restProvider.connectToPT().then(( result: any ) => {
-            console.log( ">> product(s) purchased" );
-        }, ( err ) => {
-            console.log( err );
         } );
     }
 }

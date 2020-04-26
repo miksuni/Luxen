@@ -26,7 +26,12 @@ export class ShopPage {
     productNameInitials: string = "";
 
     cartContent = [];
-    receiptContent = [];
+    //receiptContent = [];
+    //receiptPaymentMethods = [];
+    //purchaseData = { productList: [], receiptData: {} };
+    purchasedItems = [];
+    receiptPaymentMethods = [];
+    
     searchResult: any;
 
     sites = [{ id: 'Lahti' }];
@@ -49,6 +54,7 @@ export class ShopPage {
 	transactionStatus = 0;
     cardPaymentStatus = 0;
 
+    ptConnected = false;
 	ptStatusIcon = "alert";
 	ptStatusIconColor = "dark";
 	ptStatusMessage = "";
@@ -243,6 +249,8 @@ export class ShopPage {
         console.log( "cashier: " + e.options[e.selectedIndex].text );
         if ( this.cashier.length == 0 ) {
             this.presentPromptSelectCashier();
+        } else if (!this.ptConnected) {
+            this.presentPromptWaitUntilPTConnected();
         }
     }
 
@@ -354,6 +362,7 @@ export class ShopPage {
 	    } )
 
         this.waitForCardPayment();
+        console.log("==========card payment done");
     }
 
     async waitForCardPayment() {
@@ -383,10 +392,10 @@ export class ShopPage {
 
         this.presentLoading( "Talletetaan..." );
         this.shoppingCart.setCashier( this.cashier );
-        this.receiptContent = Array.from( this.cartContent );
+        //this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
         this.currentState.lastReceiptNr++;
-        console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
+        //console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
             receiptNr: 0,
@@ -418,14 +427,17 @@ export class ShopPage {
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
         receiptData.items.push( receiptItemData );
+        //this.receiptPaymentMethods.push(receiptItemData);
 
         this.shoppingCart.saveReceipt( receiptData );
+        this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
+        console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
         document.getElementById( "receipt_view" ).style.visibility = "visible";
-        console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
+        //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
             this.finishLoading();
@@ -487,10 +499,10 @@ export class ShopPage {
 
         this.presentLoading( "Talletetaan..." );
         this.shoppingCart.setCashier( this.cashier );
-        this.receiptContent = Array.from( this.cartContent );
+        //this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
         this.currentState.lastReceiptNr++;
-        console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
+        //console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
             receiptNr: 0,
@@ -519,6 +531,7 @@ export class ShopPage {
             receiptItemData.receiver = this.giftCard1Receiver;
             receiptItemData.givenDate = this.giftCard1PurchaseDate;
             receiptData.items.push( receiptItemData );
+            //this.receiptPaymentMethods.push(receiptItemData);
         }
 
         /************************** SRK gift card ***************************/
@@ -541,6 +554,7 @@ export class ShopPage {
             receiptItemData.valueBefore = this.giftCard2AmountBefore;
             receiptItemData.valueAfter = this.giftCard2AmountAfter;
             receiptData.items.push( receiptItemData );
+            //this.receiptPaymentMethods.push(receiptItemData);
         }
 
         /************************** Cash ***************************/
@@ -558,6 +572,7 @@ export class ShopPage {
             receiptItemData.sum = this.payments[2];
             receiptItemData.paymentMethod = 2;
             receiptData.items.push( receiptItemData );
+            //this.receiptPaymentMethods.push(receiptItemData);
         }
 
         /************************** Payment card ***************************/
@@ -575,6 +590,7 @@ export class ShopPage {
             receiptItemData.sum = this.payments[3];
             receiptItemData.paymentMethod = 3;
             receiptData.items.push( receiptItemData );
+            //this.receiptPaymentMethods.push(receiptItemData);
         }
 
         /************************** MobilePay ***************************/
@@ -592,6 +608,7 @@ export class ShopPage {
             receiptItemData.sum = this.payments[4];
             receiptItemData.paymentMethod = 4;
             receiptData.items.push( receiptItemData );
+            //this.receiptPaymentMethods.push(receiptItemData);
         }
 
         /************************** Product return ***************************/
@@ -610,15 +627,20 @@ export class ShopPage {
             receiptItemData.sum = 0 - this.productReturnValue;
             receiptItemData.paymentMethod = 6;
             receiptData.items.push( receiptItemData );
+            //this.receiptPaymentMethods.push(receiptItemData);
         }
 
         this.shoppingCart.saveReceipt( receiptData );
+        this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
+        console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
+        this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
+        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
         document.getElementById( "receipt_view" ).style.visibility = "visible";
-        console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
+        //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
             this.finishLoading();
@@ -947,11 +969,6 @@ export class ShopPage {
 
     /******************************************************************************************/
 
-    /*connectToPT() {
-        console.log( 'connectToPT' );
-        this.shoppingCart.connectToPT();
-    }*/
-
     sendEmail() {
         console.log( 'sendEmail' );
         this.restProvider.sendRequest( 'send_email', [] ).then(( result: any ) => {
@@ -1082,7 +1099,22 @@ export class ShopPage {
 
     presentPromptSelectCashier() {
         let alert = this.alertController.create( {
-            title: 'Aseta kassa ensin',
+            title: 'Aseta kassa ensin ja odota kunnes maksupääteyhteys muodostettu',
+            buttons: [
+                {
+                    text: 'Ok',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+    
+    presentPromptWaitUntilPTConnected() {
+        let alert = this.alertController.create( {
+            title: 'Odota kunnes maksupääteyhteys on muodostettu',
             buttons: [
                 {
                     text: 'Ok',
@@ -1140,6 +1172,7 @@ export class ShopPage {
         alert.present();
     }
 
+    // could be used if pt terminal not connected
     presentPromptPaymentCardInstructions() {
         let alert = this.alertController.create( {
             title: 'Syötä summa ' + this.totalSum + ' maksupäätteeseen',
@@ -1509,6 +1542,7 @@ export class ShopPage {
             this.cardPaymentStatus = ptStatus.paymentStatus;
             
             // connection status
+            this.ptConnected = false;
 			console.log("ptConnectionStatus: " + ptConnectionStatus);
 			switch (ptConnectionStatus) {
 				case -1: // unknown
@@ -1520,6 +1554,7 @@ export class ShopPage {
 					this.ptStatusIconColor = "dark";
 					break;
 				case 1: // connected
+                    this.ptConnected = true;
 					this.ptStatusIcon = "swap";
 					this.ptStatusIconColor = "secondary";
                     this.stopPtPoll();
