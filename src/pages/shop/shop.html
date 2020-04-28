@@ -331,7 +331,7 @@
 								<td style="text-align: center">
 									<button ion-button class="payment_button" id="card_button"
 										[disabled]="checkIfCardPaymentEnabled()"
-										(click)="cardPayment()">
+										(click)="cardPayment(totalSum)">
 										<ion-icon name="card" item-start> Korttimaksu</ion-icon>
 									</button>
 								</td>

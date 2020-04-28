@@ -344,15 +344,16 @@ export class ShopPage {
         console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
     }
 
-    async cardPayment() {
+    async cardPayment(sum:number) {
         console.log( 'cardPayment' );
         this.transactionStatus = -1;
         this.shoppingCart.setCashier( this.cashier );
         //this.presentPromptPaymentCardInstructions(); // to be used only with old card reader
 		this.restProvider.sendRequest( 'purchase',
-									 { "amount": this.totalSum,
+									 { "amount": sum,
 		                   			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
             console.log( '>> card payment result received' );
+            this.payments[3] = sum;
             this.cardPurchaseGoingOn = true;
         }, ( err ) => {
             console.log( 'error in purchase: ' + err );
@@ -432,6 +433,8 @@ export class ShopPage {
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
+        this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
+        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -476,9 +479,10 @@ export class ShopPage {
         if ( this.payments[2] > 0 ) {
             str += ( count++ + ". Suorita käteisveloitus<br>" );
         }
-        if ( this.payments[3] > 0 ) {
-            str += ( count++ + ". Suorita pankkikorttiveloitus<br>" );
-        }
+        // with old pt:
+        //if ( this.payments[3] > 0 ) {
+        //    str += ( count++ + ". Suorita pankkikorttiveloitus<br>" );
+        //}
         if ( this.payments[4] > 0 ) {
             str += ( count++ + ". Pyydä asiakasta suorttamaan MobilePay maksu, selitteeksi 'Julkaisumyynti'<br><br>" );
         }
@@ -1126,6 +1130,22 @@ export class ShopPage {
         } );
         alert.present();
     }
+    
+    presentPromptDoPaymentCardPayment() {
+        let alert = this.alertController.create( {
+            title: 'Suorita sitten pankkikorttiveloitus.',
+            buttons: [
+                {
+                    text: 'Siirrä maksu maksupäätteelle',
+                    handler: () => {
+                        console.log( 'Siirrä maksu maksupäätteelle' );
+                        this.cardPayment(this.payments[3]);
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
 
     presentPromptNotEnoughInStock( i, amountInStock ) {
         let alert = this.alertController.create( {
@@ -1405,7 +1425,10 @@ export class ShopPage {
                     text: 'Veloitukset suoritettu',
                     handler: () => {
                         console.log( 'Confirm Ok' );
-                        this.combinedPayment();
+                        //this.combinedPayment(); // needed if old pt 
+                        if ( this.payments[3] > 0 ) {
+                            this.presentPromptDoPaymentCardPayment();
+                        }
                     }
                 },
                 {
@@ -1578,7 +1601,6 @@ export class ShopPage {
                     console.log("card payment ok");
                     if (this.cardPurchaseGoingOn) {
                         this.cardPurchaseGoingOn = false;
-                        this.payments[3] = this.totalSum;
                         this.combinedPayment();
                     }
                 break;
