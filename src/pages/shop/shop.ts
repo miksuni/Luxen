@@ -373,7 +373,8 @@ export class ShopPage {
           });
 
           // wait until the promise returns us a value
-          let result = await promise; 
+          let result = await promise;
+          console.log(result)
   		  this.getPTStatus();
           console.log("loop");
        }
@@ -433,7 +434,8 @@ export class ShopPage {
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
-        this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
+        //this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
+        this.receiptPaymentMethods = receiptData.items;
         console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
         this.shoppingCart.clearAll();
         this.clearPayments();
@@ -519,7 +521,7 @@ export class ShopPage {
 
         /************************** Ry gift card ***************************/
         if ( this.payments[0] > 0 ) {
-            var receiptItemData = {
+            var receiptItemData0 = {
                 sum: 0,
                 paymentMethod: 0,
                 giftCard1Type: 0,
@@ -529,18 +531,17 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData.sum = this.payments[0];
-            receiptItemData.paymentMethod = 0;
-            receiptItemData.giftCard1Type = this.giftCard1Type;
-            receiptItemData.receiver = this.giftCard1Receiver;
-            receiptItemData.givenDate = this.giftCard1PurchaseDate;
-            receiptData.items.push( receiptItemData );
-            //this.receiptPaymentMethods.push(receiptItemData);
+            receiptItemData0.sum = this.payments[0];
+            receiptItemData0.paymentMethod = 0;
+            receiptItemData0.giftCard1Type = this.giftCard1Type;
+            receiptItemData0.receiver = this.giftCard1Receiver;
+            receiptItemData0.givenDate = this.giftCard1PurchaseDate;
+            receiptData.items.push( receiptItemData0 );
         }
 
         /************************** SRK gift card ***************************/
         if ( this.payments[1] > 0 ) {
-            var receiptItemData = {
+            var receiptItemData1 = {
                 sum: 0,
                 paymentMethod: 1,
                 giftCard1Type: 0,
@@ -550,20 +551,19 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData.sum = this.payments[1];
-            receiptItemData.paymentMethod = 1;
-            receiptItemData.receiver = this.giftCard2Receiver;
-            receiptItemData.originator = this.giftCard2Originator;
-            receiptItemData.givenDate = this.giftCard2PurchaseDate;
-            receiptItemData.valueBefore = this.giftCard2AmountBefore;
-            receiptItemData.valueAfter = this.giftCard2AmountAfter;
-            receiptData.items.push( receiptItemData );
-            //this.receiptPaymentMethods.push(receiptItemData);
+            receiptItemData1.sum = this.payments[1];
+            receiptItemData1.paymentMethod = 1;
+            receiptItemData1.receiver = this.giftCard2Receiver;
+            receiptItemData1.originator = this.giftCard2Originator;
+            receiptItemData1.givenDate = this.giftCard2PurchaseDate;
+            receiptItemData1.valueBefore = this.giftCard2AmountBefore;
+            receiptItemData1.valueAfter = this.giftCard2AmountAfter;
+            receiptData.items.push( receiptItemData1 );
         }
 
         /************************** Cash ***************************/
         if ( this.payments[2] > 0 ) {
-            var receiptItemData = {
+            var receiptItemData2 = {
                 sum: 0,
                 paymentMethod: 2,
                 giftCard1Type: 0,
@@ -573,15 +573,14 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData.sum = this.payments[2];
-            receiptItemData.paymentMethod = 2;
-            receiptData.items.push( receiptItemData );
-            //this.receiptPaymentMethods.push(receiptItemData);
+            receiptItemData2.sum = this.payments[2];
+            receiptItemData2.paymentMethod = 2;
+            receiptData.items.push( receiptItemData2 );
         }
 
         /************************** Payment card ***************************/
         if ( this.payments[3] > 0 ) {
-            var receiptItemData = {
+            var receiptItemData3 = {
                 sum: 0,
                 paymentMethod: 3,
                 giftCard1Type: 0,
@@ -591,15 +590,14 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData.sum = this.payments[3];
-            receiptItemData.paymentMethod = 3;
-            receiptData.items.push( receiptItemData );
-            //this.receiptPaymentMethods.push(receiptItemData);
+            receiptItemData3.sum = this.payments[3];
+            receiptItemData3.paymentMethod = 3;
+            receiptData.items.push( receiptItemData3 );
         }
 
         /************************** MobilePay ***************************/
         if ( this.payments[4] > 0 ) {
-            var receiptItemData = {
+            var receiptItemData4 = {
                 sum: 0,
                 paymentMethod: 4,
                 giftCard1Type: 0,
@@ -609,16 +607,15 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData.sum = this.payments[4];
-            receiptItemData.paymentMethod = 4;
-            receiptData.items.push( receiptItemData );
-            //this.receiptPaymentMethods.push(receiptItemData);
+            receiptItemData4.sum = this.payments[4];
+            receiptItemData4.paymentMethod = 4;
+            receiptData.items.push( receiptItemData4 );
         }
 
         /************************** Product return ***************************/
         // Special case and a bit different handling
         if ( this.productReturnValue < 0 ) {
-            var receiptItemData = {
+            var receiptItemData6 = {
                 sum: 0,
                 paymentMethod: 6,
                 giftCard1Type: 0,
@@ -628,16 +625,16 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData.sum = 0 - this.productReturnValue;
-            receiptItemData.paymentMethod = 6;
-            receiptData.items.push( receiptItemData );
-            //this.receiptPaymentMethods.push(receiptItemData);
+            receiptItemData6.sum = 0 - this.productReturnValue;
+            receiptItemData6.paymentMethod = 6;
+            receiptData.items.push( receiptItemData6 );
         }
 
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
-        this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
+        //this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
+        this.receiptPaymentMethods = receiptData.items;
         console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
         this.shoppingCart.clearAll();
         this.clearPayments();

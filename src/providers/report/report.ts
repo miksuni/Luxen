@@ -48,16 +48,16 @@ export class ReportProvider {
 
         console.log( 'purchases: ' + JSON.stringify( purchases ) );
 
-        var giftCard1TransactionCount = 0;
-        var giftCard2TransactionCount = 0;
+        var giftCard1TransactionCount = 0; // RY
+        //var giftCard2TransactionCount = 0; // SRK - not included to reports for the time being
         var cashTransactionCount = 0;
         var cardTransactionCount = 0;
         var mobilePayTransactionCount = 0;
         var ownPurchaseCount = 0;
         var invoiceTranscationCount = 0;
 
-        var giftCard1PurchaseValue = 0.0;
-        var giftCard2PurchaseValue = 0.0;
+        var giftCard1PurchaseValue = 0.0; // RY
+        //var giftCard2PurchaseValue = 0.0; // SRK - not included to reports for the time being
         var cashPurchaseValue = 0.0;
         var cardPurchaseValue = 0.0;
         var mobilePayPurchaseValue = 0.0;
@@ -81,9 +81,9 @@ export class ReportProvider {
                 giftCard1Data.push( giftCardData );
                 giftCard1TransactionCount++;
                 giftCard1PurchaseValue += purchases[i].totalSum;
-            } else if ( purchases[i].paymentMethod == 1 ) {
-                giftCard2TransactionCount++;
-                giftCard2PurchaseValue += purchases[i].totalSum;
+            //} else if ( purchases[i].paymentMethod == 1 ) {
+            //    giftCard2TransactionCount++;
+            //    giftCard2PurchaseValue += purchases[i].totalSum;
             } else if ( purchases[i].paymentMethod == 2 ) {
                 cashTransactionCount++;
                 cashPurchaseValue += purchases[i].totalSum;
@@ -123,7 +123,6 @@ export class ReportProvider {
         var mobilePayTrCount = mobilePayTransactionCount.toString();
         var mobilePayTrValue = mobilePayPurchaseValue.toFixed( 2 );
         var cashTrCount = cashTransactionCount.toString();
-        var cashTrValue = cashPurchaseValue.toFixed( 2 );
         var cashTrValue = cashPurchaseValue.toFixed( 2 );
         var giftCartTrCount = giftCard1TransactionCount.toString();
         var giftCartTrValue = giftCard1PurchaseValue.toFixed( 2 );
