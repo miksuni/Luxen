@@ -146,8 +146,8 @@ export class ShopPage {
     ionViewDidLoad() {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).hide();
         this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
-        document.getElementById( "receipt_view" ).style.visibility = "hidden";
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
@@ -441,7 +441,9 @@ export class ShopPage {
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
-        document.getElementById( "receipt_view" ).style.visibility = "visible";
+        $( "#shopping_cart_area" ).hide();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).show();
         //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -640,7 +642,9 @@ export class ShopPage {
         this.clearPayments();
         this.clearCombinedPaymentData();
         this.update();
-        document.getElementById( "receipt_view" ).style.visibility = "visible";
+        $( "#shopping_cart_area" ).hide();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).show();
         //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -655,10 +659,18 @@ export class ShopPage {
         }, 2000 );
     }
 
+    handleReceipt() {
+        console.log( 'handleReceipt' );
+        $( "#shopping_cart_area" ).show();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).hide();
+    }
+
     showCombinedPayment() {
         console.log( 'showCombinedPayment' );
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).show();
+        $( "#receipt_view" ).hide();
         this.toBePaid = this.totalSum;
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
@@ -695,6 +707,7 @@ export class ShopPage {
         console.log( 'cancelCombinedPayment' );
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
+        $( "#receipt_view" ).hide();
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
         }
@@ -984,7 +997,6 @@ export class ShopPage {
 
     cancelPurchase() {
         console.log( 'cancelPurchase' );
-        document.getElementById( "receipt_view" ).style.visibility = "hidden";
         this.shoppingCart.clearAll();
         this.update();
     }

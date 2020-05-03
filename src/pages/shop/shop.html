@@ -264,34 +264,30 @@
 					<!-- *** PAYMENT METHOD COMBINATIONS end *** -->
 				</div>
 				
-				<tr>
-				<td>
-				<!-- RECEIPT start -->
-				<div id="receipt_view" >
-					<table class="receipt">
-						<tr>
-							<td colspan="4" class=receipt_line>Viimeisin kuitti:</td>
-						</tr>
-						<tr>
-							<th>Tuote</th>
-							<th>Hinta</th>
-							<th>Määrä</th>
-							<th>Yht.</th>
-						</tr>
-						<tr *ngFor="let item of purchasedItems let i = index">
-							<td class=receipt_line>{{item.productName}}</td>
-							<td class=receipt_line>{{item.priceAsString}}</td>
-							<td class=receipt_line>{{item.quantity}}</td>
-							<td class=receipt_line>{{item.totalAsString}}</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<th>{{receiptTotalSumAsString}}</th>
-						</tr>
-                        
-                        
+                <!-- RECEIPT start -->
+                <div id="receipt_view" >
+                    <table class="receipt">
+                        <tr>
+                            <td colspan="4" class=receipt_line>Viimeisin kuitti:</td>
+                        </tr>
+                        <tr>
+                            <th>Tuote</th>
+                            <th>Hinta</th>
+                            <th>Määrä</th>
+                            <th>Yht.</th>
+                        </tr>
+                        <tr *ngFor="let item of purchasedItems let i = index">
+                            <td class=receipt_line>{{item.productName}}</td>
+                            <td class=receipt_line>{{item.priceAsString}}</td>
+                            <td class=receipt_line>{{item.quantity}}</td>
+                            <td class=receipt_line>{{item.totalAsString}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <th>{{receiptTotalSumAsString}}</th>
+                        </tr>
                         <tr>
                             <td colspan="2" class=receipt_line>Maksutavat:</td>
                         </tr>
@@ -302,15 +298,15 @@
                         <tr *ngFor="let item of receiptPaymentMethods let i = index">
                             <td class=receipt_line>{{item.paymentMethod}}</td>
                             <td class=receipt_line>{{item.sum}}</td>
+                            <td colspan="2" class=receipt_line>
+                                <button ion-button class="product_line_button"
+                                    (click)="handleReceipt()">Sulje
+                                </button>
+                            </td>
                         </tr>
-                        
-                        
-                        
-					</table>
-				</div>
-				<!-- RECEIPT end -->
-				</td>
-				</tr>
+                    </table>
+                </div>
+                <!-- RECEIPT end -->
 			</td>
 
 			<!-- *** RIGHT PANEL *** -->
