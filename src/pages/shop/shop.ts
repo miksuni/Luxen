@@ -61,7 +61,7 @@ export class ShopPage {
 	ptConnectionInitiated = false;
 	ptConnectionTerminated = false;
     
-    ptPollTimer;
+    paymentPollTimer;
     cardPurchaseGoingOn = false;
 
     version = "Kassaversio 1.1.0";
@@ -217,7 +217,8 @@ export class ShopPage {
         if ( e.selectedIndex > 0 ) {
             //e.disabled = false; // does now work
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
-            this.connectPt();
+            //this.connectPt();
+            this.startPtConnectionPoll();
         }
     }
 
@@ -375,7 +376,7 @@ export class ShopPage {
           // wait until the promise returns us a value
           let result = await promise;
           console.log(result)
-  		  this.getPTStatus();
+  		  this.getPaymentStatus();
           console.log("loop");
        }
        //this.ptStatusMessage = "";
@@ -1519,38 +1520,56 @@ export class ShopPage {
     finishLoading() {
         this.loadingIndicator.dismiss();
     }
-
+/*
 	connectPt() {
+        console.log('connectPt');
 		if (!this.ptConnectionInitiated) {
 			this.ptConnectionInitiated = true;
 			this.ptConnectionTerminated = false;
-			console.log('connectPt')
-	    	setTimeout(() => {
-          		this.restProvider.connectToPT().then(( result: any ) => {
-					if (!this.ptConnectionTerminated) {
-                        this.startPtPoll();
-					}
-          		}, ( err ) => {
-            		console.log( 'error in connect: ' + err );
-          		} )
-	      		.catch((result:any) => {
-	        		console.log('catch in connect');
-	      		} )
-        	}, 5000 );
+            this.restProvider.connectToPT().then(( result: any ) => {
+                if (!this.ptConnectionTerminated) {
+                    this.startPtConnectionPoll();
+                }
+            }, ( err ) => {
+                console.log( 'error in connect: ' + err );
+            } )
+            .catch((result:any) => {
+                console.log('catch in connect');
+            } )
       	}
 	}
+ */
+    connectToPt() {
+        console.log('connectToPt');
+        if (!this.ptConnectionInitiated) {
+            this.ptConnectionInitiated = true;
+            this.ptConnectionTerminated = false;
+            this.restProvider.connectToPT().then(( result: any ) => {
+                if (!this.ptConnectionTerminated) {
+                    setTimeout(() => {
+                        this.getPtConnectionStatus();
+                    }, 5000 );
+                }
+            }, ( err ) => {
+                console.log( 'error in connect: ' + err );
+            } )
+            .catch((result:any) => {
+                console.log('catch in connect');
+            } )
+        }
+    }
  
 	disconnectPt() {
 		if (this.ptConnectionInitiated) {
     		console.log('disconnectPt');
-            this.stopPtPoll();
+            this.stopPtConnectionPoll();
             this.ptConnectionInitiated = false;
 		    this.ptConnectionTerminated = true;
     		this.restProvider.disconnectPT().then(( result: any ) => {
         		console.log( '>> result received' );
         		// update connection status only after timeout to give time for state change
 	    		setTimeout(() => {
-          			this.getPTStatus();
+          			this.getPtConnectionStatus();
         		}, 5000 );
       		}, ( err ) => {
         		console.log( 'error in disconnect: ' + err );
@@ -1561,18 +1580,13 @@ export class ShopPage {
 		}
     }
 
-	getPTStatus() {
-		console.log( 'getPTStatus' );
+	getPtConnectionStatus() {
+		console.log( 'getPtConnectionStatus' );
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
             console.log( '>> PT status received: ' + result.result);
-			//this.ptStatusMessage = result.result;
 			const ptStatus = JSON.parse(result.result);
 			const ptConnectionStatus = ptStatus.wsstatus;
-			this.transactionStatus = ptStatus.transactionStatus;
 			this.ptStatusMessage = ptStatus.posMessage;
-            this.cardPaymentStatus = ptStatus.paymentStatus;
-            
-            // connection status
             this.ptConnected = false;
 			console.log("ptConnectionStatus: " + ptConnectionStatus);
 			switch (ptConnectionStatus) {
@@ -1581,14 +1595,15 @@ export class ShopPage {
 					this.ptStatusIconColor = "dark";
 					break;
 				case 0: // connecting
-					this.ptStatusIcon = "more";
+					this.ptStatusIcon = "help";
 					this.ptStatusIconColor = "dark";
+                    //this.stopPtConnectionPoll();
 					break;
 				case 1: // connected
                     this.ptConnected = true;
 					this.ptStatusIcon = "swap";
 					this.ptStatusIconColor = "secondary";
-                    this.stopPtPoll();
+                    this.stopPtConnectionPoll();
 					break;
 				case 2: // closing
 					this.ptStatusIcon = "close-circle";
@@ -1599,6 +1614,23 @@ export class ShopPage {
 					this.ptStatusIconColor = "danger";
 					break;
 			}
+        }, ( err ) => {
+            console.log( 'error in getting PT status: ' + err );
+        } )
+		.catch((result:any) => {
+	    	console.log('catch in getting PT status: ' + result.result);
+		} )
+	}
+
+    getPaymentStatus() {
+        console.log( 'getPaymentStatus' );
+        this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
+            console.log( '>> PT status received: ' + result.result);
+            const ptStatus = JSON.parse(result.result);
+            //const ptConnectionStatus = ptStatus.wsstatus;
+            this.transactionStatus = ptStatus.transactionStatus;
+            this.ptStatusMessage = ptStatus.posMessage;
+            this.cardPaymentStatus = ptStatus.paymentStatus;
             
             // payment status
             switch(this.cardPaymentStatus) {
@@ -1620,25 +1652,42 @@ export class ShopPage {
         }, ( err ) => {
             console.log( 'error in getting PT status: ' + err );
         } )
-		.catch((result:any) => {
-	    	console.log('catch in getting PT status: ' + result.result);
-		} )
-	}
+        .catch((result:any) => {
+            console.log('catch in getting PT status: ' + result.result);
+        } )
+    }
 
-
-  startPtPoll() {
-    if (!this.ptPollTimer) {
-      console.log('startPtPoll');
-      this.ptPollTimer = setInterval(() => {
-        console.log( '>> Pt poll ');
-        this.getPTStatus();
+  startPtConnectionPoll() {
+    console.log( '>> startPtConnectionPoll ');
+    if (!this.paymentPollTimer) {
+      this.connectToPt();
+      this.paymentPollTimer = setInterval(() => {
+        console.log( '>> PtConnectionPoll... ');
+        this.ptConnectionInitiated = false;
+        this.connectToPt();
       }, 10000 );
     }
   }
   
-  stopPtPoll() {
-    console.log('stopPtPoll');
-    clearInterval(this.ptPollTimer);
-    this.ptPollTimer = null;
+  stopPtConnectionPoll() {
+    console.log('stopPtConnectionPoll');
+    clearInterval(this.paymentPollTimer);
+    this.paymentPollTimer = null;
+  }
+  
+  startPaymentPoll() {
+    if (!this.paymentPollTimer) {
+      console.log('startPaymentPoll');
+      this.paymentPollTimer = setInterval(() => {
+        console.log( '>> paymentPollTimer fires');
+        this.getPaymentStatus();
+      }, 10000 );
+    }
+  }
+  
+  stopPaymentPoll() {
+    console.log('stopPaymenPoll');
+    clearInterval(this.paymentPollTimer);
+    this.paymentPollTimer = null;
   }
 }
