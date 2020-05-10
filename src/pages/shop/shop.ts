@@ -1550,7 +1550,6 @@ export class ShopPage {
         		console.log( '>> result received' );
         		// update connection status only after timeout to give time for state change
 	    		setTimeout(() => {
-          			console.log('connectPt');
           			this.getPTStatus();
         		}, 5000 );
       		}, ( err ) => {

@@ -298,12 +298,22 @@
                         <tr *ngFor="let item of receiptPaymentMethods let i = index">
                             <td class=receipt_line>{{item.paymentMethod}}</td>
                             <td class=receipt_line>{{item.sum}}</td>
-                            <td colspan="2" class=receipt_line>
-                                <button ion-button class="product_line_button"
-                                    (click)="handleReceipt()">Sulje
-                                </button>
-                            </td>
                         </tr>
+                        <tr>
+                           <td>
+                               sposti
+                           </td>
+                           <td  class=receipt_line>
+                              <button ion-button class="product_line_button"
+                                    (click)="handleReceipt()">Lähetä kuitti
+                              </button>
+                           </td>
+                           <td  class=receipt_line>
+                              <button ion-button class="product_line_button"
+                                    (click)="handleReceipt()">Sulje
+                              </button>
+                          </td>
+                       </tr>
                     </table>
                 </div>
                 <!-- RECEIPT end -->
