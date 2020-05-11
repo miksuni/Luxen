@@ -250,8 +250,6 @@ export class ShopPage {
         console.log( "cashier: " + e.options[e.selectedIndex].text );
         if ( this.cashier.length == 0 ) {
             this.presentPromptSelectCashier();
-        } else if (!this.ptConnected) {
-            this.presentPromptWaitUntilPTConnected();
         }
     }
 
@@ -1003,12 +1001,10 @@ export class ShopPage {
     }
 
     checkIfCardPaymentEnabled() {
-        //console.log('checkIfCardPaymentEnabled');
-        return !this.cardPaymentEnabled;
+        return (!this.cardPaymentEnabled || !this.ptConnected);
     }
 
     checkIfCashPaymentEnabled() {
-        //console.log('checkIfCashPaymentEnabled');
         return !this.cashPaymentEnabled;
     }
 
@@ -1113,7 +1109,7 @@ export class ShopPage {
 
     presentPromptSelectCashier() {
         let alert = this.alertController.create( {
-            title: 'Aseta kassa ensin ja odota kunnes maksupääteyhteys muodostettu',
+            title: 'Aseta kassa ensin',
             buttons: [
                 {
                     text: 'Ok',
@@ -1588,6 +1584,8 @@ export class ShopPage {
 			const ptConnectionStatus = ptStatus.wsstatus;
 			this.ptStatusMessage = ptStatus.posMessage;
             this.ptConnected = false;
+            ( <HTMLInputElement>document.getElementById( "cm4" ) ).disabled = true;
+            ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
 			console.log("ptConnectionStatus: " + ptConnectionStatus);
 			switch (ptConnectionStatus) {
 				case -1: // unknown
@@ -1604,6 +1602,9 @@ export class ShopPage {
 					this.ptStatusIcon = "swap";
 					this.ptStatusIconColor = "secondary";
                     this.stopPtConnectionPoll();
+                    ( <HTMLInputElement>document.getElementById( "cm4" ) ).disabled = false;
+                    ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = false;
+                    console.log(">> ptConnected");
 					break;
 				case 2: // closing
 					this.ptStatusIcon = "close-circle";

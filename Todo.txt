@@ -12,7 +12,7 @@ Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
 
 Bugit
 ========
-New     Kassa ei muodosta maksupääteyhteyttä ei muodosteta automaattisesti
+Done    (1.1.0) Kassa ei muodosta maksupääteyhteyttä ei muodosteta automaattisesti
         Jos maksupääteyhteyttä ei ole, ei mitään maksua voi tehdä
 
 Done 	(1.0.4) Kuittinumeroa ei kasvatettu 1.3.2020 ostoissa (kuittinumero syynä uloskirjautuminen
