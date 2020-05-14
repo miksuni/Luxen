@@ -12,6 +12,13 @@ Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
 
 Bugit
 ========
+
+New     _CloseReason käsittely. Jos transaktio meneillään pitää tässä tilanteessa palauttaa virhestatus.
+        Nyt ei tehdä mitään --> POS jää odottaamaan loputtomiin
+        Kommentti: JOS (ei ole varmaa) ws.readyState ei palauta oikeaa arvoa hankala käsitellä oikein
+        
+New     Aikavalvonnan laukeamisen käsittely waitForCardPayment -funktio
+
 Done    (1.1.0) Kassa ei muodosta maksupääteyhteyttä ei muodosteta automaattisesti
         Jos maksupääteyhteyttä ei ole, ei mitään maksua voi tehdä
 

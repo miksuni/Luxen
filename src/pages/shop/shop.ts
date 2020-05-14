@@ -63,6 +63,8 @@ export class ShopPage {
     
     paymentPollTimer;
     cardPurchaseGoingOn = false;
+    
+    soldItems: any;
 
     version = "Kassaversio 1.1.0";
 
@@ -100,8 +102,6 @@ export class ShopPage {
     giftCard2Originator: string = "";
     giftCard2AmountBefore: number = 0.0;
     giftCard2AmountAfter: number = 0.0;
-    cashPay: number = 0.0;
-    cardPay: number = 0.0;
     payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
     givenAmount = 0;
@@ -147,6 +147,7 @@ export class ShopPage {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
+        $( "#soldItems" ).hide();
         this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
@@ -212,6 +213,10 @@ export class ShopPage {
 
     onCashierSelected( $event ) {
         console.log( 'onCashierSelected' );
+        $( "#shopping_cart_area" ).show();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).hide();
+        $( "#soldItems" ).hide();
         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
         console.log( "selected index: " + e.selectedIndex );
         if ( e.selectedIndex > 0 ) {
@@ -224,6 +229,11 @@ export class ShopPage {
 
     onLogout() {
         console.log( '>> shop.onLogout' );
+        $( "#shopping_cart_area" ).show();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).hide();
+        $( "#soldItems" ).hide();
+        this.ptStatusMessage = "";
         if ( this.shoppingCart.hasContent() ) {
             this.presentPromptItemsInShoppingCart();
         } else {
@@ -377,7 +387,7 @@ export class ShopPage {
   		  this.getPaymentStatus();
           console.log("loop");
        }
-       //this.ptStatusMessage = "";
+       this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
     }
 
     clearPayments() {
@@ -443,6 +453,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).show();
+        $( "#soldItems" ).hide();
         //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -644,6 +655,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).show();
+        $( "#soldItems" ).hide();
         //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -663,6 +675,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
+        $( "#soldItems" ).hide();
     }
 
     showCombinedPayment() {
@@ -670,6 +683,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).show();
         $( "#receipt_view" ).hide();
+        $( "#soldItems" ).hide();
         this.toBePaid = this.totalSum;
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
@@ -691,8 +705,6 @@ export class ShopPage {
         this.giftCard2Originator = "";
         this.giftCard2AmountBefore = 0.0;
         this.giftCard2AmountAfter = 0.0;
-        this.cashPay = 0.0;
-        this.cardPay = 0.0;
         this.payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
         ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked = false;
@@ -707,6 +719,7 @@ export class ShopPage {
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
         $( "#receipt_view" ).hide();
+         $( "#soldItems" ).hide();
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
         }
@@ -981,6 +994,35 @@ export class ShopPage {
     }
 
     /******************************************************************************************/
+
+    getSoldItems() {
+        this.restProvider.sendRequest( 'sold_items', [] ).then(( result: any ) => {
+            this.soldItems = JSON.parse( result.result );
+            console.log( 'soldItems: ' + JSON.stringify( this.soldItems ) );
+        }, ( err ) => {
+            console.log( err );
+        } );
+    }
+    
+    onCheckPayments() {
+        console.log( 'onCheckPayments' );
+        $( "#shopping_cart_area" ).hide();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).hide();
+        $( "#soldItems" ).show();
+        this.getSoldItems();
+    }
+
+    onPurchaseSelected( productName, index ) {
+        console.log( '>> shop.onPurchaseSelected: ' + productName + ' index: ' + index );
+    }
+
+    closePurchasedItemsView() {
+        $( "#shopping_cart_area" ).show();
+        $( "#payment_data_area" ).hide();
+        $( "#receipt_view" ).hide();
+        $( "#soldItems" ).hide();
+    }
 
     sendEmail() {
         console.log( 'sendEmail' );

@@ -214,7 +214,6 @@
 							<tr class="cm_3">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm31" type="number"
-									[(ngModel)]="cashPay"
 									(ngModelChange)="cm31Listener($event)"></td>
 								<td></td>
 							</tr>
@@ -227,7 +226,6 @@
 							<tr class="cm_4">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm41" type="number"
-									[(ngModel)]="cardPay"
 									(ngModelChange)="cm41Listener($event)"></td>
 								<td></td>
 							</tr>
@@ -240,7 +238,6 @@
 							<tr class="cm_5">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm51" type="number"
-									[(ngModel)]="MobilePay"
 									(ngModelChange)="cm51Listener($event)"></td>
 								<td></td>
 							</tr>
@@ -317,6 +314,37 @@
                     </table>
                 </div>
                 <!-- RECEIPT end -->
+                
+                <!-- SOLD ITEMS start -->
+                <div id=soldItems>
+                    <table class="products">
+                        <caption>Tänään myydyt tuotteet</caption>
+                            <thead>
+                                <tr>
+                                    <th id="thProductName">Tuotenimi</th>
+                                    <th id="thInShelf">Määrä</th>
+                                    <th id="thSKC">Kuitti nr</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            <tr *ngFor="let element of soldItems; let i = index" [ngClass]="{'odd': 0 !== i % 2}"
+                                (click)="onPurchaseSelected(element.productName, i)">
+                                <td>{{element.productName}}</td>
+                                <td id="tdInShelf">{{element.quantity}}</td>
+                                <td id="tdSKC">{{element.receiptNr}}</td>
+                            </tr>
+                        </tbody>
+                        <tr>
+                            <td  class=receipt_line>
+                              <button ion-button class="product_line_button"
+                                  (click)="closePurchasedItemsView()">Sulje
+                              </button>
+                          </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- SOLD ITEMS end -->
+                
 			</td>
 
 			<!-- *** RIGHT PANEL *** -->
@@ -421,6 +449,13 @@
 					</td>
 				</tr>
 				<tr>
+                <tr>
+                    <td style="text-align: center">
+                        <button id="check_payments_button" ion-button class="product_line_button" (click)="onCheckPayments()">
+                        Tapahtumat</button>
+                    </td>
+                </tr>
+                <tr>
 				  <td class=version_id>{{version}}</td>
 				</tr>
 			</td>

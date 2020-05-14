@@ -17,7 +17,6 @@ import { ProductList } from '../providers/productlist/productlist';
 import { RestProvider } from '../providers/rest/rest';
 import { ShoppingcartProvider } from '../providers/shoppingcart/shoppingcart';
 import { ReportProvider } from '../providers/report/report';
-import { InlineWorker } from '../pages/shop/inlineworker';
 
 @NgModule( {
     declarations: [

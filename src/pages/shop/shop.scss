@@ -242,4 +242,64 @@ page-shop {
 	    text-align: right;
 	    font-size: 60%;
 	}
+    
+    // Sold items
+    
+    table.products {
+        margin: auto;
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #fff; /*for older IE*/
+        border-style: hidden;
+    }
+    
+    table.products caption {
+        background-color: #f79646;
+        color: #fff;
+        font-size: medium;
+        font-weight: bold;
+        letter-spacing: .3em;
+    }
+    
+    table.products thead th {
+        padding: 8px;
+        background-color: #fde9d9;
+        font-size: medium;
+    }
+    
+    table.products thead th#thProductName {
+        width: 40%; 
+    }
+    
+    table.products thead th#thInShelf, table.products thead th#thSKC {
+        width: 20%;
+    }
+    
+    table.products th, table.products td {
+        padding: 3px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #f79646 #ccc;
+    }
+    
+    //table.products td {
+    //  text-align: right;
+    //}
+    
+    table.products tbody td#tdInShelf, table.products tbody td#tdSKC {
+        text-align: center;
+    }
+    
+    table.products tbody th {
+        text-align: left;
+        font-weight: normal;
+    }
+    
+    //table.products tbody tr#k-alt:nth-child(odd) {
+    //  background: #CCC;
+    //}
+    
+    table.products tr.odd {
+        background-color: #fde9d9;
+    }
 }
