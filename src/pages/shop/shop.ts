@@ -37,6 +37,7 @@ export class ShopPage {
     sites = [{ id: 'Lahti' }];
     cashiers: any;
     currentState: any;
+    receiptNr: number = 0;
     orderList = { products: [] };
     chat = { from: '', message: '' };
     chatMessages: any;
@@ -61,11 +62,13 @@ export class ShopPage {
 	ptConnectionInitiated = false;
 	ptConnectionTerminated = false;
     
-    paymentPollTimer;
+    paymentPollTimer; // not in use currently
     cardPurchaseGoingOn = false;
     
     soldItems: any;
 
+    customerEmail = "";
+//placeholder="Tuotenumero" (click)="onInputClicked()"
     version = "Kassaversio 1.1.0";
 
     /*
@@ -102,7 +105,7 @@ export class ShopPage {
     giftCard2Originator: string = "";
     giftCard2AmountBefore: number = 0.0;
     giftCard2AmountAfter: number = 0.0;
-    payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+    payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // Used only with combined payment view
 
     givenAmount = 0;
     cashBack = 0;
@@ -147,7 +150,7 @@ export class ShopPage {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
@@ -216,7 +219,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
         console.log( "selected index: " + e.selectedIndex );
         if ( e.selectedIndex > 0 ) {
@@ -232,7 +235,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         this.ptStatusMessage = "";
         if ( this.shoppingCart.hasContent() ) {
             this.presentPromptItemsInShoppingCart();
@@ -443,8 +446,8 @@ export class ShopPage {
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
-        //this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
         this.receiptPaymentMethods = receiptData.items;
+        this.receiptNr = this.currentState.lastReceiptNr;
         console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
         this.shoppingCart.clearAll();
         this.clearPayments();
@@ -453,7 +456,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).show();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -627,9 +630,9 @@ export class ShopPage {
         /************************** Product return ***************************/
         // Special case and a bit different handling
         if ( this.productReturnValue < 0 ) {
-            var receiptItemData6 = {
+            var receiptItemData7 = {
                 sum: 0,
-                paymentMethod: 6,
+                paymentMethod: 7,
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -637,16 +640,16 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData6.sum = 0 - this.productReturnValue;
-            receiptItemData6.paymentMethod = 6;
-            receiptData.items.push( receiptItemData6 );
+            receiptItemData7.sum = 0 - this.productReturnValue;
+            receiptItemData7.paymentMethod = 7;
+            receiptData.items.push( receiptItemData7 );
         }
 
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
-        //this.receiptPaymentMethods = Array.from(this.shoppingCart.getPurchaseData().receiptData.items);
         this.receiptPaymentMethods = receiptData.items;
+        this.receiptNr = this.currentState.lastReceiptNr;
         console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
         this.shoppingCart.clearAll();
         this.clearPayments();
@@ -655,7 +658,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).show();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
@@ -672,18 +675,28 @@ export class ShopPage {
 
     handleReceipt() {
         console.log( 'handleReceipt' );
+        
+    }
+    
+    closeReceiptView() {
+        console.log( 'closeReceiptView' );
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
+        this.customerEmail = "";
     }
 
+    onCustomerEmailUpdated() {
+        console.log( 'onCustomerEmailUpdated: ' + this.customerEmail);
+    }
+    
     showCombinedPayment() {
         console.log( 'showCombinedPayment' );
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).show();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         this.toBePaid = this.totalSum;
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
@@ -719,7 +732,7 @@ export class ShopPage {
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
         $( "#receipt_view" ).hide();
-         $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
         }
@@ -996,8 +1009,15 @@ export class ShopPage {
     /******************************************************************************************/
 
     getSoldItems() {
+        console.log( 'getSoldItems' );
         this.restProvider.sendRequest( 'sold_items', [] ).then(( result: any ) => {
-            this.soldItems = JSON.parse( result.result );
+            var items = JSON.parse( result.result );
+            for (var i = 0; i < items.length; i++) {
+                const date = new Date(items[i].createdAt);
+                items[i].timeStr = date.toLocaleTimeString();
+                console.log("--" + items[i].timeStr);
+            }
+            this.soldItems = items;
             console.log( 'soldItems: ' + JSON.stringify( this.soldItems ) );
         }, ( err ) => {
             console.log( err );
@@ -1009,7 +1029,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).show();
+        $( "#sold_items" ).show();
         this.getSoldItems();
     }
 
@@ -1021,7 +1041,7 @@ export class ShopPage {
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
-        $( "#soldItems" ).hide();
+        $( "#sold_items" ).hide();
     }
 
     sendEmail() {
@@ -1718,6 +1738,7 @@ export class ShopPage {
     this.paymentPollTimer = null;
   }
   
+  // Not used yet
   startPaymentPoll() {
     if (!this.paymentPollTimer) {
       console.log('startPaymentPoll');
@@ -1728,6 +1749,7 @@ export class ShopPage {
     }
   }
   
+  // Not used yet
   stopPaymentPoll() {
     console.log('stopPaymenPoll');
     clearInterval(this.paymentPollTimer);

@@ -265,7 +265,7 @@
                 <div id="receipt_view" >
                     <table class="receipt">
                         <tr>
-                            <td colspan="4" class=receipt_line>Viimeisin kuitti:</td>
+                            <td colspan="4" class=receipt_line>Kuitti nr. {{receiptNr}}</td>
                         </tr>
                         <tr>
                             <th>Tuote</th>
@@ -297,8 +297,9 @@
                             <td class=receipt_line>{{item.sum}}</td>
                         </tr>
                         <tr>
-                           <td>
-                               sposti
+                           <td><ion-input type="email"
+                               [(ngModel)]="customerEmail"
+                               (ionChange)="onCustomerEmailUpdated()"></ion-input>
                            </td>
                            <td  class=receipt_line>
                               <button ion-button class="product_line_button"
@@ -307,7 +308,7 @@
                            </td>
                            <td  class=receipt_line>
                               <button ion-button class="product_line_button"
-                                    (click)="handleReceipt()">Sulje
+                                    (click)="closeReceiptView()">Sulje
                               </button>
                           </td>
                        </tr>
@@ -316,11 +317,12 @@
                 <!-- RECEIPT end -->
                 
                 <!-- SOLD ITEMS start -->
-                <div id=soldItems>
+                <div id=sold_items>
                     <table class="products">
                         <caption>Tänään myydyt tuotteet</caption>
                             <thead>
                                 <tr>
+                                    <th id="thProductName">Klo</th>
                                     <th id="thProductName">Tuotenimi</th>
                                     <th id="thInShelf">Määrä</th>
                                     <th id="thSKC">Kuitti nr</th>
@@ -329,6 +331,7 @@
                         <tbody>
                             <tr *ngFor="let element of soldItems; let i = index" [ngClass]="{'odd': 0 !== i % 2}"
                                 (click)="onPurchaseSelected(element.productName, i)">
+                                <td>{{element.timeStr}}</td>
                                 <td>{{element.productName}}</td>
                                 <td id="tdInShelf">{{element.quantity}}</td>
                                 <td id="tdSKC">{{element.receiptNr}}</td>
