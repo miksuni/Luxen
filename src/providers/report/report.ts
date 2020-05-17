@@ -331,4 +331,56 @@ export class ReportProvider {
             console.log( err );
         } );
     }
+    
+    makeReceipt(receiptData) {
+        
+        var currentDate = new Date().toLocaleDateString( 'fi-FI' );
+        var currentTime = new Date().toLocaleTimeString( 'fi-FI' );
+        var currentDateTime = currentDate.toString() + "   " + currentTime;
+        
+        var receiptRows = [];
+        var headerStr = [
+            "<html>",
+            "<body>",
+            "<h2>Julkaisumyyntikuitti</h2><small>",
+            currentDateTime,
+            "</small><hr>",
+            "<h3>Lahden seudun rauhanyhdistys r.y.</h3>",
+            "<table>",
+            "<tr>",
+            "<th align=\"left\">Tuote</th>",
+            "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Hinta</th>",
+            "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Määrä</th>",
+            "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Yhteensä</th>",
+            "</tr>"
+        ].join( '' );
+
+        console.log( headerStr );
+        
+        for (var i = 0; i < receiptData.purchasedItems.length; i++) {
+            receiptRows.push("<tr>");
+            receiptRows.push("<td>");
+            receiptRows.push(receiptData.purchasedItems[i].productName);
+            receiptRows.push("</td>");
+            receiptRows.push("<td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push(receiptData.purchasedItems[i].priceAsString);
+            receiptRows.push("</td>");
+            receiptRows.push("<td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push(receiptData.purchasedItems[i].quantity);
+            receiptRows.push("</td>");
+            receiptRows.push("<td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push(receiptData.purchasedItems[i].totalAsString);
+            receiptRows.push("</td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push("</tr>");
+        }
+        receiptRows.push("</table></body></html>");
+        
+        return headerStr + receiptRows.join( '' );
+    }
+    
+    sendReceipt(receiptData) {
+        console.log("sendReceipt");
+        console.log(JSON.stringify(receiptData));
+        console.log(this.makeReceipt(receiptData));
+    }
 }

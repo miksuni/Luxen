@@ -26,9 +26,6 @@ export class ShopPage {
     productNameInitials: string = "";
 
     cartContent = [];
-    //receiptContent = [];
-    //receiptPaymentMethods = [];
-    //purchaseData = { productList: [], receiptData: {} };
     purchasedItems = [];
     receiptPaymentMethods = [];
     
@@ -441,7 +438,6 @@ export class ShopPage {
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
         receiptData.items.push( receiptItemData );
-        //this.receiptPaymentMethods.push(receiptItemData);
 
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
@@ -675,7 +671,15 @@ export class ShopPage {
 
     handleReceipt() {
         console.log( 'handleReceipt' );
-        
+        var customerReceiptData = { receiptNr: 0,
+                                    purchasedItems: [],
+                                    receiptPaymentMethods: [],
+                                    recipient: "" };
+        customerReceiptData.receiptNr = this.receiptNr;
+        customerReceiptData.purchasedItems = this.purchasedItems;
+        customerReceiptData.receiptPaymentMethods = this.receiptPaymentMethods;
+        customerReceiptData.recipient = this.customerEmail;
+        this.reportProvider.sendReceipt(customerReceiptData);
     }
     
     closeReceiptView() {
