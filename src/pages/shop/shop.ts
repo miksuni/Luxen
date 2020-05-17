@@ -102,6 +102,9 @@ export class ShopPage {
     giftCard2Originator: string = "";
     giftCard2AmountBefore: number = 0.0;
     giftCard2AmountAfter: number = 0.0;
+    cashPay: number = 0.0;
+    cardPay: number = 0.0;
+    mobilePay: number = 0.0;
     payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // Used only with combined payment view
 
     givenAmount = 0;

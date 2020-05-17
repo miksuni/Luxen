@@ -214,6 +214,7 @@
 							<tr class="cm_3">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm31" type="number"
+                                    [(ngModel)]="cashPay"
 									(ngModelChange)="cm31Listener($event)"></td>
 								<td></td>
 							</tr>
@@ -226,6 +227,7 @@
 							<tr class="cm_4">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm41" type="number"
+                                    [(ngModel)]="cardPay"
 									(ngModelChange)="cm41Listener($event)"></td>
 								<td></td>
 							</tr>
@@ -238,6 +240,7 @@
 							<tr class="cm_5">
 								<td>Veloitus:</td>
 								<td><input class="cm_number" id="cm51" type="number"
+                                    [(ngModel)]="mobilePay"
 									(ngModelChange)="cm51Listener($event)"></td>
 								<td></td>
 							</tr>
