@@ -278,15 +278,15 @@
                         </tr>
                         <tr *ngFor="let item of purchasedItems let i = index">
                             <td class=receipt_line>{{item.productName}}</td>
-                            <td class=receipt_line>{{item.priceAsString}}</td>
-                            <td class=receipt_line>{{item.quantity}}</td>
-                            <td class=receipt_line>{{item.totalAsString}}</td>
+                            <td class=receipt_line>{{item.priceAsString}} €</td>
+                            <td class=receipt_line>{{item.quantity}} kpl</td>
+                            <td class=receipt_line>{{item.totalAsString}} €</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <th>{{receiptTotalSumAsString}}</th>
+                            <th>{{receiptTotalSumAsString}} €</th>
                         </tr>
                         <tr>
                             <td colspan="2" class=receipt_line>Maksutavat:</td>
@@ -295,9 +295,9 @@
                             <th>Maksutapa</th>
                             <th>Summa</th>
                         </tr>
-                        <tr *ngFor="let item of receiptPaymentMethods let i = index">
-                            <td class=receipt_line>{{item.paymentMethod}}</td>
-                            <td class=receipt_line>{{item.sum}}</td>
+                        <tr *ngFor="let item of receiptPaymentInfo let i = index">
+                            <td class=receipt_line>{{item.paymentMethodDescription}}</td>
+                            <td class=receipt_line>{{item.sumAsString}} €</td>
                         </tr>
                         <tr>
                            <td><ion-input type="email"

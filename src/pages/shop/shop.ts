@@ -27,7 +27,7 @@ export class ShopPage {
 
     cartContent = [];
     purchasedItems = [];
-    receiptPaymentMethods = [];
+    receiptPaymentInfo = [];
     
     searchResult: any;
 
@@ -425,6 +425,7 @@ export class ShopPage {
         var receiptItemData = {
             sum: 0,
             paymentMethod: 5,
+            paymentMethodDescription: "Ry:n oma osto",
             giftCard1Type: 0,
             handedTo: '',
             committee: '',
@@ -436,7 +437,7 @@ export class ShopPage {
         };
 
         receiptItemData.sum = this.payments[5];
-        receiptItemData.paymentMethod = 5;
+        //receiptItemData.paymentMethod = 5;
         receiptItemData.handedTo = handedTo;
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
@@ -445,9 +446,9 @@ export class ShopPage {
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
-        this.receiptPaymentMethods = receiptData.items;
+        this.receiptPaymentInfo = receiptData.items;
         this.receiptNr = this.currentState.lastReceiptNr;
-        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
+        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentInfo));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -536,50 +537,44 @@ export class ShopPage {
         /************************** Ry gift card ***************************/
         if ( this.payments[0] > 0 ) {
             var receiptItemData0 = {
-                sum: 0,
+                sum: this.payments[0],
+                sumAsString: this.payments[0].toFixed(2),
                 paymentMethod: 0,
-                giftCard1Type: 0,
-                receiver: '',
+                paymentMethodDescription: "Ry:n lahjakortti",
+                giftCard1Type: this.giftCard1Type,
+                receiver: this.giftCard1Receiver,
                 originator: '',
-                givenDate: '',
+                givenDate: this.giftCard1PurchaseDate,
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData0.sum = this.payments[0];
-            receiptItemData0.paymentMethod = 0;
-            receiptItemData0.giftCard1Type = this.giftCard1Type;
-            receiptItemData0.receiver = this.giftCard1Receiver;
-            receiptItemData0.givenDate = this.giftCard1PurchaseDate;
             receiptData.items.push( receiptItemData0 );
         }
 
         /************************** SRK gift card ***************************/
         if ( this.payments[1] > 0 ) {
             var receiptItemData1 = {
-                sum: 0,
+                sum: this.payments[1],
+                sumAsString: this.payments[1].toFixed(2),
                 paymentMethod: 1,
+                paymentMethodDescription: "SRK:n lahjakortti",
                 giftCard1Type: 0,
-                receiver: '',
-                originator: '',
-                givenDate: '',
-                valueBefore: 0,
-                valueAfter: 0
+                receiver: this.giftCard2Receiver,
+                originator: this.giftCard2Originator,
+                givenDate: this.giftCard2PurchaseDate,
+                valueBefore: this.giftCard2AmountBefore,
+                valueAfter: this.giftCard2AmountAfter
             };
-            receiptItemData1.sum = this.payments[1];
-            receiptItemData1.paymentMethod = 1;
-            receiptItemData1.receiver = this.giftCard2Receiver;
-            receiptItemData1.originator = this.giftCard2Originator;
-            receiptItemData1.givenDate = this.giftCard2PurchaseDate;
-            receiptItemData1.valueBefore = this.giftCard2AmountBefore;
-            receiptItemData1.valueAfter = this.giftCard2AmountAfter;
             receiptData.items.push( receiptItemData1 );
         }
 
         /************************** Cash ***************************/
         if ( this.payments[2] > 0 ) {
             var receiptItemData2 = {
-                sum: 0,
+                sum: this.payments[2],
+                sumAsString: this.payments[2].toFixed(2),
                 paymentMethod: 2,
+                paymentMethodDescription: "Käteinen",
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -587,16 +582,16 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData2.sum = this.payments[2];
-            receiptItemData2.paymentMethod = 2;
             receiptData.items.push( receiptItemData2 );
         }
 
         /************************** Payment card ***************************/
         if ( this.payments[3] > 0 ) {
             var receiptItemData3 = {
-                sum: 0,
+                sum: this.payments[3],
+                sumAsString: this.payments[3].toFixed(2),
                 paymentMethod: 3,
+                paymentMethodDescription: "Pankkikortti",
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -604,16 +599,16 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData3.sum = this.payments[3];
-            receiptItemData3.paymentMethod = 3;
             receiptData.items.push( receiptItemData3 );
         }
 
         /************************** MobilePay ***************************/
         if ( this.payments[4] > 0 ) {
             var receiptItemData4 = {
-                sum: 0,
+                sum: this.payments[4],
+                sumAsString: this.payments[4].toFixed(2),
                 paymentMethod: 4,
+                paymentMethodDescription: "MobilePay",
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -621,8 +616,6 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData4.sum = this.payments[4];
-            receiptItemData4.paymentMethod = 4;
             receiptData.items.push( receiptItemData4 );
         }
 
@@ -630,8 +623,10 @@ export class ShopPage {
         // Special case and a bit different handling
         if ( this.productReturnValue < 0 ) {
             var receiptItemData7 = {
-                sum: 0,
+                sum: 0 - this.productReturnValue,
+                sumAsString: (0 - this.productReturnValue).toFixed(2),
                 paymentMethod: 7,
+                paymentMethodDescription: "Tuotepalautus",
                 giftCard1Type: 0,
                 receiver: '',
                 originator: '',
@@ -639,17 +634,15 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptItemData7.sum = 0 - this.productReturnValue;
-            receiptItemData7.paymentMethod = 7;
             receiptData.items.push( receiptItemData7 );
         }
 
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
         console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
-        this.receiptPaymentMethods = receiptData.items;
+        this.receiptPaymentInfo = receiptData.items;
         this.receiptNr = this.currentState.lastReceiptNr;
-        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentMethods));
+        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentInfo));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -676,11 +669,11 @@ export class ShopPage {
         console.log( 'handleReceipt' );
         var customerReceiptData = { receiptNr: 0,
                                     purchasedItems: [],
-                                    receiptPaymentMethods: [],
+                                    receiptPaymentInfo: [],
                                     recipient: "" };
         customerReceiptData.receiptNr = this.receiptNr;
         customerReceiptData.purchasedItems = this.purchasedItems;
-        customerReceiptData.receiptPaymentMethods = this.receiptPaymentMethods;
+        customerReceiptData.receiptPaymentInfo = this.receiptPaymentInfo;
         customerReceiptData.recipient = this.customerEmail;
         this.reportProvider.sendReceipt(customerReceiptData);
     }
@@ -1500,9 +1493,10 @@ export class ShopPage {
                     text: 'Veloitukset suoritettu',
                     handler: () => {
                         console.log( 'Confirm Ok' );
-                        //this.combinedPayment(); // needed if old pt 
                         if ( this.payments[3] > 0 ) {
                             this.presentPromptDoPaymentCardPayment();
+                        } else {
+                            this.combinedPayment();
                         }
                     }
                 },

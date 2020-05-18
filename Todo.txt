@@ -9,7 +9,6 @@ Done	(1.0.3) Jos ei myyntiä -> ei raporttia (ohjetekstistä voi ottaa ko. osuud
 
 Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
 
-
 Bugit
 ========
 
@@ -18,6 +17,8 @@ New     _CloseReason käsittely. Jos transaktio meneillään pitää tässä til
         Kommentti: JOS (ei ole varmaa) ws.readyState ei palauta oikeaa arvoa hankala käsitellä oikein
         
 New     Aikavalvonnan laukeamisen käsittely waitForCardPayment -funktio
+
+Done    (1.1.0) Tehty loppuun keskeneräiseksi jäänyt combined payment
 
 Done    (1.1.0) Kassa ei muodosta maksupääteyhteyttä ei muodosteta automaattisesti
         Jos maksupääteyhteyttä ei ole, ei mitään maksua voi tehdä
