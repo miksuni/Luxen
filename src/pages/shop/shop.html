@@ -300,13 +300,21 @@
                             <td class=receipt_line>{{item.sumAsString}} €</td>
                         </tr>
                         <tr>
+                        </tr>
+                        <tr>
+                            <td>PK-osto</td>
+                        </tr>
+                        <tr>
+                            <td class=pt_status_text>{{lastPtMerchantReceipt}}</td>
+                        </tr>
+                        <tr>
                            <td><ion-input type="email"
                                [(ngModel)]="customerEmail"
                                (ionChange)="onCustomerEmailUpdated()"></ion-input>
                            </td>
                            <td  class=receipt_line>
                               <button ion-button class="product_line_button"
-                                    (click)="handleReceipt()">Lähetä kuitti
+                                    (click)="sendReceipt()">Lähetä kuitti
                               </button>
                            </td>
                            <td  class=receipt_line>

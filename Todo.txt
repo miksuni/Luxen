@@ -1,5 +1,8 @@
 Featuret
 ========
+
+ToDo    (x.x.x) Viimeistele kuitti
+
 Done	(1.0.3) Ryn: oma osto valmiiksi
 Done	(1.0.3) Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
 Done	(1.0.3) MobilePay tuki
@@ -15,7 +18,8 @@ Bugit
 New     _CloseReason käsittely. Jos transaktio meneillään pitää tässä tilanteessa palauttaa virhestatus.
         Nyt ei tehdä mitään --> POS jää odottaamaan loputtomiin
         Kommentti: JOS (ei ole varmaa) ws.readyState ei palauta oikeaa arvoa hankala käsitellä oikein
-        
+        Kommentti: toistuu silloin tällöin. Pitäisi fixata
+
 New     Aikavalvonnan laukeamisen käsittely waitForCardPayment -funktio
 
 Done    (1.1.0) Tehty loppuun keskeneräiseksi jäänyt combined payment

@@ -61,6 +61,8 @@ export class ShopPage {
     
     paymentPollTimer; // not in use currently
     cardPurchaseGoingOn = false;
+    lastPtMerchantReceipt: any;
+    lastPtCustomerReceipt: any;
     
     soldItems: any;
 
@@ -665,7 +667,7 @@ export class ShopPage {
         }, 2000 );
     }
 
-    handleReceipt() {
+    sendReceipt() {
         console.log( 'handleReceipt' );
         var customerReceiptData = { receiptNr: 0,
                                     purchasedItems: [],
@@ -1706,6 +1708,13 @@ export class ShopPage {
                     if (this.cardPurchaseGoingOn) {
                         this.cardPurchaseGoingOn = false;
                         this.combinedPayment();
+                        this.restProvider.sendRequest( 'get_receipt_text', [] ).then(( result: any ) => {
+                            var lastPtResult = JSON.parse( result.result );
+                            console.log( 'merchant text: ' + lastPtResult.merchantReceipt );
+                            this.lastPtMerchantReceipt = lastPtResult.merchantReceipt;
+                        }, ( err ) => {
+                            console.log( err );
+                        } );
                     }
                 break;
                 case 1:

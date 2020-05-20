@@ -336,18 +336,21 @@ export class ReportProvider {
         
         var currentDate = new Date().toLocaleDateString( 'fi-FI' );
         var currentTime = new Date().toLocaleTimeString( 'fi-FI' );
-        var currentDateTime = currentDate.toString() + "   " + currentTime;
-        
+        var currentDateTime = currentDate.toString() + "   " + currentTime; 
         var receiptRows = [];
+        
+        // caption
         var headerStr = [
-            "<html>",
-            "<body>",
-            "<h2>Julkaisumyyntikuitti</h2><small>",
+            "<html><body>",
+            "<h2>Julkaisumyyntikuitti",
+            " (",
+            receiptData.receiptNr,
+            ")",
+            "</h2><small>",
             currentDateTime,
             "</small><hr>",
             "<h3>Lahden seudun rauhanyhdistys r.y.</h3>",
-            "<table>",
-            "<tr>",
+            "<table><tr>",
             "<th align=\"left\">Tuote</th>",
             "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Hinta</th>",
             "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Määrä</th>",
@@ -355,24 +358,33 @@ export class ReportProvider {
             "</tr>"
         ].join( '' );
 
-        console.log( headerStr );
         
+        // products
         for (var i = 0; i < receiptData.purchasedItems.length; i++) {
-            receiptRows.push("<tr>");
-            receiptRows.push("<td>");
+            receiptRows.push("<tr><td>");
             receiptRows.push(receiptData.purchasedItems[i].productName);
-            receiptRows.push("</td>");
-            receiptRows.push("<td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
             receiptRows.push(receiptData.purchasedItems[i].priceAsString);
-            receiptRows.push("</td>");
-            receiptRows.push("<td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
             receiptRows.push(receiptData.purchasedItems[i].quantity);
-            receiptRows.push("</td>");
-            receiptRows.push("<td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push(" kpl</td><td style=\"padding:0px 0px 0px 10px\">");
             receiptRows.push(receiptData.purchasedItems[i].totalAsString);
-            receiptRows.push("</td style=\"padding:0px 0px 0px 10px\">");
-            receiptRows.push("</tr>");
+            receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
         }
+        receiptRows.push("</table><br>");
+        
+        // payment methods
+        receiptRows.push("<table><tr>");
+        receiptRows.push("<th align=\"left\">Maksutavat</th>");
+        receiptRows.push("<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Summa</th>");
+        for (var i = 0; i < receiptData.receiptPaymentInfo.length; i++) {
+            receiptRows.push("<tr><td>");
+            receiptRows.push(receiptData.receiptPaymentInfo[i].paymentMethodDescription);
+            receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
+            receiptRows.push(receiptData.receiptPaymentInfo[i].sumAsString);
+            receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
+        }
+        
         receiptRows.push("</table></body></html>");
         
         return headerStr + receiptRows.join( '' );
@@ -381,6 +393,18 @@ export class ReportProvider {
     sendReceipt(receiptData) {
         console.log("sendReceipt");
         console.log(JSON.stringify(receiptData));
-        console.log(this.makeReceipt(receiptData));
+        var receiptStr = this.makeReceipt(receiptData);
+        console.log(receiptStr);
+        
+        this.reportMessage.subject = "Julkaisumyyntikuitti";
+        this.reportMessage.content =  receiptStr;
+        this.reportMessage.recipient = receiptData.recipient;
+        this.reportMessage.format = "text/html";
+        
+        this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
+            console.log( 'order info mail sent' );
+        }, ( err ) => {
+            console.log( err );
+        } );
     }
 }

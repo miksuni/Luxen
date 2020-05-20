@@ -116,13 +116,6 @@ page-shop {
 		background-color: #9fc9b8;
 	}
 
-	.receipt {
-		margin-top: 10px;
-        width: 100%;
-		//margin-left: 10px;
-		background-color: #fafaff;
-	}
-
 	.cart {
 	    font-size: 70%;
         border: 2px solid #aaaaaa;
@@ -170,14 +163,21 @@ page-shop {
 	//    width:80px;
 	//}
 	
-	.receipt {
-	    //font-size: 70%;
-	}
+    .receipt {
+        margin-top: 10px;
+        width: 100%;
+        //margin-left: 10px;
+        background-color: #fafaff;
+    }
 	
 	.receipt_line {
 		padding: 1px 5px 1px 5px;
 	}
 	
+    .pt_status_text {
+        white-space:pre
+    }
+    
 	.icon_padding {
 		margin-right: 10px;
 	}
