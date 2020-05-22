@@ -166,7 +166,6 @@ page-shop {
     .receipt {
         margin-top: 10px;
         width: 100%;
-        //margin-left: 10px;
         background-color: #fafaff;
     }
 	
@@ -175,7 +174,10 @@ page-shop {
 	}
 	
     .pt_status_text {
-        white-space:pre
+        white-space:pre;
+        padding: 1px 5px 1px 5px;
+        font-family: "Lucida Console", Courier, monospace;
+        font-size: 70%;
     }
     
 	.icon_padding {

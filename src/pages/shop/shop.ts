@@ -669,14 +669,12 @@ export class ShopPage {
 
     sendReceipt() {
         console.log( 'handleReceipt' );
-        var customerReceiptData = { receiptNr: 0,
-                                    purchasedItems: [],
-                                    receiptPaymentInfo: [],
-                                    recipient: "" };
-        customerReceiptData.receiptNr = this.receiptNr;
-        customerReceiptData.purchasedItems = this.purchasedItems;
-        customerReceiptData.receiptPaymentInfo = this.receiptPaymentInfo;
-        customerReceiptData.recipient = this.customerEmail;
+        var customerReceiptData = { receiptNr: this.receiptNr,
+                                    totalSum: this.receiptTotalSumAsString,
+                                    purchasedItems: this.purchasedItems,
+                                    receiptPaymentInfo: this.receiptPaymentInfo,
+                                    ptCustomerText: this.lastPtCustomerReceipt,
+                                    recipient: this.customerEmail };
         this.reportProvider.sendReceipt(customerReceiptData);
     }
     
@@ -1712,6 +1710,8 @@ export class ShopPage {
                             var lastPtResult = JSON.parse( result.result );
                             console.log( 'merchant text: ' + lastPtResult.merchantReceipt );
                             this.lastPtMerchantReceipt = lastPtResult.merchantReceipt;
+                            this.lastPtCustomerReceipt = lastPtResult.customerReceipt;
+                            console.log("Custormer receuot " + this.lastPtCustomerReceipt);
                         }, ( err ) => {
                             console.log( err );
                         } );

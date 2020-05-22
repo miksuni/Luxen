@@ -371,7 +371,9 @@ export class ReportProvider {
             receiptRows.push(receiptData.purchasedItems[i].totalAsString);
             receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
         }
-        receiptRows.push("</table><br>");
+        receiptRows.push("<tr><td></td><td></td><td></td><th>");
+        receiptRows.push(receiptData.totalSum);
+        receiptRows.push(" €</th></tr></table><br>");
         
         // payment methods
         receiptRows.push("<table><tr>");
@@ -384,8 +386,10 @@ export class ReportProvider {
             receiptRows.push(receiptData.receiptPaymentInfo[i].sumAsString);
             receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
         }
-        
-        receiptRows.push("</table></body></html>");
+        receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;'>Maksukortti</td></tr>");
+        receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;white-space:pre;'>");
+        receiptRows.push(receiptData.ptCustomerText);
+        receiptRows.push("</td></tr></table></body></html>");
         
         return headerStr + receiptRows.join( '' );
     }
