@@ -338,6 +338,7 @@ export class ReportProvider {
         var currentTime = new Date().toLocaleTimeString( 'fi-FI' );
         var currentDateTime = currentDate.toString() + "   " + currentTime; 
         var receiptRows = [];
+        var cardPaymentIncluded = false;
         
         // caption
         var headerStr = [
@@ -385,10 +386,15 @@ export class ReportProvider {
             receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
             receiptRows.push(receiptData.receiptPaymentInfo[i].sumAsString);
             receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
+            if (receiptData.receiptPaymentInfo[i].paymentMethod == 3) {
+                cardPaymentIncluded = true;
+            }
         }
-        receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;'>Maksukortti</td></tr>");
-        receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;white-space:pre;'>");
-        receiptRows.push(receiptData.ptCustomerText);
+        if (cardPaymentIncluded) {
+            receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;'>Maksukortti</td></tr>");
+            receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;white-space:pre;'>");
+            receiptRows.push(receiptData.ptCustomerText);
+        }
         receiptRows.push("</td></tr></table></body></html>");
         
         return headerStr + receiptRows.join( '' );

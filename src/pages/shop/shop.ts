@@ -426,6 +426,7 @@ export class ShopPage {
 
         var receiptItemData = {
             sum: 0,
+            sumAsString: this.payments[5].toFixed(2),
             paymentMethod: 5,
             paymentMethodDescription: "Ry:n oma osto",
             giftCard1Type: 0,
@@ -676,8 +677,9 @@ export class ShopPage {
                                     ptCustomerText: this.lastPtCustomerReceipt,
                                     recipient: this.customerEmail };
         this.reportProvider.sendReceipt(customerReceiptData);
+        this.presentPromptReceiptSent();
     }
-    
+
     closeReceiptView() {
         console.log( 'closeReceiptView' );
         $( "#shopping_cart_area" ).show();
@@ -690,7 +692,12 @@ export class ShopPage {
     onCustomerEmailUpdated() {
         console.log( 'onCustomerEmailUpdated: ' + this.customerEmail);
     }
-    
+
+    checkIfReceiptSendingEnabled() {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return !re.test(String(this.customerEmail).toLowerCase());
+    }
+
     showCombinedPayment() {
         console.log( 'showCombinedPayment' );
         $( "#shopping_cart_area" ).hide();
@@ -719,6 +726,8 @@ export class ShopPage {
         this.giftCard2AmountBefore = 0.0;
         this.giftCard2AmountAfter = 0.0;
         this.payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+        this.lastPtCustomerReceipt = "";
+        this.lastPtMerchantReceipt = "";
 
         ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked = false;
         ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked = false;
@@ -1561,6 +1570,23 @@ export class ShopPage {
                     text: 'Sulje ohje',
                     handler: () => {
                         console.log( 'Confirm Ok' );
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+
+    presentPromptReceiptSent() {
+        let alert = this.alertController.create( {
+            title: 'Lähetetty',
+            message: "Kuitti lähetetty osoitteeseen " + this.customerEmail,
+            buttons: [
+                {
+                    text: 'Sulje ohje',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                        this.closeReceiptView();
                     }
                 }
             ]

@@ -314,7 +314,8 @@
                            </td>
                            <td  class=receipt_line>
                               <button ion-button class="product_line_button"
-                                    (click)="sendReceipt()">Lähetä kuitti
+                                  [disabled]="checkIfReceiptSendingEnabled()"
+                                  (click)="sendReceipt()">Lähetä kuitti
                               </button>
                            </td>
                            <td  class=receipt_line>
