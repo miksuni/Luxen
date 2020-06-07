@@ -15,8 +15,8 @@ export class ReportProvider {
     reportMessage = { recipient: '', subject: '', content: '', format: '' };
     dbDump = { dbentry: '' };
 
-    //transactionReportAddress = "lahdenry.laskut@gmail.com";
-    transactionReportAddress = "mikko.m.suni@gmail.com";
+    transactionReportAddress = "lahdenry.laskut@gmail.com";
+    //transactionReportAddress = "mikko.m.suni@gmail.com";
     productsToBeOrderedReportAddress = "mikko.m.suni@gmail.com";
     adminEmail = "mikko.m.suni@gmail.com";
 

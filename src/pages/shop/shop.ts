@@ -122,6 +122,9 @@ export class ShopPage {
     cashier = "";
 
     loadingIndicator: any;
+    
+    ptMaxLoopCount = 50;
+    ptWaitingTime = 2000000; // Purchase request does not time out
 
     constructor( public navCtrl: NavController,
         public navParams: NavParams,
@@ -232,22 +235,28 @@ export class ShopPage {
         }
     }
 
-    onLogout() {
-        console.log( '>> shop.onLogout' );
+    logout(forcedLogout) {
+        console.log( '>> shop.logout' );
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
         $( "#sold_items" ).hide();
         this.ptStatusMessage = "";
-        if ( this.shoppingCart.hasContent() ) {
+        if ( this.shoppingCart.hasContent() && !forcedLogout ) {
             this.presentPromptItemsInShoppingCart();
         } else {
             var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
             e.selectedIndex = 0;
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         }
-        this.disconnectPt();
+        this.disconnectPt(); 
+    }
+
+    onLogout() {
+        console.log( '>> shop.onLogout' );
+        this.logout(false);
         this.presentPromptSendReport();
+        
         //this.reportProvider.sendToBeOrderedReport();
         // TODO: ACTIVATE IN PRODUCTION
         /*this.orderList.products = this.productList.getProductsBelowCount(2);
@@ -381,9 +390,10 @@ export class ShopPage {
     }
 
     async waitForCardPayment() {
-	  for (let i = 0; i < 50 && this.transactionStatus !== 0; i++) {
+      var i;
+	  for (i = 0; i < this.ptMaxLoopCount && this.transactionStatus !== 0; i++) {
          let promise = new Promise((res, rej) => {
-             setTimeout(() => res("loop"), 2000)
+             setTimeout(() => res("loop"), this.ptWaitingTime)
           });
 
           // wait until the promise returns us a value
@@ -392,7 +402,10 @@ export class ShopPage {
   		  this.getPaymentStatus();
           console.log("loop");
        }
-       this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
+       if (i >= this.ptMaxLoopCount) {
+          this.presentPromptPtTimeOut();
+          console.log("timeout in pt status");
+       }
     }
 
     clearPayments() {
@@ -1409,6 +1422,7 @@ export class ShopPage {
                         console.log( 'Confirm Ok' );
                         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
                         e.selectedIndex = 0;
+                        ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
                         this.shoppingCart.clearAll();
                         this.cancelCombinedPayment();
                     }
@@ -1594,6 +1608,25 @@ export class ShopPage {
         alert.present();
     }
 
+    presentPromptPtTimeOut() {
+        let alert = this.alertController.create( {
+            title: 'Aikavalvontakatkaisu',
+            message: "Korttimaksu perutaan aikavalvonnan laukeamisen takia.<p>" + 
+                     " Kirjaudu sovelluksesta ulos ja sitten takaisin sisään avataksesi " +
+                     " maksupääteyhteyden uudelleen",
+            buttons: [
+                {
+                    text: 'Kirjaudu ulos',
+                    handler: () => {
+                        console.log( 'Confirm Ok' );
+                        this.logout(true);
+                    }
+                }
+            ]
+        } );
+        alert.present();
+    }
+
     presentLoading( text ) {
         this.loadingIndicator = this.loadingCtrl.create( {
             content: text
@@ -1717,6 +1750,12 @@ export class ShopPage {
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
             console.log( '>> PT status received: ' + result.result);
             const ptStatus = JSON.parse(result.result);
+            
+            if (ptStatus.connectionClosedByPeer) {
+                this.ptStatusMessage = "Yhteys maksupäätteeseen katkennut";
+                return;
+            }
+            
             //const ptConnectionStatus = ptStatus.wsstatus;
             this.transactionStatus = ptStatus.transactionStatus;
             this.ptStatusMessage = ptStatus.posMessage;
@@ -1725,7 +1764,7 @@ export class ShopPage {
             // payment status
             switch(this.cardPaymentStatus) {
                 case -1:
-                    console.log("card payment ");
+                    console.log("error in gettin pt status");
                 break;
                 case 0:
                     console.log("card payment ok");

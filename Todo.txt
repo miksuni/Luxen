@@ -1,8 +1,7 @@
 Featuret
 ========
 
-ToDo    (x.x.x) Viimeistele kuitti (lähetä kuitti nappula enabloitu vasta kun email annettu + vahvistus lähetyksestä + sulkeutuu
-Jos ry:n oma osto niin maksutapalistassa ei näyt summaa
+Jos ry:n oma osto niin maksutapalistassa ei näy summaa
 
 Done	(1.0.3) Ryn: oma osto valmiiksi
 Done	(1.0.3) Tiedot lahjakortista (syntymäpäivä, vaulavahja) raporttiin
@@ -16,12 +15,16 @@ Combined payment: Ry lahjakortti Annettu pvm --> Kortti annettu
 Bugit
 ========
 
-New     _CloseReason käsittely. Jos transaktio meneillään pitää tässä tilanteessa palauttaa virhestatus.
+
+
+New     Aikavalvonnan laukeamisen käsittely waitForCardPayment -funktio
+
+Done     _CloseReason käsittely. Jos transaktio meneillään pitää tässä tilanteessa palauttaa virhestatus.
         Nyt ei tehdä mitään --> POS jää odottaamaan loputtomiin
         Kommentti: JOS (ei ole varmaa) ws.readyState ei palauta oikeaa arvoa hankala käsitellä oikein
         Kommentti: toistuu silloin tällöin. Pitäisi fixata
-
-New     Aikavalvonnan laukeamisen käsittely waitForCardPayment -funktio
+        Fixattu palauttamalla tieto getPTStatus funktiossa jos yhteys katkennut (näytetään
+        myös UI:ssä=
 
 Done    Keepalive tulee joskus 2 kertaa peräkkäin jolloin PT taustajärjestelmä katkaisee yhteyden
         Backend: Lisätty tarkistus ettei lähetetä samaa id:tä uudelleen
