@@ -190,4 +190,12 @@ export class AdminPage {
 	        console.log('catch in disconnect');
 	    } )
     }
+    
+    doPtTest() {
+        this.restProvider.sendRequest( 'test', [] ).then(( result: any ) => {
+            console.log( '>> admin: test' );
+        }, ( err ) => {
+            console.log( err );
+        } );
+    }
 }
