@@ -65,10 +65,15 @@ export class ShopPage {
     lastPtCustomerReceipt: any;
     
     soldItems: any;
+    
+    // for checking the last payment card purhcase
+    lastCardPaymentAmount = 0;
+    lastCardPaymentReceiptId = 0;
+    cardPurchaseCheckingGoingOn = false;
 
     customerEmail = "";
-//placeholder="Tuotenumero" (click)="onInputClicked()"
-    version = "Kassaversio 1.1.0";
+
+    version = "Kassaversio 1.1.1-a";
 
     /*
     paymentInfo = {
@@ -122,9 +127,6 @@ export class ShopPage {
     cashier = "";
 
     loadingIndicator: any;
-    
-    ptMaxLoopCount = 50;
-    ptWaitingTime = 2000000; // Purchase request does not time out
 
     constructor( public navCtrl: NavController,
         public navParams: NavParams,
@@ -168,6 +170,7 @@ export class ShopPage {
         ( <HTMLInputElement>document.getElementById( "cm51" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "product_return_button" ) ).disabled = true;
+        ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = true;
         this.productList.getProductInfo();
         this.shoppingCart.clearAll();
         this.cartContent = this.shoppingCart.getProducts();
@@ -230,6 +233,7 @@ export class ShopPage {
         if ( e.selectedIndex > 0 ) {
             //e.disabled = false; // does now work
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
+            ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = false;
             //this.connectPt();
             this.startPtConnectionPoll();
         }
@@ -249,7 +253,11 @@ export class ShopPage {
             e.selectedIndex = 0;
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         }
-        this.disconnectPt(); 
+        this.disconnectPt();
+        this.cardPaymentEnabled = false;
+        this.cashPaymentEnabled = false;
+        this.combinedPaymentEnabled = false;
+        ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = true;
     }
 
     onLogout() {
@@ -378,6 +386,9 @@ export class ShopPage {
             console.log( '>> card payment result received' );
             this.payments[3] = sum;
             this.cardPurchaseGoingOn = true;
+            // save for possible payment check
+            this.lastCardPaymentAmount = sum;
+            this.lastCardPaymentReceiptId = this.currentState.lastReceiptNr;
         }, ( err ) => {
             console.log( 'error in purchase: ' + err );
         } )
@@ -389,11 +400,31 @@ export class ShopPage {
         console.log("==========card payment done");
     }
 
+    async checkLastCardPayment() {
+        console.log( 'checkLastCardPayment' );
+        //this.transactionStatus = -1;
+        this.cardPurchaseCheckingGoingOn = true;
+        this.restProvider.sendRequest( 'check_last_purchase',
+                                     { "amount": this.lastCardPaymentAmount,
+                                       "receiptId": this.lastCardPaymentReceiptId } ).then(( result: any ) => {
+            console.log( '>> check payment result received' );
+            //this.cardPurchaseCheckingGoingOn = true;
+        }, ( err ) => {
+            console.log( 'error in check: ' + err );
+        } )
+        .catch((result:any) => {
+            console.log('catch in check');
+        } )
+
+        this.waitForCardPaymentCheck();
+        console.log("payment checked");
+    }
+    
     async waitForCardPayment() {
-      var i;
-	  for (i = 0; i < this.ptMaxLoopCount && this.transactionStatus !== 0; i++) {
+      console.log( 'waitForCardPayment' );
+	  for (let i = 0; i < 1000 && this.transactionStatus !== 0; i++) {
          let promise = new Promise((res, rej) => {
-             setTimeout(() => res("loop"), this.ptWaitingTime)
+             setTimeout(() => res("loop purchase response"), 2000)
           });
 
           // wait until the promise returns us a value
@@ -402,12 +433,25 @@ export class ShopPage {
   		  this.getPaymentStatus();
           console.log("loop");
        }
-       if (i >= this.ptMaxLoopCount) {
-          this.presentPromptPtTimeOut();
-          console.log("timeout in pt status");
-       }
+       this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
     }
 
+    async waitForCardPaymentCheck() {
+      console.log( 'waitForCardPaymentCheck' );
+      for (let i = 0; i < 1000 && this.cardPurchaseCheckingGoingOn; i++) {
+         let promise = new Promise((res, rej) => {
+             setTimeout(() => res("loop check response"), 2000)
+          });
+
+          // wait until the promise returns us a value
+          let result = await promise;
+          console.log(result)
+          this.getPaymentStatus();
+          console.log("loop");
+       }
+       this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
+    }
+    
     clearPayments() {
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
@@ -1041,6 +1085,7 @@ export class ShopPage {
             }
             this.soldItems = items;
             console.log( 'soldItems: ' + JSON.stringify( this.soldItems ) );
+            this.checkLastCardPayment();
         }, ( err ) => {
             console.log( err );
         } );
@@ -1764,7 +1809,7 @@ export class ShopPage {
             // payment status
             switch(this.cardPaymentStatus) {
                 case -1:
-                    console.log("error in gettin pt status");
+                    console.log("error in getting pt status");
                 break;
                 case 0:
                     console.log("card payment ok");
@@ -1785,6 +1830,10 @@ export class ShopPage {
                 case 1:
                     console.log("processing card payment...");
                 break;
+            }
+            
+            if (this.cardPurchaseCheckingGoingOn) {
+               this.cardPurchaseCheckingGoingOn = false;
             }
             
         }, ( err ) => {
