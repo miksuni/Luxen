@@ -73,7 +73,7 @@ export class ShopPage {
 
     customerEmail = "";
 
-    version = "Kassaversio 1.1.1-a";
+    version = "Kassaversio 1.1.1-b";
 
     /*
     paymentInfo = {
@@ -246,6 +246,7 @@ export class ShopPage {
         $( "#receipt_view" ).hide();
         $( "#sold_items" ).hide();
         this.ptStatusMessage = "";
+        this.productNameInitials = "";
         if ( this.shoppingCart.hasContent() && !forcedLogout ) {
             this.presentPromptItemsInShoppingCart();
         } else {
