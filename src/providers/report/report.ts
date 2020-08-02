@@ -34,8 +34,7 @@ export class ReportProvider {
         if ( testModeActivated ) {
             this.transactionReportAddress = "mikko.m.suni@gmail.com";
         } else {
-            //this.transactionReportAddress = "lahdenry.laskut@gmail.com";
-            this.transactionReportAddress = "mikko.m.suni@gmail.com";
+            this.transactionReportAddress = "lahdenry.laskut@gmail.com";
         }
         this.testMode = testModeActivated;
     }
@@ -412,7 +411,7 @@ export class ReportProvider {
         this.reportMessage.format = "text/html";
         
         this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
-            console.log( 'order info mail sent' );
+            console.log( 'receipt mail sent' );
         }, ( err ) => {
             console.log( err );
         } );

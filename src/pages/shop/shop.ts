@@ -52,6 +52,7 @@ export class ShopPage {
 	transactionStatus = 0;
     cardPaymentStatus = 0;
 
+    ptInUse = false;
     ptConnected = false;
 	ptStatusIcon = "alert";
 	ptStatusIconColor = "dark";
@@ -73,7 +74,7 @@ export class ShopPage {
 
     customerEmail = "";
 
-    version = "Kassaversio 1.1.1-b";
+    version = "Kassaversio 1.1.3";
 
     /*
     paymentInfo = {
@@ -179,10 +180,15 @@ export class ShopPage {
 		//this.getPTStatus();
         //this.getChat();
         this.update();
+        //this.setPtInUse(true);
     }
 
     testModelChanged( $event ) {
         console.log( '>> testModelChanged: ' + $event )
+    }
+
+    setPtInUse(ptInUse: boolean) {
+        this.ptInUse = ptInUse;
     }
 
     getCashiers() {
@@ -235,7 +241,9 @@ export class ShopPage {
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
             ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = false;
             //this.connectPt();
-            this.startPtConnectionPoll();
+            if (this.ptInUse) {
+                this.startPtConnectionPoll();
+            }
         }
     }
 
@@ -380,25 +388,28 @@ export class ShopPage {
         console.log( 'cardPayment' );
         this.transactionStatus = -1;
         this.shoppingCart.setCashier( this.cashier );
-        //this.presentPromptPaymentCardInstructions(); // to be used only with old card reader
-		this.restProvider.sendRequest( 'purchase',
-									 { "amount": sum,
-		                   			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
-            console.log( '>> card payment result received' );
-            this.payments[3] = sum;
-            this.cardPurchaseGoingOn = true;
-            // save for possible payment check
-            this.lastCardPaymentAmount = sum;
-            this.lastCardPaymentReceiptId = this.currentState.lastReceiptNr;
-        }, ( err ) => {
-            console.log( 'error in purchase: ' + err );
-        } )
-	    .catch((result:any) => {
-	        console.log('catch in purchase');
-	    } )
+        if (!this.ptInUse) {
+            this.presentPromptPaymentCardInstructions(sum); // to be used only with old card reader
+        } else {
+		    this.restProvider.sendRequest( 'purchase',
+			    						 { "amount": sum,
+		                       			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
+                console.log( '>> card payment result received' );
+                this.payments[3] = sum;
+                this.cardPurchaseGoingOn = true;
+                // save for possible payment check
+                this.lastCardPaymentAmount = sum;
+                this.lastCardPaymentReceiptId = this.currentState.lastReceiptNr;
+            }, ( err ) => {
+                console.log( 'error in purchase: ' + err );
+            } )
+	        .catch((result:any) => {
+	            console.log('catch in purchase');
+	        } )
 
-        this.waitForCardPayment();
-        console.log("==========card payment done");
+            this.waitForCardPayment();
+            console.log("==========card payment done");
+        }
     }
 
     async checkLastCardPayment() {
@@ -557,10 +568,12 @@ export class ShopPage {
         if ( this.payments[2] > 0 ) {
             str += ( count++ + ". Suorita käteisveloitus<br>" );
         }
-        // with old pt:
-        //if ( this.payments[3] > 0 ) {
-        //    str += ( count++ + ". Suorita pankkikorttiveloitus<br>" );
-        //}
+        /*if (!this.ptInUse) {
+            // with old pt:
+            if ( this.payments[3] > 0 ) {
+                str += ( count++ + ". Suorita pankkikorttiveloitus<br>" );
+            }
+        }*/
         if ( this.payments[4] > 0 ) {
             str += ( count++ + ". Pyydä asiakasta suorttamaan MobilePay maksu, selitteeksi 'Julkaisumyynti'<br><br>" );
         }
@@ -1131,7 +1144,10 @@ export class ShopPage {
     }
 
     checkIfCardPaymentEnabled() {
-        return (!this.cardPaymentEnabled || !this.ptConnected);
+        if (this.ptInUse)
+            return (!this.cardPaymentEnabled || !this.ptConnected);
+        else
+            return !this.cardPaymentEnabled;
     }
 
     checkIfCashPaymentEnabled() {
@@ -1329,15 +1345,15 @@ export class ShopPage {
     }
 
     // could be used if pt terminal not connected
-    presentPromptPaymentCardInstructions() {
+    presentPromptPaymentCardInstructions(sum:number) {
         let alert = this.alertController.create( {
-            title: 'Syötä summa ' + this.totalSum + ' maksupäätteeseen',
+            title: 'Syötä summa ' + sum + ' maksupäätteeseen',
             buttons: [
                 {
                     text: 'Ok',
                     handler: () => {
                         console.log( 'Confirm card payment Ok' );
-                        this.payments[3] = this.totalSum;
+                        this.payments[3] = sum;
                         this.combinedPayment();
                     }
                 },
@@ -1563,7 +1579,11 @@ export class ShopPage {
                     handler: () => {
                         console.log( 'Confirm Ok' );
                         if ( this.payments[3] > 0 ) {
-                            this.presentPromptDoPaymentCardPayment();
+                            if (this.ptInUse) {
+                                this.presentPromptDoPaymentCardPayment();
+                            } else {
+                                this.presentPromptPaymentCardInstructions(this.payments[3])
+                            }
                         } else {
                             this.combinedPayment();
                         }
