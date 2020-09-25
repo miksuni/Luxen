@@ -256,7 +256,7 @@
 									<button ion-button class="product_line_button" color="light"
 										(click)="cancelCombinedPayment()">Peruuta</button>
 									<button ion-button class="product_line_button"
-										(click)="presentPromptCombinedPaymentGuide()">Ohje</button>
+										(click)="promptCombinedPaymentGuide()">Ohje</button>
 								</td>
 							</tr>
 						</table>
@@ -407,7 +407,7 @@
 								<td style="text-align: center">
 									<button ion-button class="payment_button" id="gift_card_button"
 										[disabled]="checkIfGiftCartPaymentEnabled()"
-										(click)="presentPromptOwnPurchase()">
+										(click)="promptOwnPurchase()">
 										<ion-icon name="contract" item-start> Ry oma osto</ion-icon>
 									</button>
 								</td>
@@ -415,44 +415,6 @@
 						</table>
 					</tr>
 					<!-- PAYMENT BUTTONS end -->
-
-					<!-- CHAT start -->
-					<!-- 
-					<tr>
-						<td colspan="2">
-							<table class="chat_view">
-								<tr>
-									<td colspan="2">
-										<table>
-											<div class="chat_box">
-												<tr *ngFor="let entry of chatMessages let i = index">
-													<td class="chat_lines">
-														<div id="{{ 'chat' + i }}">
-															<b>{{entry.from}}:</b> {{entry.message}}
-														</div>
-													</td>
-												</tr>
-											</div>
-										</table>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<div class="chat_input_box">
-											<ion-input [(ngModel)]="chatMessage"
-												placeholder="Kirjoita viesti..." (click)="onInputClicked()"></ion-input>
-										</div>
-									</td>
-									<td>
-										<button ion-button class="send_button" (click)="saveChat()">
-											<ion-icon name="send" item-start></ion-icon>
-										</button>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-					<!-- CHAT end -->
 
 				</table>
 				</td>

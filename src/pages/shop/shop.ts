@@ -52,7 +52,7 @@ export class ShopPage {
 	transactionStatus = 0;
     cardPaymentStatus = 0;
 
-    ptInUse = false;
+    ptInUse = true;
     ptConnected = false;
 	ptStatusIcon = "alert";
 	ptStatusIconColor = "dark";
@@ -115,11 +115,9 @@ export class ShopPage {
         public restProvider: RestProvider,
         private alertController: AlertController,
         public loadingCtrl: LoadingController ) {
-	    console.log('shop page constructor');
     }
 
     ionViewDidLoad() {
-        console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
         $( "#sold_items" ).hide();
@@ -144,20 +142,15 @@ export class ShopPage {
         this.update();
     }
 
-    testModelChanged( $event ) {
-        console.log( '>> testModelChanged: ' + $event )
-    }
-
     setPtInUse(ptInUse: boolean) {
         this.ptInUse = ptInUse;
     }
+    testModelChanged( $event ) {
+    }
 
     getCashiers() {
-        console.log( '>> home.getCashiers' );
         this.restProvider.cashiers( "" ).then(( result: any ) => {
-            console.log( '>> result received' );
             this.cashiers = JSON.parse( result.result );
-            console.log( 'cashiers: ' + JSON.stringify( this.cashiers ) );
             this.finishLoading();
         }, ( err ) => {
             console.log( err );
@@ -165,15 +158,11 @@ export class ShopPage {
     }
 
     getCurrentState() {
-        console.log( '>> home.getCurrentState' );
         this.restProvider.sendRequest( 'current_state', [] ).then(( result: any ) => {
-            console.log( '>> result received' );
             var currentState = JSON.parse( result.result );
             if ( currentState.length > 0 ) {
                 this.currentState = currentState[0];
             }
-            console.log( 'currentState: ' + JSON.stringify( this.currentState ) );
-
         }, ( err ) => {
             console.log( 'error in getting current state: ' + err );
         } )
@@ -183,13 +172,11 @@ export class ShopPage {
     }
 
     onCashierSelected( $event ) {
-        console.log( 'onCashierSelected' );
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
         $( "#sold_items" ).hide();
         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
-        console.log( "selected index: " + e.selectedIndex );
         if ( e.selectedIndex > 0 ) {
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
             ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = false;
@@ -200,7 +187,6 @@ export class ShopPage {
     }
 
     logout(forcedLogout) {
-        console.log( '>> shop.logout' );
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
@@ -222,7 +208,6 @@ export class ShopPage {
     }
 
     onLogout() {
-        console.log( '>> shop.onLogout' );
         this.logout(false);
         this.promptSendReport();
         
@@ -236,11 +221,8 @@ export class ShopPage {
     }
 
     onInputClicked() {
-        console.log( '>> shop.onInputClicked:' );
         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
-        //var value = e.options[e.selectedIndex].value;
         this.cashier = e.options[e.selectedIndex].text;
-        console.log( "cashier: " + e.options[e.selectedIndex].text );
         if ( this.cashier.length == 0 ) {
             this.promptSelectCashier();
         }
@@ -250,14 +232,11 @@ export class ShopPage {
     }
 
     onProductNameUpdated() {
-        console.log( '>> shop.onProductNameUpdated: ' + this.productNameInitials );
         var found = this.productList.getProductByWord( this.productNameInitials );
         this.searchResult = found;
-        console.log( '>> found: ' + found.length );
     }
 
     onProductSelected( productName, index ) {
-        console.log( '>> shop.onProductSelected: ' + productName + ' index: ' + index );
         this.checkConditions( this.searchResult[index] );
         // clear search result list
         this.searchResult.splice( 0, this.searchResult.length );
@@ -265,7 +244,6 @@ export class ShopPage {
     }
 
     addToShoppingCart( productInfo ) {
-        console.log( '>> shop.addToShoppingCart' );
         if ( productInfo.amountInStock < 1 ) {
             this.promptNoItemsInStock( productInfo );
         } else {
@@ -275,7 +253,6 @@ export class ShopPage {
     }
 
     checkConditions( productInfo ) {
-        console.log( '>> shop.checkConditions: ' + JSON.stringify( productInfo ) );
         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
         //var value = e.options[e.selectedIndex].value;
         this.cashier = e.options[e.selectedIndex].text;
@@ -291,18 +268,15 @@ export class ShopPage {
     }
 
     onGivenAmountUpdated() {
-        console.log( '>> shop.onGivenAmountUpdated' );
         this.cashBack = this.givenAmount - this.totalSum;
     }
 
     removeProduct( productName, i ) {
-        console.log( 'removeFromCart: ' + productName + ", index: " + i );
         this.shoppingCart.removeProduct( i );
         this.update();
     }
 
     increase( item, i ) {
-        console.log( 'increaseItem: ' + item.productName + ", index: " + i );
         if ( item.quantity >= item.amountInStock ) {
             this.promptNotEnoughInStock( i, item.amountInStock );
         } else {
@@ -312,24 +286,16 @@ export class ShopPage {
     }
 
     decrease( item, i ) {
-        console.log( 'decreaseItem: ' + item.productName + ", index: " + i );
-        //if ( item.quantity < 2 ) {
-        //    this.promptRemoveProduct( i );
-        //} else {
         this.shoppingCart.decrease( i );
         this.update();
-        //}
     }
 
     cashPayment() {
-        console.log( 'cashPayment' );
         this.shoppingCart.setCashier( this.cashier );
         this.showPrompt( this.totalSum );
-        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
     }
 
     async cardPayment(sum:number) {
-        console.log( 'cardPayment' );
         this.transactionStatus = -1;
         this.shoppingCart.setCashier( this.cashier );
         if (!this.ptInUse) {
@@ -338,7 +304,6 @@ export class ShopPage {
 		    this.restProvider.sendRequest( 'purchase',
 			    						 { "amount": sum,
 		                       			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
-                console.log( '>> card payment result received' );
                 this.payments[3] = sum;
                 this.cardPurchaseGoingOn = true;
                 // save for possible payment check
@@ -352,19 +317,14 @@ export class ShopPage {
 	        } )
 
             this.waitForCardPayment();
-            console.log("==========card payment done");
         }
     }
 
     async checkLastCardPayment() {
-        console.log( 'checkLastCardPayment' );
-        //this.transactionStatus = -1;
         this.cardPurchaseCheckingGoingOn = true;
         this.restProvider.sendRequest( 'check_last_purchase',
                                      { "amount": this.lastCardPaymentAmount,
                                        "receiptId": this.lastCardPaymentReceiptId } ).then(( result: any ) => {
-            console.log( '>> check payment result received' );
-            //this.cardPurchaseCheckingGoingOn = true;
         }, ( err ) => {
             console.log( 'error in check: ' + err );
         } )
@@ -373,11 +333,9 @@ export class ShopPage {
         } )
 
         this.waitForCardPaymentCheck();
-        console.log("payment checked");
     }
     
     async waitForCardPayment() {
-      console.log( 'waitForCardPayment' );
 	  for (let i = 0; i < 1000 && this.transactionStatus !== 0; i++) {
          let promise = new Promise((res, rej) => {
              setTimeout(() => res("loop purchase response"), 2000)
@@ -385,15 +343,12 @@ export class ShopPage {
 
           // wait until the promise returns us a value
           let result = await promise;
-          console.log(result)
   		  this.getPaymentStatus();
-          console.log("loop");
        }
        this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
     }
 
     async waitForCardPaymentCheck() {
-      console.log( 'waitForCardPaymentCheck' );
       for (let i = 0; i < 1000 && this.cardPurchaseCheckingGoingOn; i++) {
          let promise = new Promise((res, rej) => {
              setTimeout(() => res("loop check response"), 2000)
@@ -401,9 +356,7 @@ export class ShopPage {
 
           // wait until the promise returns us a value
           let result = await promise;
-          console.log(result)
           this.getPaymentStatus();
-          console.log("loop");
        }
        this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
     }
@@ -417,14 +370,10 @@ export class ShopPage {
     }
 
     ownPurchase( handedTo, committee, receiver ) {
-        console.log( 'ownPurchase: ' + handedTo + ', ' + committee + ', ' + receiver );
-
         this.presentLoading( "Talletetaan..." );
         this.shoppingCart.setCashier( this.cashier );
-        //this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
         this.currentState.lastReceiptNr++;
-        //console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
             receiptNr: 0,
@@ -453,7 +402,6 @@ export class ShopPage {
         };
 
         receiptItemData.sum = this.payments[5];
-        //receiptItemData.paymentMethod = 5;
         receiptItemData.handedTo = handedTo;
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
@@ -461,10 +409,8 @@ export class ShopPage {
 
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
-        console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
         this.receiptPaymentInfo = receiptData.items;
         this.receiptNr = this.currentState.lastReceiptNr;
-        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentInfo));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -473,14 +419,12 @@ export class ShopPage {
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).show();
         $( "#sold_items" ).hide();
-        //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
             this.finishLoading();
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
                 this.productList.getProductInfo();
-                //this.getCurrentState();
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();
@@ -488,12 +432,10 @@ export class ShopPage {
     }
 
     onProductReturnClicked() {
-        console.log( 'onProductReturnClicked' );
         this.combinedPayment();
     }
 
     combinedPaymentGuide() {
-        console.log( 'combinedPayment' );
 
         var count = 1;
 
@@ -531,17 +473,12 @@ export class ShopPage {
     }
 
     combinedPayment() {
-        console.log( 'combinedPayment' );
-
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
-
         this.presentLoading( "Talletetaan..." );
         this.shoppingCart.setCashier( this.cashier );
-        //this.receiptContent = Array.from( this.cartContent );
         this.receiptTotalSumAsString = this.totalSumAsString;
         this.currentState.lastReceiptNr++;
-        //console.log( 'receiptContent 1:  ' + JSON.stringify( this.receiptContent ) );
 
         var receiptData = {
             receiptNr: 0,
@@ -657,10 +594,8 @@ export class ShopPage {
 
         this.shoppingCart.saveReceipt( receiptData );
         this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
-        console.log('purchase data: ' + JSON.stringify(this.purchasedItems));
         this.receiptPaymentInfo = receiptData.items;
         this.receiptNr = this.currentState.lastReceiptNr;
-        console.log('purchase data: ' + JSON.stringify(this.receiptPaymentInfo));
         this.shoppingCart.clearAll();
         this.clearPayments();
         this.clearCombinedPaymentData();
@@ -669,14 +604,12 @@ export class ShopPage {
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).show();
         $( "#sold_items" ).hide();
-        //console.log( 'receiptContent 2:  ' + JSON.stringify( this.receiptContent ) );
 
         setTimeout(() => {
             this.finishLoading();
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
                 this.productList.getProductInfo();
-                //this.getCurrentState();
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();
@@ -684,7 +617,6 @@ export class ShopPage {
     }
 
     sendReceipt() {
-        console.log( 'handleReceipt' );
         var customerReceiptData = { receiptNr: this.receiptNr,
                                     totalSum: this.receiptTotalSumAsString,
                                     purchasedItems: this.purchasedItems,
@@ -696,7 +628,6 @@ export class ShopPage {
     }
 
     closeReceiptView() {
-        console.log( 'closeReceiptView' );
         $( "#shopping_cart_area" ).show();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
@@ -705,7 +636,6 @@ export class ShopPage {
     }
 
     onCustomerEmailUpdated() {
-        console.log( 'onCustomerEmailUpdated: ' + this.customerEmail);
     }
 
     checkIfReceiptSendingEnabled() {
@@ -714,7 +644,6 @@ export class ShopPage {
     }
 
     showCombinedPayment() {
-        console.log( 'showCombinedPayment' );
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).show();
         $( "#receipt_view" ).hide();
@@ -728,7 +657,6 @@ export class ShopPage {
     }
 
     clearCombinedPaymentData() {
-        console.log( 'clearCombinedPaymentData' );
 
         this.toBePaid = 0;
         this.giftCard1Type = 0;
@@ -752,7 +680,6 @@ export class ShopPage {
     }
 
     cancelCombinedPayment() {
-        console.log( 'cancelCombinedPayment' );
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
         $( "#receipt_view" ).hide();
@@ -768,7 +695,6 @@ export class ShopPage {
     }
 
     validateCm() {
-        console.log( 'validateCm' );
         var currentPayments = 0.0;
         for ( var i = 0; i < this.payments.length; i++ ) {
             currentPayments += this.payments[i];
@@ -777,8 +703,6 @@ export class ShopPage {
         this.confirmedPaymentEnabled = ( ( this.toBePaid == 0 ) &&
             this.cm1Valid() &&
             this.cm2Valid() );
-        //var tbp = ( <HTMLInputElement>document.getElementById( "to_be_paid" ) ).value;
-        //console.log( 'tbp: ' + tbp + ', this.toBePaid: ' + this.toBePaid );
         if ( this.toBePaid > 0 ) {
             document.getElementById( "to_be_paid" ).style.backgroundColor = "Red";
             document.getElementById( "to_be_paid_guide" ).style.color = "Red";
@@ -791,7 +715,6 @@ export class ShopPage {
     }
 
     disableCombinedPaymentFields() {
-        console.log( 'disableCombinedPaymentFields' );
         this.enableCm1Fields( false );
         this.enableCm2Fields( false );
     }
@@ -801,7 +724,6 @@ export class ShopPage {
 
     cm10Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked;
-        //console.log( 'cm10Listener ' + selected );
         if ( selected ) {
             var value = 20.0;
             if ( this.totalSum < 20 ) {
@@ -818,32 +740,26 @@ export class ShopPage {
         }
 
         if ( ( <HTMLInputElement>document.getElementById( "cm12" ) ).checked ) {
-            console.log( 'Merkkipäivälahjakortti valittu' );
             this.giftCard1Type = 1;
         } else {
-            console.log( 'Vauvalahjakortti valittu' );
             this.giftCard1Type = 0;
         }
         this.validateCm();
     }
 
     cm11Listener() {
-        //console.log( 'cmListener' );
         this.cm10Listener();
     }
 
     giftCard1ReceiverChanged( $event ) {
-        //console.log( 'giftCard1ReceiverChanged ' + $event );
         this.validateCm();
     }
 
     giftCard1PurchaseDateChanged( $event ) {
-        //console.log( 'giftCard1PurchaseDateChanged ' + $event );
         this.validateCm();
     }
 
     cm1Valid() {
-        //console.log( 'cm1Valid' );
         if ( ( <HTMLInputElement>document.getElementById( "cm1" ) ).checked ) {
             if ( ( this.giftCard1Receiver.length > 0 ) &&
                 ( this.giftCard1PurchaseDate.length > 0 ) ) {
@@ -856,7 +772,6 @@ export class ShopPage {
     }
 
     enableCm1Fields( enabled ) {
-        //console.log( 'enableCm1Fields' );
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm12" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm13" ) ).disabled = !enabled;
@@ -865,7 +780,6 @@ export class ShopPage {
     }
 
     clearCm1Fields() {
-        //console.log( 'clearCm1Fields' );
         this.giftCard1Receiver = "";
         this.giftCard1PurchaseDate = "";
     }
@@ -874,9 +788,7 @@ export class ShopPage {
     /*** CM 2 SRK gift card ***/
 
     cm20Listener() {
-        //console.log( 'cm20Listener' );
         var selected = ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked;
-        //console.log( 'cm20Listener ' + selected );
         if ( selected ) {
             this.enableCm2Fields( true );
         } else {
@@ -890,40 +802,33 @@ export class ShopPage {
     }
 
     giftCard2ReceiverChanged( $event ) {
-        //console.log( 'giftCard2ReceiverChanged ' + $event );
         this.validateCm();
     }
 
     cm21Listener( $event ) {
-        //console.log( 'cm21Listener ' + $event );
         this.payments[1] = parseFloat( $event );
         this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
         this.validateCm();
     }
 
     giftCard2OriginatorChanged( $event ) {
-        //console.log( 'giftCard2OriginatorChanged ' + $event );
         this.validateCm();
     }
 
     giftCard2PurchaseDateChanged( $event ) {
-        //console.log( 'giftCard2PurchaseDateChanged ' + $event );
         this.validateCm();
     }
 
     giftCard2AmountBeforeChanged( $event ) {
-        //console.log( 'giftCard2AmountBeforeChanged ' + $event );
         this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
         this.validateCm();
     }
 
     giftCard2AmountAfterChanged( $event ) {
-        //console.log( 'giftCard2AmountAfterChanged ' + $event );
         this.validateCm();
     }
 
     cm2Valid() {
-        console.log( 'cm2valid' );
         if ( ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked ) {
             if ( ( this.payments[1] > 0 ) &&
                 ( this.giftCard2Receiver.length > 0 ) &&
@@ -931,7 +836,6 @@ export class ShopPage {
                 ( this.giftCard2PurchaseDate.length > 0 ) &&
                 ( this.giftCard2AmountBefore > 0 ) &&
                 ( this.giftCard2AmountAfter >= 0 ) ) {
-                console.log( 'cm2valid: true' );
                 return true;
             } else {
                 return false;
@@ -942,7 +846,6 @@ export class ShopPage {
     }
 
     enableCm2Fields( enabled ) {
-        //console.log( 'enableCm2Fields' );
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm22" ) ).disabled = !enabled;
         ( <HTMLInputElement>document.getElementById( "cm23" ) ).disabled = !enabled;
@@ -952,7 +855,6 @@ export class ShopPage {
     }
 
     clearCm2Fields() {
-        //console.log( 'clearCm2Fields' );
         this.giftCard2Payment = 0;
         this.giftCard2Receiver = "";
         this.giftCard2Originator = "";
@@ -966,7 +868,6 @@ export class ShopPage {
 
     cm30Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm3" ) ).checked;
-        console.log( 'cm30Listener ' + selected );
         if ( selected ) {
             ( <HTMLInputElement>document.getElementById( "cm31" ) ).disabled = false;
         } else {
@@ -979,7 +880,6 @@ export class ShopPage {
     }
 
     cm31Listener( $event ) {
-        console.log( 'cm31Listener ' + $event );
         this.payments[2] = parseFloat( $event );
         this.validateCm();
     }
@@ -989,7 +889,6 @@ export class ShopPage {
 
     cm40Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm4" ) ).checked;
-        console.log( 'cm40Listener ' + selected );
         if ( selected ) {
             ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = false;
         } else {
@@ -1002,7 +901,6 @@ export class ShopPage {
     }
 
     cm41Listener( $event ) {
-        console.log( 'cm41Listener ' + $event );
         this.payments[3] = parseFloat( $event );
         this.validateCm();
     }
@@ -1012,7 +910,6 @@ export class ShopPage {
 
     cm50Listener() {
         var selected = ( <HTMLInputElement>document.getElementById( "cm5" ) ).checked;
-        console.log( 'cm50Listener ' + selected );
         if ( selected ) {
             ( <HTMLInputElement>document.getElementById( "cm51" ) ).disabled = false;
         } else {
@@ -1025,7 +922,6 @@ export class ShopPage {
     }
 
     cm51Listener( $event ) {
-        console.log( 'cm51Listener ' + $event );
         this.payments[4] = parseFloat( $event );
         this.validateCm();
     }
@@ -1033,16 +929,13 @@ export class ShopPage {
     /******************************************************************************************/
 
     getSoldItems() {
-        console.log( 'getSoldItems' );
         this.restProvider.sendRequest( 'sold_items', [] ).then(( result: any ) => {
             var items = JSON.parse( result.result );
             for (var i = 0; i < items.length; i++) {
                 const date = new Date(items[i].createdAt);
                 items[i].timeStr = date.toLocaleTimeString();
-                console.log("--" + items[i].timeStr);
             }
             this.soldItems = items;
-            console.log( 'soldItems: ' + JSON.stringify( this.soldItems ) );
             this.checkLastCardPayment();
         }, ( err ) => {
             console.log( err );
@@ -1050,7 +943,6 @@ export class ShopPage {
     }
     
     onCheckPayments() {
-        console.log( 'onCheckPayments' );
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
@@ -1059,7 +951,6 @@ export class ShopPage {
     }
 
     onPurchaseSelected( productName, index ) {
-        console.log( '>> shop.onPurchaseSelected: ' + productName + ' index: ' + index );
     }
 
     closePurchasedItemsView() {
@@ -1070,9 +961,7 @@ export class ShopPage {
     }
 
     sendEmail() {
-        console.log( 'sendEmail' );
         this.restProvider.sendRequest( 'send_email', [] ).then(( result: any ) => {
-            console.log( '>> mail sent' );
         }, ( err ) => {
             console.log( 'error in sending mail: ' + err );
         } )
@@ -1082,7 +971,6 @@ export class ShopPage {
     }
 
     cancelPurchase() {
-        console.log( 'cancelPurchase' );
         this.shoppingCart.clearAll();
         this.update();
     }
@@ -1107,7 +995,6 @@ export class ShopPage {
     }
 
     update() {
-        console.log( 'update' );
         this.productsInCart = 0;
         this.productsInReturnBasket = 0;
         this.productReturnValue = 0;
@@ -1116,7 +1003,6 @@ export class ShopPage {
         ( <HTMLInputElement>document.getElementById( "product_return_button" ) ).disabled = true;
 
         for ( var i = 0; i < this.cartContent.length; i++ ) {
-            console.log( 'cart content ' + JSON.stringify( this.cartContent[i] ) );
             if ( this.cartContent[i].total > 0 ) {
                 this.productsInCart++;
             } else if ( this.cartContent[i].total < 0 ) {
@@ -1155,7 +1041,6 @@ export class ShopPage {
                 {
                     text: 'Ok',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                     }
                 }
             ]
@@ -1170,7 +1055,6 @@ export class ShopPage {
                 {
                     text: 'Ok',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                     }
                 }
             ]
@@ -1185,7 +1069,6 @@ export class ShopPage {
                 {
                     text: 'Siirrä maksu maksupäätteelle',
                     handler: () => {
-                        console.log( 'Siirrä maksu maksupäätteelle' );
                         this.cardPayment(this.payments[3]);
                     }
                 }
@@ -1202,14 +1085,12 @@ export class ShopPage {
                 {
                     text: 'Vahvista osto',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         this.shoppingCart.increase( i );
                     }
                 },
                 {
                     text: 'Peruuta',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1224,14 +1105,12 @@ export class ShopPage {
                 {
                     text: 'Ok',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         this.shoppingCart.decrease( i );
                     }
                 },
                 {
                     text: 'Peruuta',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1247,7 +1126,6 @@ export class ShopPage {
                 {
                     text: 'Ok',
                     handler: () => {
-                        console.log( 'Confirm card payment Ok' );
                         this.payments[3] = sum;
                         this.combinedPayment();
                     }
@@ -1255,7 +1133,6 @@ export class ShopPage {
                 {
                     text: 'Peruuta',
                     handler: () => {
-                        console.log( 'Card payment cancelled' );
                     }
                 }
             ]
@@ -1280,7 +1157,6 @@ export class ShopPage {
                     text: 'Kirjoitettu summa',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
                         if ( this.moneyGiven > this.totalSum ) {
                             this.showPrompt2( this.moneyGiven - this.totalSum );
                         } else if ( this.moneyGiven == this.totalSum ) {
@@ -1295,7 +1171,6 @@ export class ShopPage {
                     text: '10 e',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
                         this.showPrompt2( 10 - this.totalSum );
                     },
                 },
@@ -1303,7 +1178,6 @@ export class ShopPage {
                     text: '20 e',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
                         this.showPrompt2( 20 - this.totalSum );
                     },
                 },
@@ -1311,7 +1185,6 @@ export class ShopPage {
                     text: '50 e',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
                         this.showPrompt2( 50 - this.totalSum );
                     },
                 },
@@ -1319,7 +1192,6 @@ export class ShopPage {
                     text: 'Tasaraha',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        console.log( 'Saved clicked, data: ' + this.moneyGiven.toString() );
                         this.payments[2] = this.totalSum;
                         this.combinedPayment();
                     },
@@ -1327,7 +1199,6 @@ export class ShopPage {
                 {
                     text: 'Peruuta',
                     handler: data => {
-                        console.log( 'Cancel clicked' );
                     }
                 },
             ]
@@ -1359,7 +1230,6 @@ export class ShopPage {
                 {
                     text: 'Peruuta nykyinen maksu',
                     handler: data => {
-                        //console.log('Saved clicked, data: ' + JSON.stringify(data.Money));
                     }
                 }
             ]
@@ -1376,7 +1246,6 @@ export class ShopPage {
                 {
                     text: 'Kirjaudu ulos',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
                         e.selectedIndex = 0;
                         ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
@@ -1387,7 +1256,6 @@ export class ShopPage {
                 {
                     text: 'Peruuta',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1403,7 +1271,6 @@ export class ShopPage {
                 {
                     text: 'Laita silti ostoskoriin',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         this.shoppingCart.addProduct( productInfo );
                         this.update();
                     }
@@ -1411,7 +1278,6 @@ export class ShopPage {
                 {
                     text: 'Peruuta',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1429,14 +1295,12 @@ export class ShopPage {
                 {
                     text: 'Lähetä',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         this.reportProvider.sendReports();
                     }
                 },
                 {
                     text: 'Älä lähetä',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1456,7 +1320,6 @@ export class ShopPage {
                 {
                     text: 'Sulje ohje',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                     }
                 }
             ]
@@ -1472,7 +1335,6 @@ export class ShopPage {
                 {
                     text: 'Veloitukset suoritettu',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         if ( this.payments[3] > 0 ) {
                             if (this.ptInUse) {
                                 this.promptDoPaymentCardPayment();
@@ -1487,7 +1349,6 @@ export class ShopPage {
                 {
                     text: 'Peru veloitus',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1521,14 +1382,12 @@ export class ShopPage {
                 {
                     text: 'Vahvista',
                     handler: data => {
-                        console.log( 'Confirm Ok' );
                         this.ownPurchase( data.TakenBy, data.Committee, data.Receiver );
                     }
                 },
                 {
                     text: 'Peru',
                     handler: () => {
-                        console.log( 'Cancel' );
                     }
                 }
             ]
@@ -1544,7 +1403,6 @@ export class ShopPage {
                 {
                     text: 'Sulje ohje',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                     }
                 }
             ]
@@ -1560,7 +1418,6 @@ export class ShopPage {
                 {
                     text: 'Sulje ohje',
                     handler: () => {
-                        console.log( 'Confirm Ok' );
                         this.closeReceiptView();
                     }
                 }
@@ -1606,7 +1463,6 @@ export class ShopPage {
             this.ptConnectionInitiated = false;
 		    this.ptConnectionTerminated = true;
     		this.restProvider.disconnectPT().then(( result: any ) => {
-        		console.log( '>> result received' );
         		// update connection status only after timeout to give time for state change
 	    		setTimeout(() => {
           			this.getPtConnectionStatus();
@@ -1645,7 +1501,6 @@ export class ShopPage {
                     this.stopPtConnectionPoll();
                     ( <HTMLInputElement>document.getElementById( "cm4" ) ).disabled = false;
                     ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = false;
-                    console.log(">> ptConnected");
 					break;
 				case 2: // closing
 					this.ptStatusIcon = "close-circle";
