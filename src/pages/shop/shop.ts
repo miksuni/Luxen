@@ -76,28 +76,6 @@ export class ShopPage {
 
     version = "Kassaversio 1.1.3";
 
-    /*
-    paymentInfo = {
-        giftCard1: {
-            value: 0,
-            cardtype: 0,
-            receiver: '',
-            givenDate: '2020-01-01T00:00:00.000Z'
-        },
-        giftCard2: {
-            value: 0,
-            cardtype: 1,
-            receiver: '',
-            originator: '',
-            givenDate: '2020-01-01T00:00:00.000Z',
-            valueBefore: 0,
-            valueAfter: 0
-        },
-        cash: 0,
-        card: 0
-    };
-    */
-
     // TODO: KUN COMBINED PAYMENT TALLETETTU, NOLLAA NÄMÄ !!!
     toBePaid: number = 0;
     testModel: number = 0.0;
@@ -140,20 +118,6 @@ export class ShopPage {
 	    console.log('shop page constructor');
     }
 
-    //    ngAfterViewInit() {
-    //        $( document ).ready( function() {
-    //            //alert( 'JQuery is working!!' );
-    //            $( ".btn1" ).click( function() {
-    //                $( "#shopping_cart_area" ).show();
-    //                $( "#payment_data_area" ).hide();
-    //            } );
-    //            $( ".btn2" ).click( function() {
-    //                $( "#shopping_cart_area" ).hide();
-    //                $( "#payment_data_area" ).show();
-    //            } );
-    //        } );
-    //    }
-
     ionViewDidLoad() {
         console.log( 'ionViewDidLoad ShopPage' );
         $( "#payment_data_area" ).hide();
@@ -177,10 +141,7 @@ export class ShopPage {
         this.cartContent = this.shoppingCart.getProducts();
         this.getCurrentState();
         this.getCashiers();
-		//this.getPTStatus();
-        //this.getChat();
         this.update();
-        //this.setPtInUse(true);
     }
 
     testModelChanged( $event ) {
@@ -221,13 +182,6 @@ export class ShopPage {
 		} )
     }
 
-    // Works only wiht ion-select
-    //onCashierChange($event){
-    //    console.log('>> onCashierChange: ' + $event);
-    //    this.cashier = $event;
-    //    this.shoppingCart.setCashier(this.cashier);
-    //}
-
     onCashierSelected( $event ) {
         console.log( 'onCashierSelected' );
         $( "#shopping_cart_area" ).show();
@@ -237,10 +191,8 @@ export class ShopPage {
         var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
         console.log( "selected index: " + e.selectedIndex );
         if ( e.selectedIndex > 0 ) {
-            //e.disabled = false; // does now work
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
             ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = false;
-            //this.connectPt();
             if (this.ptInUse) {
                 this.startPtConnectionPoll();
             }
@@ -256,7 +208,7 @@ export class ShopPage {
         this.ptStatusMessage = "";
         this.productNameInitials = "";
         if ( this.shoppingCart.hasContent() && !forcedLogout ) {
-            this.presentPromptItemsInShoppingCart();
+            this.promptItemsInShoppingCart();
         } else {
             var e = document.getElementById( "current_cashier" ) as HTMLSelectElement;
             e.selectedIndex = 0;
@@ -272,7 +224,7 @@ export class ShopPage {
     onLogout() {
         console.log( '>> shop.onLogout' );
         this.logout(false);
-        this.presentPromptSendReport();
+        this.promptSendReport();
         
         //this.reportProvider.sendToBeOrderedReport();
         // TODO: ACTIVATE IN PRODUCTION
@@ -290,19 +242,11 @@ export class ShopPage {
         this.cashier = e.options[e.selectedIndex].text;
         console.log( "cashier: " + e.options[e.selectedIndex].text );
         if ( this.cashier.length == 0 ) {
-            this.presentPromptSelectCashier();
+            this.promptSelectCashier();
         }
     }
 
     onProductNumberUpdated() {
-        //        console.log( '>> shop.onProductNumberUpdated: ' + this.productNumberInitials );
-        //        //document.getElementById( "receipt_view" ).style.visibility = "hidden";
-        //        if ( this.productNumberInitials.length > 0 ) {
-        //            var found = this.productList.getProductProgressivelyByNumber( this.productNumberInitials );
-        //            this.searchResult = found;
-        //            console.log( '>> found: ' + found.length );
-        //            //console.log( '>> json: ' + JSON.stringify( found ) );
-        //        }
     }
 
     onProductNameUpdated() {
@@ -323,7 +267,7 @@ export class ShopPage {
     addToShoppingCart( productInfo ) {
         console.log( '>> shop.addToShoppingCart' );
         if ( productInfo.amountInStock < 1 ) {
-            this.presentPromptNoItemsInStock( productInfo );
+            this.promptNoItemsInStock( productInfo );
         } else {
             this.shoppingCart.addProduct( productInfo );
             this.update();
@@ -336,10 +280,10 @@ export class ShopPage {
         //var value = e.options[e.selectedIndex].value;
         this.cashier = e.options[e.selectedIndex].text;
         if ( this.cashier.length == 0 ) {
-            this.presentPromptSelectCashier();
+            this.promptSelectCashier();
         } else {
             if ( this.shoppingCart.hasProduct( productInfo.productName ) ) {
-                this.presentPromptAlreadyInShoppingCart();
+                this.promptAlreadyInShoppingCart();
             } else {
                 this.addToShoppingCart( productInfo );
             }
@@ -360,7 +304,7 @@ export class ShopPage {
     increase( item, i ) {
         console.log( 'increaseItem: ' + item.productName + ", index: " + i );
         if ( item.quantity >= item.amountInStock ) {
-            this.presentPromptNotEnoughInStock( i, item.amountInStock );
+            this.promptNotEnoughInStock( i, item.amountInStock );
         } else {
             this.shoppingCart.increase( i );
             this.update();
@@ -370,7 +314,7 @@ export class ShopPage {
     decrease( item, i ) {
         console.log( 'decreaseItem: ' + item.productName + ", index: " + i );
         //if ( item.quantity < 2 ) {
-        //    this.presentPromptRemoveProduct( i );
+        //    this.promptRemoveProduct( i );
         //} else {
         this.shoppingCart.decrease( i );
         this.update();
@@ -389,7 +333,7 @@ export class ShopPage {
         this.transactionStatus = -1;
         this.shoppingCart.setCashier( this.cashier );
         if (!this.ptInUse) {
-            this.presentPromptPaymentCardInstructions(sum); // to be used only with old card reader
+            this.promptPaymentCardInstructions(sum); // to be used only with old card reader
         } else {
 		    this.restProvider.sendRequest( 'purchase',
 			    						 { "amount": sum,
@@ -579,7 +523,7 @@ export class ShopPage {
         }
         str += "Kun toimenpiteet suoritettu, paina \"Veloitukset suoritettu\"";
 
-        this.presentPromptCombinedPaymentConfirmationGuide( str );
+        this.promptCombinedPaymentConfirmationGuide( str );
     }
 
     initCombinedPayment() {
@@ -748,7 +692,7 @@ export class ShopPage {
                                     ptCustomerText: this.lastPtCustomerReceipt,
                                     recipient: this.customerEmail };
         this.reportProvider.sendReceipt(customerReceiptData);
-        this.presentPromptReceiptSent();
+        this.promptReceiptSent();
     }
 
     closeReceiptView() {
@@ -1204,56 +1148,7 @@ export class ShopPage {
         }
     }
 
-    saveChat() {
-        console.log( 'saveChat' );
-        if ( this.chatMessage.length > 0 ) {
-            this.chat.message = this.chatMessage;
-            this.chat.from = this.cashier;
-            var entry = { from: "", message: "" };
-            entry.from = this.chat.from;
-            entry.message = this.chat.message;
-            this.chatMessages.push( entry );
-            this.restProvider.sendRequest( 'addchat', this.chat ).then(( result: any ) => {
-            	console.log( '>> chat sent' );
-        	}, ( err ) => {
-            	console.log( 'error in sending chat: ' + err );
-        	} )
-			.catch((result:any) => {
-	    		console.log('catch in sending chat: ' + result.result);
-			} );
-            setTimeout(() => {
-                this.presentLoading( "Haetaan..." );
-                this.scrollToEnd();
-                this.finishLoading();
-            }, 1000 );
-        }
-    }
-
-    getChat() {
-        console.log( '>> home.getChat' );
-        this.restProvider.sendRequest( "chat", [] ).then(( result: any ) => {
-            console.log( '>> result received' );
-            this.chatMessages = JSON.parse( result.result );
-            //console.log('chat messages: ' + JSON.stringify(this.chatMessages));
-            //console.log('count: ' + this.chatMessages.length);
-            setTimeout(() => {
-                //this.presentLoading( "Haetaan..." );
-                this.scrollToEnd();
-                this.finishLoading();
-            }, 1000 );
-        }, ( err ) => {
-            this.finishLoading();
-            console.log( err );
-        } );
-    }
-
-    scrollToEnd() {
-        console.log( '>> home.scrollToEnd ' );
-        var element = document.getElementById( "chat" + ( this.chatMessages.length - 1 ).toString() );
-        element.scrollIntoView( { block: "end" } );
-    }
-
-    presentPromptSelectCashier() {
+    promptSelectCashier() {
         let alert = this.alertController.create( {
             title: 'Aseta kassa ensin',
             buttons: [
@@ -1268,7 +1163,7 @@ export class ShopPage {
         alert.present();
     }
     
-    presentPromptWaitUntilPTConnected() {
+    promptWaitUntilPTConnected() {
         let alert = this.alertController.create( {
             title: 'Odota kunnes maksupääteyhteys on muodostettu',
             buttons: [
@@ -1283,7 +1178,7 @@ export class ShopPage {
         alert.present();
     }
     
-    presentPromptDoPaymentCardPayment() {
+    promptDoPaymentCardPayment() {
         let alert = this.alertController.create( {
             title: 'Suorita sitten pankkikorttiveloitus.',
             buttons: [
@@ -1299,7 +1194,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptNotEnoughInStock( i, amountInStock ) {
+    promptNotEnoughInStock( i, amountInStock ) {
         let alert = this.alertController.create( {
             title: 'Tarkista saatavuus',
             message: "Varastosaldon mukaan tuotetta on vain " + amountInStock + " kpl",
@@ -1322,7 +1217,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptRemoveProduct( i ) {
+    promptRemoveProduct( i ) {
         let alert = this.alertController.create( {
             title: 'Poistetaanko tuote ostoskorista?',
             buttons: [
@@ -1345,9 +1240,9 @@ export class ShopPage {
     }
 
     // could be used if pt terminal not connected
-    presentPromptPaymentCardInstructions(sum:number) {
+    promptPaymentCardInstructions(sum:number) {
         let alert = this.alertController.create( {
-            title: 'Syötä summa ' + sum + ' maksupäätteeseen',
+            title: 'Syötä summa ' + sum + ' e maksupäätteeseen',
             buttons: [
                 {
                     text: 'Ok',
@@ -1458,7 +1353,7 @@ export class ShopPage {
 
     showPrompt3( totalsum, givensum ) {
         const prompt = this.alertController.create( {
-            title: 'Annuettu summa ' + givensum.toString() + 'e ei riitä loppusummaan '
+            title: 'Annettu summa ' + givensum.toString() + 'e ei riitä loppusummaan '
             + totalsum + 'e , syötä maksu uudestaan',
             buttons: [
                 {
@@ -1472,7 +1367,7 @@ export class ShopPage {
         prompt.present();
     }
 
-    presentPromptItemsInShoppingCart() {
+    promptItemsInShoppingCart() {
         let alert = this.alertController.create( {
             title: 'Haluatko kirjautua ulos?',
             message: "Ostoskorissa on tuotteita! Ne poistetaan ostoskorista jos kirjaudut ulos." +
@@ -1500,7 +1395,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptNoItemsInStock( productInfo ) {
+    promptNoItemsInStock( productInfo ) {
         let alert = this.alertController.create( {
             title: 'Tarkista tuotteen saatavuus',
             message: "Varastokirjanpidon mukaan tuote on loppu",
@@ -1524,7 +1419,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptSendReport() {
+    promptSendReport() {
         let alert = this.alertController.create( {
             title: 'Lähetetäänko päivän päätösraportti?',
             message: "Valitse \"Lähtetä\" jos myynti päätetään. Tämä on normaali valinta myyntipäivän päätteeksi.<br><br>" +
@@ -1549,7 +1444,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptCombinedPaymentGuide() {
+    promptCombinedPaymentGuide() {
         let alert = this.alertController.create( {
             title: 'Maksutapojen yhdistelmä',
             message: "1. Valitse asiakkaan haluamat maksutavat vasemmalla olevista valintaruuduista<br><br>" +
@@ -1569,7 +1464,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptCombinedPaymentConfirmationGuide( str ) {
+    promptCombinedPaymentConfirmationGuide( str ) {
         let alert = this.alertController.create( {
             title: 'Maksutapojen yhdistelmä',
             message: str,
@@ -1580,9 +1475,9 @@ export class ShopPage {
                         console.log( 'Confirm Ok' );
                         if ( this.payments[3] > 0 ) {
                             if (this.ptInUse) {
-                                this.presentPromptDoPaymentCardPayment();
+                                this.promptDoPaymentCardPayment();
                             } else {
-                                this.presentPromptPaymentCardInstructions(this.payments[3])
+                                this.promptPaymentCardInstructions(this.payments[3])
                             }
                         } else {
                             this.combinedPayment();
@@ -1600,7 +1495,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptOwnPurchase() {
+    promptOwnPurchase() {
         let alert = this.alertController.create( {
             title: 'Ry:n oma osto',
             message: 'Jos tuote tai tuotteet otetaan Ry:n nimissä (esim lahjaksi annettavaksi) ' +
@@ -1641,7 +1536,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptAlreadyInShoppingCart() {
+    promptAlreadyInShoppingCart() {
         let alert = this.alertController.create( {
             title: 'Tuote on jo ostoskorissa',
             message: "Voit lisätä tuotteiden määrää ostoskorin tuoterivillä painamalla +:lla merkittyä nappia.",
@@ -1657,7 +1552,7 @@ export class ShopPage {
         alert.present();
     }
 
-    presentPromptReceiptSent() {
+    promptReceiptSent() {
         let alert = this.alertController.create( {
             title: 'Lähetetty',
             message: "Kuitti lähetetty osoitteeseen " + this.customerEmail,
@@ -1667,25 +1562,6 @@ export class ShopPage {
                     handler: () => {
                         console.log( 'Confirm Ok' );
                         this.closeReceiptView();
-                    }
-                }
-            ]
-        } );
-        alert.present();
-    }
-
-    presentPromptPtTimeOut() {
-        let alert = this.alertController.create( {
-            title: 'Aikavalvontakatkaisu',
-            message: "Korttimaksu perutaan aikavalvonnan laukeamisen takia.<p>" + 
-                     " Kirjaudu sovelluksesta ulos ja sitten takaisin sisään avataksesi " +
-                     " maksupääteyhteyden uudelleen",
-            buttons: [
-                {
-                    text: 'Kirjaudu ulos',
-                    handler: () => {
-                        console.log( 'Confirm Ok' );
-                        this.logout(true);
                     }
                 }
             ]
@@ -1704,27 +1580,8 @@ export class ShopPage {
     finishLoading() {
         this.loadingIndicator.dismiss();
     }
-/*
-	connectPt() {
-        console.log('connectPt');
-		if (!this.ptConnectionInitiated) {
-			this.ptConnectionInitiated = true;
-			this.ptConnectionTerminated = false;
-            this.restProvider.connectToPT().then(( result: any ) => {
-                if (!this.ptConnectionTerminated) {
-                    this.startPtConnectionPoll();
-                }
-            }, ( err ) => {
-                console.log( 'error in connect: ' + err );
-            } )
-            .catch((result:any) => {
-                console.log('catch in connect');
-            } )
-      	}
-	}
- */
+
     connectToPt() {
-        console.log('connectToPt');
         if (!this.ptConnectionInitiated) {
             this.ptConnectionInitiated = true;
             this.ptConnectionTerminated = false;
@@ -1745,7 +1602,6 @@ export class ShopPage {
  
 	disconnectPt() {
 		if (this.ptConnectionInitiated) {
-    		console.log('disconnectPt');
             this.stopPtConnectionPoll();
             this.ptConnectionInitiated = false;
 		    this.ptConnectionTerminated = true;
@@ -1765,16 +1621,13 @@ export class ShopPage {
     }
 
 	getPtConnectionStatus() {
-		console.log( 'getPtConnectionStatus' );
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
-            console.log( '>> PT status received: ' + result.result);
 			const ptStatus = JSON.parse(result.result);
 			const ptConnectionStatus = ptStatus.wsstatus;
 			this.ptStatusMessage = ptStatus.posMessage;
             this.ptConnected = false;
             ( <HTMLInputElement>document.getElementById( "cm4" ) ).disabled = true;
             ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
-			console.log("ptConnectionStatus: " + ptConnectionStatus);
 			switch (ptConnectionStatus) {
 				case -1: // unknown
 					this.ptStatusIcon = "remove-circle";
@@ -1812,9 +1665,7 @@ export class ShopPage {
 	}
 
     getPaymentStatus() {
-        console.log( 'getPaymentStatus' );
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
-            console.log( '>> PT status received: ' + result.result);
             const ptStatus = JSON.parse(result.result);
             
             if (ptStatus.connectionClosedByPeer) {
@@ -1833,16 +1684,13 @@ export class ShopPage {
                     console.log("error in getting pt status");
                 break;
                 case 0:
-                    console.log("card payment ok");
                     if (this.cardPurchaseGoingOn) {
                         this.cardPurchaseGoingOn = false;
                         this.combinedPayment();
                         this.restProvider.sendRequest( 'get_receipt_text', [] ).then(( result: any ) => {
                             var lastPtResult = JSON.parse( result.result );
-                            console.log( 'merchant text: ' + lastPtResult.merchantReceipt );
                             this.lastPtMerchantReceipt = lastPtResult.merchantReceipt;
                             this.lastPtCustomerReceipt = lastPtResult.customerReceipt;
-                            console.log("Custormer receuot " + this.lastPtCustomerReceipt);
                         }, ( err ) => {
                             console.log( err );
                         } );
@@ -1866,11 +1714,9 @@ export class ShopPage {
     }
 
   startPtConnectionPoll() {
-    console.log( '>> startPtConnectionPoll ');
     if (!this.paymentPollTimer) {
       this.connectToPt();
       this.paymentPollTimer = setInterval(() => {
-        console.log( '>> PtConnectionPoll... ');
         this.ptConnectionInitiated = false;
         this.connectToPt();
       }, 10000 );
@@ -1878,25 +1724,6 @@ export class ShopPage {
   }
   
   stopPtConnectionPoll() {
-    console.log('stopPtConnectionPoll');
-    clearInterval(this.paymentPollTimer);
-    this.paymentPollTimer = null;
-  }
-  
-  // Not used yet
-  startPaymentPoll() {
-    if (!this.paymentPollTimer) {
-      console.log('startPaymentPoll');
-      this.paymentPollTimer = setInterval(() => {
-        console.log( '>> paymentPollTimer fires');
-        this.getPaymentStatus();
-      }, 10000 );
-    }
-  }
-  
-  // Not used yet
-  stopPaymentPoll() {
-    console.log('stopPaymenPoll');
     clearInterval(this.paymentPollTimer);
     this.paymentPollTimer = null;
   }

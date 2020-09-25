@@ -1,6 +1,7 @@
 Featuret
 ========
 
+Julkaisulahjakortin osto
 Jos ry:n oma osto niin maksutapalistassa ei näy summaa
 Käsittele mahdollinen PT connection drop (ks integraatio-opas -> Reliabe POS transaction procesing)
 
