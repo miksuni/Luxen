@@ -43,7 +43,7 @@ export class RestProvider {
 	        })
 	    };
 	    return new Promise((resolve, reject) => {
-	        this.http.post(this.herokuUrl + '/cashiers', '{}', httpOptions)
+	        this.http.post(this.herokuUrl + '/cashiers', JSON.stringify(data), httpOptions)
 	            .subscribe(res => {
 	            resolve(res);
 	        }, (err) => {

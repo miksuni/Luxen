@@ -52,7 +52,7 @@ export class ShopPage {
 	transactionStatus = 0;
     cardPaymentStatus = 0;
 
-    ptInUse = true;
+    ptInUse = false;
     ptConnected = false;
 	ptStatusIcon = "alert";
 	ptStatusIconColor = "dark";
@@ -106,6 +106,10 @@ export class ShopPage {
     cashier = "";
 
     loadingIndicator: any;
+    
+    username="";
+    password="";
+    loginError="";
 
     constructor( public navCtrl: NavController,
         public navParams: NavParams,
@@ -118,10 +122,11 @@ export class ShopPage {
     }
 
     ionViewDidLoad() {
+        $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
         $( "#sold_items" ).hide();
-        this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
+        $( "#login_view" ).show();
         ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "cm21" ) ).value = "0";
@@ -134,12 +139,6 @@ export class ShopPage {
         ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "product_return_button" ) ).disabled = true;
         ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = true;
-        this.productList.getProductInfo();
-        this.shoppingCart.clearAll();
-        this.cartContent = this.shoppingCart.getProducts();
-        this.getCurrentState();
-        this.getCashiers();
-        this.update();
     }
 
     setPtInUse(ptInUse: boolean) {
@@ -148,9 +147,29 @@ export class ShopPage {
     testModelChanged( $event ) {
     }
 
+    login() {
+        this.presentLoading( "Kirjaudutaan..." );
+        this.loginError = "";
+        this.getCashiers();
+    }
+
     getCashiers() {
-        this.restProvider.cashiers( "" ).then(( result: any ) => {
-            this.cashiers = JSON.parse( result.result );
+        this.restProvider.cashiers( {"auth":this.username+'+'+this.password} ).then(( result: any ) => {
+            var response = JSON.parse( result.result );
+            if (response[0].error_code) {
+                this.loginError = "Käyttäjätunnus tai salasana on väärä";
+            } else {
+                this.finishLoading();
+                this.cashiers = JSON.parse( result.result );
+                $( "#login_view" ).hide();
+                $( "#shopping_cart_area" ).show();
+                this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
+                this.productList.getProductInfo();
+                this.shoppingCart.clearAll();
+                this.cartContent = this.shoppingCart.getProducts();
+                this.getCurrentState();
+                this.update();
+            }
             this.finishLoading();
         }, ( err ) => {
             console.log( err );
