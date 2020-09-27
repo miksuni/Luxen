@@ -28,7 +28,7 @@ export class ShopPage {
     cartContent = [];
     purchasedItems = [];
     receiptPaymentInfo = [];
-    
+
     searchResult: any;
 
     sites = [{ id: 'Lahti' }];
@@ -49,24 +49,24 @@ export class ShopPage {
     productReturnValue = 0;
     productsInReturnBasket = 0;
 
-	transactionStatus = 0;
+    transactionStatus = 0;
     cardPaymentStatus = 0;
 
     ptInUse = false;
     ptConnected = false;
-	ptStatusIcon = "alert";
-	ptStatusIconColor = "dark";
-	ptStatusMessage = "";
-	ptConnectionInitiated = false;
-	ptConnectionTerminated = false;
-    
+    ptStatusIcon = "alert";
+    ptStatusIconColor = "dark";
+    ptStatusMessage = "";
+    ptConnectionInitiated = false;
+    ptConnectionTerminated = false;
+
     paymentPollTimer; // not in use currently
     cardPurchaseGoingOn = false;
     lastPtMerchantReceipt: any;
     lastPtCustomerReceipt: any;
-    
+
     soldItems: any;
-    
+
     // for checking the last payment card purhcase
     lastCardPaymentAmount = 0;
     lastCardPaymentReceiptId = 0;
@@ -106,10 +106,10 @@ export class ShopPage {
     cashier = "";
 
     loadingIndicator: any;
-    
-    username="";
-    password="";
-    loginError="";
+
+    username = "";
+    password = "";
+    loginError = "";
 
     constructor( public navCtrl: NavController,
         public navParams: NavParams,
@@ -141,7 +141,7 @@ export class ShopPage {
         ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = true;
     }
 
-    setPtInUse(ptInUse: boolean) {
+    setPtInUse( ptInUse: boolean ) {
         this.ptInUse = ptInUse;
     }
     testModelChanged( $event ) {
@@ -154,9 +154,9 @@ export class ShopPage {
     }
 
     getCashiers() {
-        this.restProvider.cashiers( {"auth":this.username+'+'+this.password} ).then(( result: any ) => {
+        this.restProvider.cashiers( { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
             var response = JSON.parse( result.result );
-            if (response[0].error_code) {
+            if ( response[0].error_code ) {
                 this.loginError = "Käyttäjätunnus tai salasana on väärä";
             } else {
                 this.finishLoading();
@@ -185,9 +185,9 @@ export class ShopPage {
         }, ( err ) => {
             console.log( 'error in getting current state: ' + err );
         } )
-		.catch((result:any) => {
-			console.log('getting current state failed');
-		} )
+            .catch(( result: any ) => {
+                console.log( 'getting current state failed' );
+            } )
     }
 
     onCashierSelected( $event ) {
@@ -199,17 +199,18 @@ export class ShopPage {
         if ( e.selectedIndex > 0 ) {
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
             ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = false;
-            if (this.ptInUse) {
+            if ( this.ptInUse ) {
                 this.startPtConnectionPoll();
             }
         }
     }
 
-    logout(forcedLogout) {
-        $( "#shopping_cart_area" ).show();
+    logout( forcedLogout ) {
+        $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
         $( "#receipt_view" ).hide();
         $( "#sold_items" ).hide();
+        $( "#login_view" ).show();
         this.ptStatusMessage = "";
         this.productNameInitials = "";
         if ( this.shoppingCart.hasContent() && !forcedLogout ) {
@@ -227,9 +228,9 @@ export class ShopPage {
     }
 
     onLogout() {
-        this.logout(false);
+        this.logout( false );
         this.promptSendReport();
-        
+
         //this.reportProvider.sendToBeOrderedReport();
         // TODO: ACTIVATE IN PRODUCTION
         /*this.orderList.products = this.productList.getProductsBelowCount(2);
@@ -314,26 +315,28 @@ export class ShopPage {
         this.showPrompt( this.totalSum );
     }
 
-    async cardPayment(sum:number) {
+    async cardPayment( sum: number ) {
         this.transactionStatus = -1;
         this.shoppingCart.setCashier( this.cashier );
-        if (!this.ptInUse) {
-            this.promptPaymentCardInstructions(sum); // to be used only with old card reader
+        if ( !this.ptInUse ) {
+            this.promptPaymentCardInstructions( sum ); // to be used only with old card reader
         } else {
-		    this.restProvider.sendRequest( 'purchase',
-			    						 { "amount": sum,
-		                       			   "receiptId": this.currentState.lastReceiptNr } ).then(( result: any ) => {
-                this.payments[3] = sum;
-                this.cardPurchaseGoingOn = true;
-                // save for possible payment check
-                this.lastCardPaymentAmount = sum;
-                this.lastCardPaymentReceiptId = this.currentState.lastReceiptNr;
-            }, ( err ) => {
-                console.log( 'error in purchase: ' + err );
-            } )
-	        .catch((result:any) => {
-	            console.log('catch in purchase');
-	        } )
+            this.restProvider.sendRequest( 'purchase',
+                {
+                    "amount": sum,
+                    "receiptId": this.currentState.lastReceiptNr
+                } ).then(( result: any ) => {
+                    this.payments[3] = sum;
+                    this.cardPurchaseGoingOn = true;
+                    // save for possible payment check
+                    this.lastCardPaymentAmount = sum;
+                    this.lastCardPaymentReceiptId = this.currentState.lastReceiptNr;
+                }, ( err ) => {
+                    console.log( 'error in purchase: ' + err );
+                } )
+                .catch(( result: any ) => {
+                    console.log( 'catch in purchase' );
+                } )
 
             this.waitForCardPayment();
         }
@@ -342,44 +345,46 @@ export class ShopPage {
     async checkLastCardPayment() {
         this.cardPurchaseCheckingGoingOn = true;
         this.restProvider.sendRequest( 'check_last_purchase',
-                                     { "amount": this.lastCardPaymentAmount,
-                                       "receiptId": this.lastCardPaymentReceiptId } ).then(( result: any ) => {
-        }, ( err ) => {
-            console.log( 'error in check: ' + err );
-        } )
-        .catch((result:any) => {
-            console.log('catch in check');
-        } )
+            {
+                "amount": this.lastCardPaymentAmount,
+                "receiptId": this.lastCardPaymentReceiptId
+            } ).then(( result: any ) => {
+            }, ( err ) => {
+                console.log( 'error in check: ' + err );
+            } )
+            .catch(( result: any ) => {
+                console.log( 'catch in check' );
+            } )
 
         this.waitForCardPaymentCheck();
     }
-    
-    async waitForCardPayment() {
-	  for (let i = 0; i < 1000 && this.transactionStatus !== 0; i++) {
-         let promise = new Promise((res, rej) => {
-             setTimeout(() => res("loop purchase response"), 2000)
-          });
 
-          // wait until the promise returns us a value
-          let result = await promise;
-  		  this.getPaymentStatus();
-       }
-       this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
+    async waitForCardPayment() {
+        for ( let i = 0; i < 1000 && this.transactionStatus !== 0; i++ ) {
+            let promise = new Promise(( res, rej ) => {
+                setTimeout(() => res( "loop purchase response" ), 2000 )
+            } );
+
+            // wait until the promise returns us a value
+            let result = await promise;
+            this.getPaymentStatus();
+        }
+        this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
     }
 
     async waitForCardPaymentCheck() {
-      for (let i = 0; i < 1000 && this.cardPurchaseCheckingGoingOn; i++) {
-         let promise = new Promise((res, rej) => {
-             setTimeout(() => res("loop check response"), 2000)
-          });
+        for ( let i = 0; i < 1000 && this.cardPurchaseCheckingGoingOn; i++ ) {
+            let promise = new Promise(( res, rej ) => {
+                setTimeout(() => res( "loop check response" ), 2000 )
+            } );
 
-          // wait until the promise returns us a value
-          let result = await promise;
-          this.getPaymentStatus();
-       }
-       this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
+            // wait until the promise returns us a value
+            let result = await promise;
+            this.getPaymentStatus();
+        }
+        this.ptStatusMessage = "Aikavalvontakatkaisu. Kirjaudu ulos ja sisään.";
     }
-    
+
     clearPayments() {
         for ( var i = 0; i < this.payments.length; i++ ) {
             this.payments[i] = 0.0;
@@ -407,7 +412,7 @@ export class ShopPage {
 
         var receiptItemData = {
             sum: 0,
-            sumAsString: this.payments[5].toFixed(2),
+            sumAsString: this.payments[5].toFixed( 2 ),
             paymentMethod: 5,
             paymentMethodDescription: "Ry:n oma osto",
             giftCard1Type: 0,
@@ -427,7 +432,7 @@ export class ShopPage {
         receiptData.items.push( receiptItemData );
 
         this.shoppingCart.saveReceipt( receiptData );
-        this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
+        this.purchasedItems = Array.from( this.shoppingCart.getPurchaseData().productList );
         this.receiptPaymentInfo = receiptData.items;
         this.receiptNr = this.currentState.lastReceiptNr;
         this.shoppingCart.clearAll();
@@ -512,7 +517,7 @@ export class ShopPage {
         if ( this.payments[0] > 0 ) {
             var receiptItemData0 = {
                 sum: this.payments[0],
-                sumAsString: this.payments[0].toFixed(2),
+                sumAsString: this.payments[0].toFixed( 2 ),
                 paymentMethod: 0,
                 paymentMethodDescription: "Ry:n lahjakortti",
                 giftCard1Type: this.giftCard1Type,
@@ -529,7 +534,7 @@ export class ShopPage {
         if ( this.payments[1] > 0 ) {
             var receiptItemData1 = {
                 sum: this.payments[1],
-                sumAsString: this.payments[1].toFixed(2),
+                sumAsString: this.payments[1].toFixed( 2 ),
                 paymentMethod: 1,
                 paymentMethodDescription: "SRK:n lahjakortti",
                 giftCard1Type: 0,
@@ -546,7 +551,7 @@ export class ShopPage {
         if ( this.payments[2] > 0 ) {
             var receiptItemData2 = {
                 sum: this.payments[2],
-                sumAsString: this.payments[2].toFixed(2),
+                sumAsString: this.payments[2].toFixed( 2 ),
                 paymentMethod: 2,
                 paymentMethodDescription: "Käteinen",
                 giftCard1Type: 0,
@@ -563,7 +568,7 @@ export class ShopPage {
         if ( this.payments[3] > 0 ) {
             var receiptItemData3 = {
                 sum: this.payments[3],
-                sumAsString: this.payments[3].toFixed(2),
+                sumAsString: this.payments[3].toFixed( 2 ),
                 paymentMethod: 3,
                 paymentMethodDescription: "Pankkikortti",
                 giftCard1Type: 0,
@@ -580,7 +585,7 @@ export class ShopPage {
         if ( this.payments[4] > 0 ) {
             var receiptItemData4 = {
                 sum: this.payments[4],
-                sumAsString: this.payments[4].toFixed(2),
+                sumAsString: this.payments[4].toFixed( 2 ),
                 paymentMethod: 4,
                 paymentMethodDescription: "MobilePay",
                 giftCard1Type: 0,
@@ -598,7 +603,7 @@ export class ShopPage {
         if ( this.productReturnValue < 0 ) {
             var receiptItemData7 = {
                 sum: 0 - this.productReturnValue,
-                sumAsString: (0 - this.productReturnValue).toFixed(2),
+                sumAsString: ( 0 - this.productReturnValue ).toFixed( 2 ),
                 paymentMethod: 7,
                 paymentMethodDescription: "Tuotepalautus",
                 giftCard1Type: 0,
@@ -612,7 +617,7 @@ export class ShopPage {
         }
 
         this.shoppingCart.saveReceipt( receiptData );
-        this.purchasedItems = Array.from(this.shoppingCart.getPurchaseData().productList);
+        this.purchasedItems = Array.from( this.shoppingCart.getPurchaseData().productList );
         this.receiptPaymentInfo = receiptData.items;
         this.receiptNr = this.currentState.lastReceiptNr;
         this.shoppingCart.clearAll();
@@ -636,13 +641,15 @@ export class ShopPage {
     }
 
     sendReceipt() {
-        var customerReceiptData = { receiptNr: this.receiptNr,
-                                    totalSum: this.receiptTotalSumAsString,
-                                    purchasedItems: this.purchasedItems,
-                                    receiptPaymentInfo: this.receiptPaymentInfo,
-                                    ptCustomerText: this.lastPtCustomerReceipt,
-                                    recipient: this.customerEmail };
-        this.reportProvider.sendReceipt(customerReceiptData);
+        var customerReceiptData = {
+            receiptNr: this.receiptNr,
+            totalSum: this.receiptTotalSumAsString,
+            purchasedItems: this.purchasedItems,
+            receiptPaymentInfo: this.receiptPaymentInfo,
+            ptCustomerText: this.lastPtCustomerReceipt,
+            recipient: this.customerEmail
+        };
+        this.reportProvider.sendReceipt( customerReceiptData );
         this.promptReceiptSent();
     }
 
@@ -659,7 +666,7 @@ export class ShopPage {
 
     checkIfReceiptSendingEnabled() {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return !re.test(String(this.customerEmail).toLowerCase());
+        return !re.test( String( this.customerEmail ).toLowerCase() );
     }
 
     showCombinedPayment() {
@@ -950,8 +957,8 @@ export class ShopPage {
     getSoldItems() {
         this.restProvider.sendRequest( 'sold_items', [] ).then(( result: any ) => {
             var items = JSON.parse( result.result );
-            for (var i = 0; i < items.length; i++) {
-                const date = new Date(items[i].createdAt);
+            for ( var i = 0; i < items.length; i++ ) {
+                const date = new Date( items[i].createdAt );
                 items[i].timeStr = date.toLocaleTimeString();
             }
             this.soldItems = items;
@@ -960,7 +967,7 @@ export class ShopPage {
             console.log( err );
         } );
     }
-    
+
     onCheckPayments() {
         $( "#shopping_cart_area" ).hide();
         $( "#payment_data_area" ).hide();
@@ -984,9 +991,9 @@ export class ShopPage {
         }, ( err ) => {
             console.log( 'error in sending mail: ' + err );
         } )
-		.catch((result:any) => {
-	    	console.log('catch in seding email: ' + result.result);
-		} )
+            .catch(( result: any ) => {
+                console.log( 'catch in seding email: ' + result.result );
+            } )
     }
 
     cancelPurchase() {
@@ -995,8 +1002,8 @@ export class ShopPage {
     }
 
     checkIfCardPaymentEnabled() {
-        if (this.ptInUse)
-            return (!this.cardPaymentEnabled || !this.ptConnected);
+        if ( this.ptInUse )
+            return ( !this.cardPaymentEnabled || !this.ptConnected );
         else
             return !this.cardPaymentEnabled;
     }
@@ -1066,7 +1073,7 @@ export class ShopPage {
         } );
         alert.present();
     }
-    
+
     promptWaitUntilPTConnected() {
         let alert = this.alertController.create( {
             title: 'Odota kunnes maksupääteyhteys on muodostettu',
@@ -1080,7 +1087,7 @@ export class ShopPage {
         } );
         alert.present();
     }
-    
+
     promptDoPaymentCardPayment() {
         let alert = this.alertController.create( {
             title: 'Suorita sitten pankkikorttiveloitus.',
@@ -1088,7 +1095,7 @@ export class ShopPage {
                 {
                     text: 'Siirrä maksu maksupäätteelle',
                     handler: () => {
-                        this.cardPayment(this.payments[3]);
+                        this.cardPayment( this.payments[3] );
                     }
                 }
             ]
@@ -1138,7 +1145,7 @@ export class ShopPage {
     }
 
     // could be used if pt terminal not connected
-    promptPaymentCardInstructions(sum:number) {
+    promptPaymentCardInstructions( sum: number ) {
         let alert = this.alertController.create( {
             title: 'Syötä summa ' + sum + ' e maksupäätteeseen',
             buttons: [
@@ -1355,10 +1362,10 @@ export class ShopPage {
                     text: 'Veloitukset suoritettu',
                     handler: () => {
                         if ( this.payments[3] > 0 ) {
-                            if (this.ptInUse) {
+                            if ( this.ptInUse ) {
                                 this.promptDoPaymentCardPayment();
                             } else {
-                                this.promptPaymentCardInstructions(this.payments[3])
+                                this.promptPaymentCardInstructions( this.payments[3] )
                             }
                         } else {
                             this.combinedPayment();
@@ -1458,11 +1465,11 @@ export class ShopPage {
     }
 
     connectToPt() {
-        if (!this.ptConnectionInitiated) {
+        if ( !this.ptConnectionInitiated ) {
             this.ptConnectionInitiated = true;
             this.ptConnectionTerminated = false;
             this.restProvider.connectToPT().then(( result: any ) => {
-                if (!this.ptConnectionTerminated) {
+                if ( !this.ptConnectionTerminated ) {
                     setTimeout(() => {
                         this.getPtConnectionStatus();
                     }, 5000 );
@@ -1470,95 +1477,95 @@ export class ShopPage {
             }, ( err ) => {
                 console.log( 'error in connect: ' + err );
             } )
-            .catch((result:any) => {
-                console.log('catch in connect');
-            } )
+                .catch(( result: any ) => {
+                    console.log( 'catch in connect' );
+                } )
         }
     }
- 
-	disconnectPt() {
-		if (this.ptConnectionInitiated) {
+
+    disconnectPt() {
+        if ( this.ptConnectionInitiated ) {
             this.stopPtConnectionPoll();
             this.ptConnectionInitiated = false;
-		    this.ptConnectionTerminated = true;
-    		this.restProvider.disconnectPT().then(( result: any ) => {
-        		// update connection status only after timeout to give time for state change
-	    		setTimeout(() => {
-          			this.getPtConnectionStatus();
-        		}, 5000 );
-      		}, ( err ) => {
-        		console.log( 'error in disconnect: ' + err );
-      		})
-	  		.catch((result:any) => {
-	    		console.log('catch in disconnect');
-	  		})
-		}
+            this.ptConnectionTerminated = true;
+            this.restProvider.disconnectPT().then(( result: any ) => {
+                // update connection status only after timeout to give time for state change
+                setTimeout(() => {
+                    this.getPtConnectionStatus();
+                }, 5000 );
+            }, ( err ) => {
+                console.log( 'error in disconnect: ' + err );
+            } )
+                .catch(( result: any ) => {
+                    console.log( 'catch in disconnect' );
+                } )
+        }
     }
 
-	getPtConnectionStatus() {
+    getPtConnectionStatus() {
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
-			const ptStatus = JSON.parse(result.result);
-			const ptConnectionStatus = ptStatus.wsstatus;
-			this.ptStatusMessage = ptStatus.posMessage;
+            const ptStatus = JSON.parse( result.result );
+            const ptConnectionStatus = ptStatus.wsstatus;
+            this.ptStatusMessage = ptStatus.posMessage;
             this.ptConnected = false;
             ( <HTMLInputElement>document.getElementById( "cm4" ) ).disabled = true;
             ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
-			switch (ptConnectionStatus) {
-				case -1: // unknown
-					this.ptStatusIcon = "remove-circle";
-					this.ptStatusIconColor = "dark";
-					break;
-				case 0: // connecting
-					this.ptStatusIcon = "help";
-					this.ptStatusIconColor = "dark";
+            switch ( ptConnectionStatus ) {
+                case -1: // unknown
+                    this.ptStatusIcon = "remove-circle";
+                    this.ptStatusIconColor = "dark";
+                    break;
+                case 0: // connecting
+                    this.ptStatusIcon = "help";
+                    this.ptStatusIconColor = "dark";
                     //this.stopPtConnectionPoll();
-					break;
-				case 1: // connected
+                    break;
+                case 1: // connected
                     this.ptConnected = true;
-					this.ptStatusIcon = "swap";
-					this.ptStatusIconColor = "secondary";
+                    this.ptStatusIcon = "swap";
+                    this.ptStatusIconColor = "secondary";
                     this.stopPtConnectionPoll();
                     ( <HTMLInputElement>document.getElementById( "cm4" ) ).disabled = false;
                     ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = false;
-					break;
-				case 2: // closing
-					this.ptStatusIcon = "close-circle";
-					this.ptStatusIconColor = "danger";
-					break;
-				case 3: // closed
-					this.ptStatusIcon = "close-circle";
-					this.ptStatusIconColor = "danger";
-					break;
-			}
+                    break;
+                case 2: // closing
+                    this.ptStatusIcon = "close-circle";
+                    this.ptStatusIconColor = "danger";
+                    break;
+                case 3: // closed
+                    this.ptStatusIcon = "close-circle";
+                    this.ptStatusIconColor = "danger";
+                    break;
+            }
         }, ( err ) => {
             console.log( 'error in getting PT status: ' + err );
         } )
-		.catch((result:any) => {
-	    	console.log('catch in getting PT status: ' + result.result);
-		} )
-	}
+            .catch(( result: any ) => {
+                console.log( 'catch in getting PT status: ' + result.result );
+            } )
+    }
 
     getPaymentStatus() {
         this.restProvider.sendRequest( 'get_pt_status', [] ).then(( result: any ) => {
-            const ptStatus = JSON.parse(result.result);
-            
-            if (ptStatus.connectionClosedByPeer) {
+            const ptStatus = JSON.parse( result.result );
+
+            if ( ptStatus.connectionClosedByPeer ) {
                 this.ptStatusMessage = "Yhteys maksupäätteeseen katkennut";
                 return;
             }
-            
+
             //const ptConnectionStatus = ptStatus.wsstatus;
             this.transactionStatus = ptStatus.transactionStatus;
             this.ptStatusMessage = ptStatus.posMessage;
             this.cardPaymentStatus = ptStatus.paymentStatus;
-            
+
             // payment status
-            switch(this.cardPaymentStatus) {
+            switch ( this.cardPaymentStatus ) {
                 case -1:
-                    console.log("error in getting pt status");
-                break;
+                    console.log( "error in getting pt status" );
+                    break;
                 case 0:
-                    if (this.cardPurchaseGoingOn) {
+                    if ( this.cardPurchaseGoingOn ) {
                         this.cardPurchaseGoingOn = false;
                         this.combinedPayment();
                         this.restProvider.sendRequest( 'get_receipt_text', [] ).then(( result: any ) => {
@@ -1569,36 +1576,36 @@ export class ShopPage {
                             console.log( err );
                         } );
                     }
-                break;
+                    break;
                 case 1:
-                    console.log("processing card payment...");
-                break;
+                    console.log( "processing card payment..." );
+                    break;
             }
-            
-            if (this.cardPurchaseCheckingGoingOn) {
-               this.cardPurchaseCheckingGoingOn = false;
+
+            if ( this.cardPurchaseCheckingGoingOn ) {
+                this.cardPurchaseCheckingGoingOn = false;
             }
-            
+
         }, ( err ) => {
             console.log( 'error in getting PT status: ' + err );
         } )
-        .catch((result:any) => {
-            console.log('catch in getting PT status: ' + result.result);
-        } )
+            .catch(( result: any ) => {
+                console.log( 'catch in getting PT status: ' + result.result );
+            } )
     }
 
-  startPtConnectionPoll() {
-    if (!this.paymentPollTimer) {
-      this.connectToPt();
-      this.paymentPollTimer = setInterval(() => {
-        this.ptConnectionInitiated = false;
-        this.connectToPt();
-      }, 10000 );
+    startPtConnectionPoll() {
+        if ( !this.paymentPollTimer ) {
+            this.connectToPt();
+            this.paymentPollTimer = setInterval(() => {
+                this.ptConnectionInitiated = false;
+                this.connectToPt();
+            }, 10000 );
+        }
     }
-  }
-  
-  stopPtConnectionPoll() {
-    clearInterval(this.paymentPollTimer);
-    this.paymentPollTimer = null;
-  }
+
+    stopPtConnectionPoll() {
+        clearInterval( this.paymentPollTimer );
+        this.paymentPollTimer = null;
+    }
 }

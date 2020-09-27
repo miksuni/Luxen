@@ -18,6 +18,7 @@ export class ProductUpdatePage {
     price: string = "";
     amountInStock: string = "";
     inProduction: boolean = false;
+    inventoryCorrection: boolean = false;
 
     objectId: string = "";
 
@@ -31,7 +32,7 @@ export class ProductUpdatePage {
     productUpdates: any;
 
     //productInfoStr: any;
-    productInfo = { objectId: '', ISBN: '', productName: '', price: '', amountInStock: '', productCode: '', availableFromPublisher: false };
+    productInfo = { objectId: '', ISBN: '', productName: '', price: '', amountInStock: '', productCode: '', availableFromPublisher: false, inventoryCorrection: false };
 
     constructor( public navCtrl: NavController,
         private barcodeScanner: BarcodeScanner,
@@ -47,10 +48,6 @@ export class ProductUpdatePage {
         this.productList.getProductInfo();
     }
 
-    saveProducts() {
-        console.log( '>> home.saveProducts' );
-    }
-
     saveProduct() {
         this.presentLoading();
         this.productInfo.objectId = this.objectId;
@@ -59,10 +56,12 @@ export class ProductUpdatePage {
         this.productInfo.price = this.price;
         this.productInfo.amountInStock = this.amountInStock;
         this.productInfo.availableFromPublisher = this.inProduction;
+        this.productInfo.inventoryCorrection = this.inventoryCorrection;
         console.log( '>> home.saveProduct ' + JSON.stringify( this.productInfo ) );
         this.productList.updateProductInfo( this.productInfo );
         setTimeout(() => {
             console.log( '>> timeout ends' );
+            this.inventoryCorrection = false;
             this.productList.getProductInfo();
             this.finishLoading();
         }, 3000 );
@@ -250,10 +249,6 @@ export class ProductUpdatePage {
                 this.amountInStock = amountInStock.toString();
             }
         }
-    }
-
-    inProductionChanged() {
-        console.log( '>> productUpdate.inProductionChanged, new value: ' + this.inProduction );
     }
 
     clear() {
