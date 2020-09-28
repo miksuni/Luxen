@@ -110,6 +110,7 @@ export class ShopPage {
     username = "";
     password = "";
     loginError = "";
+    admin: boolean = false;
 
     constructor( public navCtrl: NavController,
         public navParams: NavParams,
@@ -161,6 +162,16 @@ export class ShopPage {
             } else {
                 this.finishLoading();
                 this.cashiers = JSON.parse( result.result );
+                if ( this.cashiers.length == 1 ) {
+                    console.log( "admin logged in" );
+                    this.admin = true;
+                    $( "#admin_control" ).show();
+                    $( "#payment_data_area" ).hide();
+                    $( "#receipt_view" ).hide();
+                    $( "#sold_items" ).hide();
+                }
+                this.productList.setAdminUserInfo( this.admin );
+                console.log( "cashiers: " + result.result );
                 $( "#login_view" ).hide();
                 $( "#shopping_cart_area" ).show();
                 this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
@@ -224,6 +235,7 @@ export class ShopPage {
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
         this.combinedPaymentEnabled = false;
+        this.admin = false;
         ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = true;
     }
 

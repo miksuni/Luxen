@@ -15,12 +15,13 @@ export class ProductList {
     emptyProduct = JSON.parse( '{"ISBN":"","Tuotenro":"","Tuote":"Tuotetta ei varastossa","Kpl":"0","Hinta":"", "Tilattavissa":"True"}' );
     nullProduct = JSON.parse( '[]' );
 
+    isAdmin: boolean = false;
+
     productInfoStr: any;
     productInfo: any;
     //productInfo = {ISBN:'', productCode:'', productName:'', amountInStock:'', price:'', availableFromPublisher:'', createdAt:'', updatedAt:'', objectId:''};
 
     constructor( public httpClient: HttpClient, public restProvider: RestProvider ) {
-        console.log( 'Hello ProductList Provider' );
         //this.getProductInfo();
     }
 
@@ -28,10 +29,17 @@ export class ProductList {
         return this.productInfo;
     }
 
+    setAdminUserInfo( isAdmin ) {
+        this.isAdmin = isAdmin;
+    }
+
+    isAdminUser() {
+        console.log( 'isAdmin: ' + this.isAdmin );
+        return this.isAdmin;
+    }
+
     getProductInfo() {
-        console.log( '>> productList.getProductInfo' );
         this.restProvider.productInfo( "" ).then(( result: any ) => {
-            console.log( '>> result received' );
             this.productInfoStr = result.result;
             this.productInfo = JSON.parse( this.productInfoStr );
         }, ( err ) => {
@@ -40,23 +48,18 @@ export class ProductList {
     }
 
     getProductByNumber( isbnNumber ) {
-        console.log( '>> productList.getProductByNumber' );
         for ( var i = 0; i < this.productInfo.length; i++ ) {
             if ( isbnNumber == this.productInfo[i].ISBN.replace( /-/g, '' ) ) {
-                console.log( '>> found' );
                 return this.productInfo[i];
             }
         }
         return this.emptyProduct;
     }
 
-
     getProductProgressivelyByNumber( letters ) {
-        console.log( '>> productList.getProductProgressivelyByNumber' );
         if ( letters.length == 0 ) {
             return this.nullProduct;
         }
-        console.log( '>> ProductList.getProductByNumber' );
         var results = [];
         //console.log('>> LEN ' + this.productInfo.length);
         for ( var i = 0; i < this.productInfo.length; i++ ) {
@@ -71,7 +74,6 @@ export class ProductList {
     }
 
     getProductByName( letters ) {
-        console.log( '>> productList.getProductByName' );
         if ( letters.length == 0 ) {
             return this.nullProduct;
         }
@@ -85,7 +87,6 @@ export class ProductList {
     }
 
     getProductByWord( letters ) {
-        console.log( '>> productList.getProductByName' );
         if ( letters.length == 0 ) {
             return this.nullProduct;
         }
@@ -101,7 +102,6 @@ export class ProductList {
     }
 
     getProductsNotKeptInStock() {
-        console.log( '>> productList.getProductsNotKeptInStock' );
 
         var results = [];
         for ( var i = 0; i < this.productInfo.length; i++ ) {
@@ -113,7 +113,6 @@ export class ProductList {
     }
 
     getProductsBelowCount( count ) {
-        console.log( '>> productList.getProductsBelowCount' );
         var results = [];
         for ( var i = 0; i < this.productInfo.length; i++ ) {
             if ( this.productInfo[i].amountInStock < this.productInfo[i].stockKeepingCount &&
@@ -124,12 +123,7 @@ export class ProductList {
         return results;
     }
 
-    getProductCount() {
-        //return this.productList.length;
-    }
-
     updateProductInfo( updatedInfo ) {
-        console.log( '>> ProductList.updateProductInfo' );
         this.restProvider.saveProduct( updatedInfo ).then(( result: any ) => {
             console.log( ">> product info saved" );
         }, ( err ) => {
@@ -138,7 +132,6 @@ export class ProductList {
     }
 
     addProduct( updatedInfo ) {
-        console.log( '>> ProductList.addProduct' );
         this.restProvider.addProduct( updatedInfo ).then(( result: any ) => {
             console.log( ">> product added" );
         }, ( err ) => {
@@ -147,7 +140,6 @@ export class ProductList {
     }
 
     removeProduct( updatedInfo ) {
-        console.log( '>> ProductList.removeProduct' );
         this.restProvider.removeProduct( updatedInfo ).then(( result: any ) => {
             console.log( ">> product removed" );
         }, ( err ) => {
