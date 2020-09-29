@@ -111,6 +111,7 @@ export class ShopPage {
     password = "";
     loginError = "";
     admin: boolean = false;
+    menuDisabled: boolean = true;
 
     constructor( public navCtrl: NavController,
         public navParams: NavParams,
@@ -165,14 +166,14 @@ export class ShopPage {
                 if ( this.cashiers.length == 1 ) {
                     console.log( "admin logged in" );
                     this.admin = true;
-                    $( "#admin_control" ).show();
-                    $( "#payment_data_area" ).hide();
-                    $( "#receipt_view" ).hide();
-                    $( "#sold_items" ).hide();
+                    this.menuDisabled = false;
                 }
                 this.productList.setAdminUserInfo( this.admin );
                 console.log( "cashiers: " + result.result );
                 $( "#login_view" ).hide();
+                $( "#payment_data_area" ).hide();
+                $( "#receipt_view" ).hide();
+                $( "#sold_items" ).hide();
                 $( "#shopping_cart_area" ).show();
                 this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
                 this.productList.getProductInfo();
