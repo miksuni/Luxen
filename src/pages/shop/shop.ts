@@ -111,6 +111,7 @@ export class ShopPage {
     password = "";
     loginError = "";
     admin: boolean = false;
+    testUser: boolean = false;
     menuDisabled: boolean = true;
 
     constructor( public navCtrl: NavController,
@@ -152,23 +153,34 @@ export class ShopPage {
     login() {
         this.presentLoading( "Kirjaudutaan..." );
         this.loginError = "";
-        this.getCashiers();
+
+        this.restProvider.sendRequest( 'auth', { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
+            var response = JSON.parse( result.result );
+            console.log( 'auth: ' + result.result );
+            if ( response["auth"] === "admin" ) {
+                this.admin = true;
+                this.menuDisabled = false;
+            } else if ( response["auth"] === "tester" ) {
+                this.testUser = true;
+            }
+            this.getCashiers();
+        }, ( err ) => {
+            console.log( 'error in getting current state: ' + err );
+        } )
+            .catch(( result: any ) => {
+                console.log( 'getting current state failed' );
+            } )
     }
 
     getCashiers() {
-        this.restProvider.cashiers( { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
+        this.restProvider.cashiers( [] ).then(( result: any ) => {
             var response = JSON.parse( result.result );
             if ( response[0].error_code ) {
                 this.loginError = "Käyttäjätunnus tai salasana on väärä";
             } else {
                 this.finishLoading();
                 this.cashiers = JSON.parse( result.result );
-                if ( this.cashiers.length == 1 ) {
-                    console.log( "admin logged in" );
-                    this.admin = true;
-                    this.menuDisabled = false;
-                }
-                this.productList.setAdminUserInfo( this.admin );
+                this.productList.setAdminUserInfo( this.admin ); ///// !!!!!!!!!!!!
                 console.log( "cashiers: " + result.result );
                 $( "#login_view" ).hide();
                 $( "#payment_data_area" ).hide();
