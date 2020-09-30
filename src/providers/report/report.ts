@@ -30,6 +30,10 @@ export class ReportProvider {
         return this.testMode;
     }
 
+    setTestUser() {
+        this.transactionReportAddress = "Ei määritelty"
+    }
+
     setTestMode( testModeActivated ) {
         if ( testModeActivated ) {
             this.transactionReportAddress = "mikko.m.suni@gmail.com";
@@ -61,7 +65,7 @@ export class ReportProvider {
         var cardPurchaseValue = 0.0;
         var mobilePayPurchaseValue = 0.0;
         var ownPurchaseValue = 0.0;
-		var invoiceValue = 0.0;
+        var invoiceValue = 0.0;
 
         var ownPurchaseTable = "";
         var ownPurchaseRows = "";
@@ -80,9 +84,9 @@ export class ReportProvider {
                 giftCard1Data.push( giftCardData );
                 giftCard1TransactionCount++;
                 giftCard1PurchaseValue += purchases[i].totalSum;
-            //} else if ( purchases[i].paymentMethod == 1 ) {
-            //    giftCard2TransactionCount++;
-            //    giftCard2PurchaseValue += purchases[i].totalSum;
+                //} else if ( purchases[i].paymentMethod == 1 ) {
+                //    giftCard2TransactionCount++;
+                //    giftCard2PurchaseValue += purchases[i].totalSum;
             } else if ( purchases[i].paymentMethod == 2 ) {
                 cashTransactionCount++;
                 cashPurchaseValue += purchases[i].totalSum;
@@ -330,15 +334,15 @@ export class ReportProvider {
             console.log( err );
         } );
     }
-    
-    makeReceipt(receiptData) {
-        
+
+    makeReceipt( receiptData ) {
+
         var currentDate = new Date().toLocaleDateString( 'fi-FI' );
         var currentTime = new Date().toLocaleTimeString( 'fi-FI' );
-        var currentDateTime = currentDate.toString() + "   " + currentTime; 
+        var currentDateTime = currentDate.toString() + "   " + currentTime;
         var receiptRows = [];
         var cardPaymentIncluded = false;
-        
+
         // caption
         var headerStr = [
             "<html><body>",
@@ -358,58 +362,58 @@ export class ReportProvider {
             "</tr>"
         ].join( '' );
 
-        
+
         // products
-        for (var i = 0; i < receiptData.purchasedItems.length; i++) {
-            receiptRows.push("<tr><td>");
-            receiptRows.push(receiptData.purchasedItems[i].productName);
-            receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
-            receiptRows.push(receiptData.purchasedItems[i].priceAsString);
-            receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
-            receiptRows.push(receiptData.purchasedItems[i].quantity);
-            receiptRows.push(" kpl</td><td style=\"padding:0px 0px 0px 10px\">");
-            receiptRows.push(receiptData.purchasedItems[i].totalAsString);
-            receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
+        for ( var i = 0; i < receiptData.purchasedItems.length; i++ ) {
+            receiptRows.push( "<tr><td>" );
+            receiptRows.push( receiptData.purchasedItems[i].productName );
+            receiptRows.push( "</td><td style=\"padding:0px 0px 0px 10px\">" );
+            receiptRows.push( receiptData.purchasedItems[i].priceAsString );
+            receiptRows.push( "</td><td style=\"padding:0px 0px 0px 10px\">" );
+            receiptRows.push( receiptData.purchasedItems[i].quantity );
+            receiptRows.push( " kpl</td><td style=\"padding:0px 0px 0px 10px\">" );
+            receiptRows.push( receiptData.purchasedItems[i].totalAsString );
+            receiptRows.push( "</td style=\"padding:0px 0px 0px 10px\"></tr>" );
         }
-        receiptRows.push("<tr><td></td><td></td><td></td><th>");
-        receiptRows.push(receiptData.totalSum);
-        receiptRows.push(" €</th></tr></table><br>");
-        
+        receiptRows.push( "<tr><td></td><td></td><td></td><th>" );
+        receiptRows.push( receiptData.totalSum );
+        receiptRows.push( " €</th></tr></table><br>" );
+
         // payment methods
-        receiptRows.push("<table><tr>");
-        receiptRows.push("<th align=\"left\">Maksutavat</th>");
-        receiptRows.push("<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Summa</th>");
-        for (var i = 0; i < receiptData.receiptPaymentInfo.length; i++) {
-            receiptRows.push("<tr><td>");
-            receiptRows.push(receiptData.receiptPaymentInfo[i].paymentMethodDescription);
-            receiptRows.push("</td><td style=\"padding:0px 0px 0px 10px\">");
-            receiptRows.push(receiptData.receiptPaymentInfo[i].sumAsString);
-            receiptRows.push("</td style=\"padding:0px 0px 0px 10px\"></tr>");
-            if (receiptData.receiptPaymentInfo[i].paymentMethod == 3) {
+        receiptRows.push( "<table><tr>" );
+        receiptRows.push( "<th align=\"left\">Maksutavat</th>" );
+        receiptRows.push( "<th align=\"left\" style=\"padding:0px 0px 0px 10px\">Summa</th>" );
+        for ( var i = 0; i < receiptData.receiptPaymentInfo.length; i++ ) {
+            receiptRows.push( "<tr><td>" );
+            receiptRows.push( receiptData.receiptPaymentInfo[i].paymentMethodDescription );
+            receiptRows.push( "</td><td style=\"padding:0px 0px 0px 10px\">" );
+            receiptRows.push( receiptData.receiptPaymentInfo[i].sumAsString );
+            receiptRows.push( "</td style=\"padding:0px 0px 0px 10px\"></tr>" );
+            if ( receiptData.receiptPaymentInfo[i].paymentMethod == 3 ) {
                 cardPaymentIncluded = true;
             }
         }
-        if (cardPaymentIncluded) {
-            receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;'>Maksukortti</td></tr>");
-            receiptRows.push("<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;white-space:pre;'>");
-            receiptRows.push(receiptData.ptCustomerText);
+        if ( cardPaymentIncluded ) {
+            receiptRows.push( "<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;'>Maksukortti</td></tr>" );
+            receiptRows.push( "<tr><td style = 'padding: 1px 5px 1px 5px;font-size: 70%;font-family: Lucida Console;white-space:pre;'>" );
+            receiptRows.push( receiptData.ptCustomerText );
         }
-        receiptRows.push("</td></tr></table></body></html>");
-        
+        receiptRows.push( "</td></tr></table></body></html>" );
+
         return headerStr + receiptRows.join( '' );
     }
-    
-    sendReceipt(receiptData) {
-        console.log("sendReceipt");
-        console.log(JSON.stringify(receiptData));
-        var receiptStr = this.makeReceipt(receiptData);
-        console.log(receiptStr);
-        
+
+    sendReceipt( receiptData ) {
+        console.log( "sendReceipt" );
+        console.log( JSON.stringify( receiptData ) );
+        var receiptStr = this.makeReceipt( receiptData );
+        console.log( receiptStr );
+
         this.reportMessage.subject = "Julkaisumyyntikuitti";
-        this.reportMessage.content =  receiptStr;
+        this.reportMessage.content = receiptStr;
         this.reportMessage.recipient = receiptData.recipient;
         this.reportMessage.format = "text/html";
-        
+
         this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
             console.log( 'receipt mail sent' );
         }, ( err ) => {

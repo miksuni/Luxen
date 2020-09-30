@@ -110,7 +110,6 @@ export class ShopPage {
     username = "";
     password = "";
     loginError = "";
-    admin: boolean = false;
     testUser: boolean = false;
     menuDisabled: boolean = true;
 
@@ -153,17 +152,28 @@ export class ShopPage {
     login() {
         this.presentLoading( "Kirjaudutaan..." );
         this.loginError = "";
+        var authorized: boolean = false;
 
         this.restProvider.sendRequest( 'auth', { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
             var response = JSON.parse( result.result );
             console.log( 'auth: ' + result.result );
+
             if ( response["auth"] === "admin" ) {
-                this.admin = true;
                 this.menuDisabled = false;
+                authorized = true;
             } else if ( response["auth"] === "tester" ) {
                 this.testUser = true;
+                this.productList.setTestUserInfo( true );
+                authorized = true;
+            } else if ( response["auth"] === "user" ) {
+                authorized = true;
             }
-            this.getCashiers();
+            if ( authorized ) {
+                this.getCashiers();
+            } else {
+                this.finishLoading();
+                this.loginError = "Käyttäjätunnus tai salasana on väärä";
+            }
         }, ( err ) => {
             console.log( 'error in getting current state: ' + err );
         } )
@@ -175,25 +185,25 @@ export class ShopPage {
     getCashiers() {
         this.restProvider.cashiers( [] ).then(( result: any ) => {
             var response = JSON.parse( result.result );
-            if ( response[0].error_code ) {
-                this.loginError = "Käyttäjätunnus tai salasana on väärä";
-            } else {
-                this.finishLoading();
-                this.cashiers = JSON.parse( result.result );
-                this.productList.setAdminUserInfo( this.admin ); ///// !!!!!!!!!!!!
-                console.log( "cashiers: " + result.result );
-                $( "#login_view" ).hide();
-                $( "#payment_data_area" ).hide();
-                $( "#receipt_view" ).hide();
-                $( "#sold_items" ).hide();
-                $( "#shopping_cart_area" ).show();
-                this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
+            this.finishLoading();
+            this.cashiers = JSON.parse( result.result );
+            console.log( "cashiers: " + result.result );
+            $( "#login_view" ).hide();
+            $( "#payment_data_area" ).hide();
+            $( "#receipt_view" ).hide();
+            $( "#sold_items" ).hide();
+            $( "#shopping_cart_area" ).show();
+            this.presentLoading( "Käynnistetään kassa ja haetaan tuotetiedot..." );
+            if ( !this.testUser ) {
                 this.productList.getProductInfo();
-                this.shoppingCart.clearAll();
-                this.cartContent = this.shoppingCart.getProducts();
-                this.getCurrentState();
-                this.update();
+            } else {
+                this.reportProvider.setTestUser();
+                this.productList.getTestProductInfo();
             }
+            this.shoppingCart.clearAll();
+            this.cartContent = this.shoppingCart.getProducts();
+            this.getCurrentState();
+            this.update();
             this.finishLoading();
         }, ( err ) => {
             console.log( err );
@@ -248,7 +258,6 @@ export class ShopPage {
         this.cardPaymentEnabled = false;
         this.cashPaymentEnabled = false;
         this.combinedPaymentEnabled = false;
-        this.admin = false;
         ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = true;
     }
 
@@ -1346,7 +1355,9 @@ export class ShopPage {
                 {
                     text: 'Lähetä',
                     handler: () => {
-                        this.reportProvider.sendReports();
+                        if ( !this.testUser ) {
+                            this.reportProvider.sendReports();
+                        }
                     }
                 },
                 {

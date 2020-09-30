@@ -15,10 +15,9 @@ export class ProductList {
     emptyProduct = JSON.parse( '{"ISBN":"","Tuotenro":"","Tuote":"Tuotetta ei varastossa","Kpl":"0","Hinta":"", "Tilattavissa":"True"}' );
     nullProduct = JSON.parse( '[]' );
 
-    isAdmin: boolean = false;
+    isTester: boolean = false;
 
-    productInfoStr: any;
-    productInfo: any;
+    productInfo: any = [];
     //productInfo = {ISBN:'', productCode:'', productName:'', amountInStock:'', price:'', availableFromPublisher:'', createdAt:'', updatedAt:'', objectId:''};
 
     constructor( public httpClient: HttpClient, public restProvider: RestProvider ) {
@@ -29,19 +28,31 @@ export class ProductList {
         return this.productInfo;
     }
 
-    setAdminUserInfo( isAdmin ) {
-        this.isAdmin = isAdmin;
+    setTestUserInfo( isTester ) {
+        this.isTester = isTester;
     }
 
-    isAdminUser() {
-        console.log( 'isAdmin: ' + this.isAdmin );
-        return this.isAdmin;
+    isTestUser() {
+        console.log( 'isTester: ' + this.isTester );
     }
 
     getProductInfo() {
         this.restProvider.productInfo( "" ).then(( result: any ) => {
-            this.productInfoStr = result.result;
-            this.productInfo = JSON.parse( this.productInfoStr );
+            this.productInfo = JSON.parse( result.result );
+        }, ( err ) => {
+            console.log( err );
+        } );
+    }
+
+    getTestProductInfo() {
+        this.restProvider.productInfo( "" ).then(( result: any ) => {
+            var allProducts = JSON.parse( result.result );
+            for ( var i = 0; i < allProducts.length; i++ ) {
+                var n = allProducts[i].productName.toLowerCase().indexOf( "testituote" );
+                if ( n >= 0 ) {
+                    this.productInfo.push( allProducts[i] );
+                }
+            }
         }, ( err ) => {
             console.log( err );
         } );
