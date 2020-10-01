@@ -15,7 +15,7 @@
         	<ion-icon name={{ptStatusIcon}}></ion-icon>
     	</button>
     </ion-buttons>
-<ion-title>Julkaisumyynti</ion-title> </ion-navbar> </ion-header>
+<ion-title>{{pageHeader}}</ion-title> </ion-navbar> </ion-header>
 
 
 <ion-content padding class="shop">
@@ -44,6 +44,34 @@
 
 			<!-- *** LEFT PANEL *** -->
 			<td class="table_left_column">
+
+                <!-- LOGIN start -->
+                <div id="login_view" >
+                    <table class="receipt">
+                        <tr>
+                            <td class=receipt_line>Kirjaudu sisään</td>
+                        </tr>
+                        <tr>
+                           <td><ion-input
+                               [(ngModel)]="username" placeholder="käyttäjätunnus"></ion-input>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><ion-input type="password" placeholder="salasana"
+                               [(ngModel)]="password"></ion-input>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td  class=receipt_line>
+                              <button ion-button class="product_line_button"
+                                  (click)="login()">Kirjaudu
+                              </button>
+                           </td>
+                       </tr>
+                    </table>
+                    <p style="color:red;">{{loginError}}</p>
+                </div>
+                <!-- LOGIN end -->
 
 				<div id="left_panel_area">
 					<!-- SHOPPING CART -->
@@ -263,34 +291,6 @@
 					</div>
 					<!-- *** PAYMENT METHOD COMBINATIONS end *** -->
 				</div>
-
-                <!-- LOGIN start -->
-                <div id="login_view" >
-                    <table class="receipt">
-                        <tr>
-                            <td class=receipt_line>Kirjaudu sisään</td>
-                        </tr>
-                        <tr>
-                           <td><ion-input
-                               [(ngModel)]="username"></ion-input>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><ion-input type="password"
-                               [(ngModel)]="password"></ion-input>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td  class=receipt_line>
-                              <button ion-button class="product_line_button"
-                                  (click)="login()">Kirjaudu
-                              </button>
-                           </td>
-                       </tr>
-                    </table>
-                    <p style="color:red;">{{loginError}}</p>
-                </div>
-                <!-- LOGIN end -->
 
                 <!-- RECEIPT start -->
                 <div id="receipt_view" >

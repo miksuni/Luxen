@@ -22,6 +22,8 @@ import * as $ from "jquery";
 } )
 export class ShopPage {
 
+    pageHeader: string = "Julkaisumyynti";
+
     productNumberInitials: string = "";
     productNameInitials: string = "";
 
@@ -156,7 +158,7 @@ export class ShopPage {
 
         this.restProvider.sendRequest( 'auth', { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
             var response = JSON.parse( result.result );
-            console.log( 'auth: ' + result.result );
+            this.pageHeader = "Julkaisumyynti";
 
             if ( response["auth"] === "admin" ) {
                 this.menuDisabled = false;
@@ -164,6 +166,7 @@ export class ShopPage {
             } else if ( response["auth"] === "tester" ) {
                 this.testUser = true;
                 this.productList.setTestUserInfo( true );
+                this.pageHeader = "Julkaisumyynti (TESTIKÄYTTÖ)";
                 authorized = true;
             } else if ( response["auth"] === "user" ) {
                 authorized = true;
@@ -187,7 +190,6 @@ export class ShopPage {
             var response = JSON.parse( result.result );
             this.finishLoading();
             this.cashiers = JSON.parse( result.result );
-            console.log( "cashiers: " + result.result );
             $( "#login_view" ).hide();
             $( "#payment_data_area" ).hide();
             $( "#receipt_view" ).hide();
