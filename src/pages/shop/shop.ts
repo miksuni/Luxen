@@ -159,7 +159,7 @@ export class ShopPage {
         this.restProvider.sendRequest( 'auth', { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
             var response = JSON.parse( result.result );
             this.pageHeader = "Julkaisumyynti";
-
+            this.getCurrentState();
             if ( response["auth"] === "admin" ) {
                 this.menuDisabled = false;
                 authorized = true;
@@ -204,7 +204,7 @@ export class ShopPage {
             }
             this.shoppingCart.clearAll();
             this.cartContent = this.shoppingCart.getProducts();
-            this.getCurrentState();
+            //this.getCurrentState();
             this.update();
             this.finishLoading();
         }, ( err ) => {
@@ -235,6 +235,7 @@ export class ShopPage {
         if ( e.selectedIndex > 0 ) {
             ( <HTMLInputElement>document.getElementById( "logout_button" ) ).disabled = false;
             ( <HTMLInputElement>document.getElementById( "check_payments_button" ) ).disabled = false;
+            this.setCurrentCashier( e.options[e.selectedIndex].text );
             if ( this.ptInUse ) {
                 this.startPtConnectionPoll();
             }
@@ -266,6 +267,7 @@ export class ShopPage {
     onLogout() {
         this.logout( false );
         this.promptSendReport();
+        this.setCurrentCashier( " " );
 
         //this.reportProvider.sendToBeOrderedReport();
         // TODO: ACTIVATE IN PRODUCTION
@@ -282,6 +284,14 @@ export class ShopPage {
         if ( this.cashier.length == 0 ) {
             this.promptSelectCashier();
         }
+    }
+
+    setCurrentCashier( cashier ) {
+        console.log( "cashier: " + cashier );
+        this.restProvider.sendRequest( 'setcashier', { "cashier": cashier } ).then(( result: any ) => {
+        }, ( err ) => {
+            console.log( err );
+        } );
     }
 
     onProductNumberUpdated() {
