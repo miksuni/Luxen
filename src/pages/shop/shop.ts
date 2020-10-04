@@ -154,20 +154,31 @@ export class ShopPage {
     login() {
         this.presentLoading( "Kirjaudutaan..." );
         this.loginError = "";
-        var authorized: boolean = false;
+        //var authorized: boolean = false;
 
         this.restProvider.sendRequest( 'auth', { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
             var response = JSON.parse( result.result );
             this.pageHeader = "Julkaisumyynti";
-            this.getCurrentState();
+            this.getCurrentState( response );
+
+
+            /**********************************************/
+            /*
             if ( response["auth"] === "admin" ) {
                 this.menuDisabled = false;
                 authorized = true;
             } else if ( response["auth"] === "tester" ) {
+                console.log( "Response: " + result.result );
+                if ( response["currentCashier"].length > 1 ) {
+                    this.finishLoading();
+                    this.loginError = "Tällä hetkellä testikäyttäjänä on jo " + response["currentCashier"] +
+                        ", yritä hetken kuluttua uudelleen";
+                } else {
                 this.testUser = true;
                 this.productList.setTestUserInfo( true );
                 this.pageHeader = "Julkaisumyynti (TESTIKÄYTTÖ)";
                 authorized = true;
+                //}
             } else if ( response["auth"] === "user" ) {
                 authorized = true;
             }
@@ -177,12 +188,14 @@ export class ShopPage {
                 this.finishLoading();
                 this.loginError = "Käyttäjätunnus tai salasana on väärä";
             }
+            */
+            /**********************************************/
+
         }, ( err ) => {
-            console.log( 'error in getting current state: ' + err );
+            console.log( 'error in authorization: ' + err );
+        } ).catch(( result: any ) => {
+            console.log( 'authorization failed' );
         } )
-            .catch(( result: any ) => {
-                console.log( 'getting current state failed' );
-            } )
     }
 
     getCashiers() {
@@ -204,7 +217,6 @@ export class ShopPage {
             }
             this.shoppingCart.clearAll();
             this.cartContent = this.shoppingCart.getProducts();
-            //this.getCurrentState();
             this.update();
             this.finishLoading();
         }, ( err ) => {
@@ -212,11 +224,48 @@ export class ShopPage {
         } );
     }
 
-    getCurrentState() {
+    getCurrentState( response ) {
+        console.log( "getCurrentState" );
+        var authorized: boolean = false;
         this.restProvider.sendRequest( 'current_state', [] ).then(( result: any ) => {
             var currentState = JSON.parse( result.result );
+            console.log( "Current state: " + result.result );
             if ( currentState.length > 0 ) {
                 this.currentState = currentState[0];
+
+
+
+
+                if ( response["auth"] === "admin" ) {
+                    this.menuDisabled = false;
+                    authorized = true;
+                } else if ( response["auth"] === "tester" ) {
+                    console.log( "Response: " + result.result );
+                    if ( this.currentState.currentCashier.length <= 1 ) {
+                        this.testUser = true;
+                        this.productList.setTestUserInfo( true );
+                        this.pageHeader = "Julkaisumyynti (TESTIKÄYTTÖ)";
+                        authorized = true;
+                    }
+                } else if ( response["auth"] === "user" ) {
+                    authorized = true;
+                }
+                if ( authorized ) {
+                    this.getCashiers();
+                } else {
+                    if ( this.currentState.currentCashier.length > 1 ) {
+                        this.loginError = "Tällä hetkellä testikäyttäjänä on jo " + this.currentState.currentCashier +
+                            ", yritä hetken kuluttua uudelleen";
+                    } else {
+                        this.loginError = "Käyttäjätunnus tai salasana on väärä";
+                    }
+                    this.finishLoading();
+
+                }
+
+
+
+
             }
         }, ( err ) => {
             console.log( 'error in getting current state: ' + err );
