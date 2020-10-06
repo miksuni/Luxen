@@ -500,7 +500,11 @@ export class ShopPage {
             this.finishLoading();
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
-                this.productList.getProductInfo();
+                if ( !this.testUser ) {
+                    this.productList.getProductInfo();
+                } else {
+                    this.productList.getTestProductInfo();
+                }
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();
@@ -685,7 +689,11 @@ export class ShopPage {
             this.finishLoading();
             this.presentLoading( "Haetaan tuotteet..." );
             setTimeout(() => {
-                this.productList.getProductInfo();
+                if ( !this.testUser ) {
+                    this.productList.getProductInfo();
+                } else {
+                    this.productList.getTestProductInfo();
+                }
                 this.finishLoading();
             }, 2000 );
             this.finishLoading();

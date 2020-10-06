@@ -47,6 +47,7 @@ export class ProductList {
     getTestProductInfo() {
         this.restProvider.productInfo( "" ).then(( result: any ) => {
             var allProducts = JSON.parse( result.result );
+            this.productInfo = [];
             for ( var i = 0; i < allProducts.length; i++ ) {
                 var n = allProducts[i].productName.toLowerCase().indexOf( "testituote" );
                 if ( n >= 0 ) {
