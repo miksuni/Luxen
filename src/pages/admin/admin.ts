@@ -15,7 +15,6 @@ export class AdminPage {
     searchResults: any;
     soldItems: any;
     products: any;
-    testMode: boolean;
     soldValue: number = 0;
 
     constructor( public navCtrl: NavController,
@@ -30,12 +29,11 @@ export class AdminPage {
         console.log( 'ionViewDidLoad AdminPage' );
         document.getElementById( "productTable" ).style.visibility = "hidden";
         document.getElementById( "soldItems" ).style.visibility = "hidden";
-        this.testMode = this.reportProvider.getTestMode();
     }
 
     onTestModeChanged() {
-        console.log( 'onTestModeChanged: ' + this.testMode );
-        this.reportProvider.setTestMode( this.testMode );
+        //console.log( 'onTestModeChanged: ' + this.testMode );
+        //this.reportProvider.setTestMode( this.testMode );
     }
 
     getProductsToBeOrdered() {
@@ -67,10 +65,10 @@ export class AdminPage {
         document.getElementById( "soldItems" ).style.visibility = "visible";
         this.restProvider.sendRequest( 'sold_items', [] ).then(( result: any ) => {
             var items = JSON.parse( result.result );
-            for (var i = 0; i < items.length; i++) {
-                const date = new Date(items[i].createdAt);
+            for ( var i = 0; i < items.length; i++ ) {
+                const date = new Date( items[i].createdAt );
                 items[i].timeStr = date.toLocaleTimeString();
-                console.log("--" + items[i].timeStr);
+                console.log( "--" + items[i].timeStr );
             }
             this.soldItems = items;
             console.log( 'soldItems: ' + JSON.stringify( this.soldItems ) );
@@ -84,16 +82,16 @@ export class AdminPage {
         document.getElementById( "soldItems" ).style.visibility = "hidden";
         this.soldValue = 0;
         var since = new Date();
-        console.log('today: ' + since);
-        since.setDate(1);
-        since.setMonth(0);
-        since.setHours(0,0,0);
-        console.log('1.1. this year: ' + since);
-        var param = {"since": since};
+        console.log( 'today: ' + since );
+        since.setDate( 1 );
+        since.setMonth( 0 );
+        since.setHours( 0, 0, 0 );
+        console.log( '1.1. this year: ' + since );
+        var param = { "since": since };
         this.restProvider.sendRequest( 'receipts', param ).then(( result: any ) => {
             var items = JSON.parse( result.result );
-            for (var i = 0; i < items.length; i++) {
-                console.log("--" + items[i].totalSum);
+            for ( var i = 0; i < items.length; i++ ) {
+                console.log( "--" + items[i].totalSum );
                 this.soldValue += items[i].totalSum;
             }
         }, ( err ) => {
@@ -168,29 +166,29 @@ export class AdminPage {
     }
 
     connectToPT() {
-        console.log('connconnectToPT');
+        console.log( 'connconnectToPT' );
         this.restProvider.connectToPT().then(( result: any ) => {
             console.log( '>> result received' );
         }, ( err ) => {
             console.log( 'error in connect: ' + err );
         } )
-	    .catch((result:any) => {
-	        console.log('catch in connect');
-	    } )
+            .catch(( result: any ) => {
+                console.log( 'catch in connect' );
+            } )
     }
 
     disconnectPT() {
-        console.log('disconnectPT');
+        console.log( 'disconnectPT' );
         this.restProvider.disconnectPT().then(( result: any ) => {
             console.log( '>> result received' );
         }, ( err ) => {
             console.log( 'error in disconnect: ' + err );
         } )
-	    .catch((result:any) => {
-	        console.log('catch in disconnect');
-	    } )
+            .catch(( result: any ) => {
+                console.log( 'catch in disconnect' );
+            } )
     }
-    
+
     doPtTest() {
         this.restProvider.sendRequest( 'test', [] ).then(( result: any ) => {
             console.log( '>> admin: test' );

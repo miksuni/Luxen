@@ -28,8 +28,8 @@ export class ProductList {
         return this.productInfo;
     }
 
-    setTestUserInfo( isTester ) {
-        this.isTester = isTester;
+    setTestUser( isTestUser ) {
+        this.isTester = isTestUser;
     }
 
     isTestUser() {

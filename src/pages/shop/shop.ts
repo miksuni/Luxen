@@ -154,48 +154,21 @@ export class ShopPage {
     login() {
         this.presentLoading( "Kirjaudutaan..." );
         this.loginError = "";
-        //var authorized: boolean = false;
-
         this.restProvider.sendRequest( 'auth', { "auth": this.username + '+' + this.password } ).then(( result: any ) => {
             var response = JSON.parse( result.result );
             this.pageHeader = "Julkaisumyynti";
             this.getCurrentState( response );
-
-
-            /**********************************************/
-            /*
-            if ( response["auth"] === "admin" ) {
-                this.menuDisabled = false;
-                authorized = true;
-            } else if ( response["auth"] === "tester" ) {
-                console.log( "Response: " + result.result );
-                if ( response["currentCashier"].length > 1 ) {
-                    this.finishLoading();
-                    this.loginError = "Tällä hetkellä testikäyttäjänä on jo " + response["currentCashier"] +
-                        ", yritä hetken kuluttua uudelleen";
-                } else {
-                this.testUser = true;
-                this.productList.setTestUserInfo( true );
-                this.pageHeader = "Julkaisumyynti (TESTIKÄYTTÖ)";
-                authorized = true;
-                //}
-            } else if ( response["auth"] === "user" ) {
-                authorized = true;
-            }
-            if ( authorized ) {
-                this.getCashiers();
-            } else {
-                this.finishLoading();
-                this.loginError = "Käyttäjätunnus tai salasana on väärä";
-            }
-            */
-            /**********************************************/
-
         }, ( err ) => {
             console.log( 'error in authorization: ' + err );
         } ).catch(( result: any ) => {
             console.log( 'authorization failed' );
         } )
+    }
+
+    setTestUser( isTestUser ) {
+        this.testUser = isTestUser;
+        this.productList.setTestUser( isTestUser );
+        this.reportProvider.setTestUser( isTestUser );
     }
 
     getCashiers() {
@@ -212,7 +185,6 @@ export class ShopPage {
             if ( !this.testUser ) {
                 this.productList.getProductInfo();
             } else {
-                this.reportProvider.setTestUser();
                 this.productList.getTestProductInfo();
             }
             this.shoppingCart.clearAll();
@@ -226,53 +198,38 @@ export class ShopPage {
 
     getCurrentState( response ) {
         console.log( "getCurrentState" );
-        var authorized: boolean = false;
+        this.setTestUser( false );
         this.restProvider.sendRequest( 'current_state', [] ).then(( result: any ) => {
             var currentState = JSON.parse( result.result );
             console.log( "Current state: " + result.result );
             if ( currentState.length > 0 ) {
                 this.currentState = currentState[0];
-
-
-
-
                 if ( response["auth"] === "admin" ) {
                     this.menuDisabled = false;
-                    authorized = true;
-                } else if ( response["auth"] === "tester" ) {
-                    console.log( "Response: " + result.result );
-                    if ( this.currentState.currentCashier.length <= 1 ) {
-                        this.testUser = true;
-                        this.productList.setTestUserInfo( true );
-                        this.pageHeader = "Julkaisumyynti (TESTIKÄYTTÖ)";
-                        authorized = true;
-                    }
-                } else if ( response["auth"] === "user" ) {
-                    authorized = true;
-                }
-                if ( authorized ) {
                     this.getCashiers();
-                } else {
+                } else if ( ( response["auth"] === "user" ) || ( response["auth"] === "tester" ) ) {
                     if ( this.currentState.currentCashier.length > 1 ) {
-                        this.loginError = "Tällä hetkellä testikäyttäjänä on jo " + this.currentState.currentCashier +
+                        this.loginError = "Tällä hetkellä kassajärjestelmää käyttää " + this.currentState.currentCashier +
                             ", yritä hetken kuluttua uudelleen";
+                        this.finishLoading();
                     } else {
-                        this.loginError = "Käyttäjätunnus tai salasana on väärä";
+                        if ( response["auth"] === "tester" ) {
+                            this.setTestUser( true );
+                            this.pageHeader = "Julkaisumyynti (TESTIKÄYTTÖ)";
+                        }
+                        this.getCashiers();
                     }
+                } else {
+                    this.loginError = "Käyttäjätunnus tai salasana on väärä";
                     this.finishLoading();
-
                 }
-
-
-
-
             }
+
         }, ( err ) => {
             console.log( 'error in getting current state: ' + err );
+        } ).catch(( result: any ) => {
+            console.log( 'getting current state failed' );
         } )
-            .catch(( result: any ) => {
-                console.log( 'getting current state failed' );
-            } )
     }
 
     onCashierSelected( $event ) {

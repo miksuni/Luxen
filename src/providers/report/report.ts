@@ -26,21 +26,13 @@ export class ReportProvider {
         console.log( 'Hello ReportProvider Provider' );
     }
 
-    getTestMode() {
-        return this.testMode;
-    }
-
-    setTestUser() {
-        this.transactionReportAddress = "Ei määritelty"
-    }
-
-    setTestMode( testModeActivated ) {
-        if ( testModeActivated ) {
-            this.transactionReportAddress = "mikko.m.suni@gmail.com";
-        } else {
+    setTestUser( isTestUser ) {
+        if ( !isTestUser ) {
             this.transactionReportAddress = "lahdenry.laskut@gmail.com";
+            //this.transactionReportAddress = "mikko.m.suni@gmail.com";
+        } else {
+            this.transactionReportAddress = "Ei määritelty";
         }
-        this.testMode = testModeActivated;
     }
 
     getReportingAddress() {
