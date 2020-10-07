@@ -18,7 +18,6 @@ export class RestProvider {
     }
 
     sendRequest( request, data ) {
-        console.log( 'sendRequest: ' + request + ", params: " + JSON.stringify( data ) );
         const httpOptions = {
             headers: new HttpHeaders( {
                 'Content-Type': 'application/json',

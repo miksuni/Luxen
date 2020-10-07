@@ -39,17 +39,14 @@ export class ShoppingcartProvider {
     paymentMethod2: "";
 
     constructor( public http: HttpClient, public restProvider: RestProvider ) {
-        console.log( 'Hello ShoppingcartProvider Provider' );
     }
 
     setCashier( cashier ) {
-        console.log( '>> ShoppingcartProvider.setCashier: ' + cashier );
         this.cashier = cashier;
         this.receipt.cashier = cashier;
     }
 
     addProduct( productInfo ) {
-        console.log( '>> ShoppingcartProvider.addProduct' );
         productInfo.quantity = 1;
         productInfo.total = productInfo.price;
         productInfo.totalAsString = productInfo.total.toFixed( 2 );
@@ -58,11 +55,9 @@ export class ShoppingcartProvider {
         this.productsInCart++;
         this.totalSum += productInfo.price;
         this.receipt.totalSum = this.totalSum;
-        console.log( '>> cart content: ' + JSON.stringify( this.shoppingCart ) );
     }
 
     removeProduct( i ) {
-        console.log( '>> ShoppingcartProvider.removeProduct' );
         if ( i >= 0 && i < this.shoppingCart.length ) {
             this.productsInCart -= this.shoppingCart[i].quantity;
             this.totalSum -= ( this.shoppingCart[i].price * this.shoppingCart[i].quantity );
@@ -73,7 +68,6 @@ export class ShoppingcartProvider {
     }
 
     clearAll() {
-        console.log( '>> ShoppingcartProvider.clearAll' );
         this.shoppingCart.splice( 0, this.shoppingCart.length );
         this.productsInCart = 0;
         this.totalSum = 0;
@@ -84,19 +78,15 @@ export class ShoppingcartProvider {
     }
 
     increase( i ) {
-        console.log( '>> ShoppingcartProvider.increase' );
         this.shoppingCart[i].quantity++;
         this.shoppingCart[i].total += this.shoppingCart[i].price;
         this.shoppingCart[i].totalAsString = this.shoppingCart[i].total.toFixed( 2 );
         this.productsInCart++;
         this.totalSum += this.shoppingCart[i].price;
         this.receipt.totalSum = this.totalSum;
-        console.log( '>> total 1: ' + this.shoppingCart[i].total );
-        console.log( '>> total 2: ' + this.totalSum );
     }
 
     decrease( i ) {
-        console.log( 'ShoppingcartProvider.decrease' );
         this.productsInCart--;
         this.totalSum -= this.shoppingCart[i].price;
         this.receipt.totalSum = this.totalSum;
@@ -110,7 +100,6 @@ export class ShoppingcartProvider {
     }
 
     getProducts() {
-        console.log( '>> ShoppingcartProvider.getProducts' );
         return this.shoppingCart;
     }
 
@@ -124,15 +113,11 @@ export class ShoppingcartProvider {
     }
 
     saveReceipt( receiptData ) {
-        console.log( '>> ShoppingcartProvider.saveReceipt' );
-        console.log( 'shoppingCart2: ' + JSON.stringify( this.shoppingCart ) );
-        console.log( 'receiptData: ' + JSON.stringify( receiptData ) );
         this.purchaseData.productList = this.shoppingCart;
         this.purchaseData.receiptData = receiptData;
-        console.log( 'purchaseData: ' + JSON.stringify( this.purchaseData ) );
         this.restProvider.sendRequest( "save_purchase_data", this.purchaseData );
     }
-    
+
     getPurchaseData() {
         return this.purchaseData;
     }
