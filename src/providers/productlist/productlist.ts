@@ -32,10 +32,6 @@ export class ProductList {
         this.isTester = isTestUser;
     }
 
-    isTestUser() {
-        console.log( 'isTester: ' + this.isTester );
-    }
-
     getProductInfo() {
         this.restProvider.productInfo( "" ).then(( result: any ) => {
             this.productInfo = JSON.parse( result.result );
@@ -137,7 +133,6 @@ export class ProductList {
 
     updateProductInfo( updatedInfo ) {
         this.restProvider.saveProduct( updatedInfo ).then(( result: any ) => {
-            console.log( ">> product info saved" );
         }, ( err ) => {
             console.log( err );
         } );
@@ -145,7 +140,6 @@ export class ProductList {
 
     addProduct( updatedInfo ) {
         this.restProvider.addProduct( updatedInfo ).then(( result: any ) => {
-            console.log( ">> product added" );
         }, ( err ) => {
             console.log( err );
         } );
@@ -153,7 +147,6 @@ export class ProductList {
 
     removeProduct( updatedInfo ) {
         this.restProvider.removeProduct( updatedInfo ).then(( result: any ) => {
-            console.log( ">> product removed" );
         }, ( err ) => {
             console.log( err );
         } );

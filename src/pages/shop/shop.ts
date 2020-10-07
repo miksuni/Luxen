@@ -197,11 +197,9 @@ export class ShopPage {
     }
 
     getCurrentState( response ) {
-        console.log( "getCurrentState" );
         this.setTestUser( false );
         this.restProvider.sendRequest( 'current_state', [] ).then(( result: any ) => {
             var currentState = JSON.parse( result.result );
-            console.log( "Current state: " + result.result );
             if ( currentState.length > 0 ) {
                 this.currentState = currentState[0];
                 if ( response["auth"] === "admin" ) {
@@ -293,7 +291,6 @@ export class ShopPage {
     }
 
     setCurrentCashier( cashier ) {
-        console.log( "cashier: " + cashier );
         this.restProvider.sendRequest( 'setcashier', { "cashier": cashier } ).then(( result: any ) => {
         }, ( err ) => {
             console.log( err );

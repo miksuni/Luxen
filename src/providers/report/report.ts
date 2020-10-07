@@ -41,8 +41,6 @@ export class ReportProvider {
 
     makeTransactionReportMessage( purchases, cashier ) {
 
-        console.log( 'purchases: ' + JSON.stringify( purchases ) );
-
         var giftCard1TransactionCount = 0; // RY
         //var giftCard2TransactionCount = 0; // SRK - not included to reports for the time being
         var cashTransactionCount = 0;
@@ -111,7 +109,6 @@ export class ReportProvider {
         var currentDate = new Date().toLocaleDateString( 'fi-FI' );
         var currentTime = new Date().toLocaleTimeString( 'fi-FI' );
         var currentDateTime = currentDate.toString() + "   " + currentTime;
-        console.log( 'current date: ' + currentDateTime );
 
         var cardTrCount = cardTransactionCount.toString();
         var cardTrValue = cardPurchaseValue.toFixed( 2 );
@@ -227,14 +224,10 @@ export class ReportProvider {
 
         ].join( '' );
 
-        console.log( str );
-
         return str;
     }
 
     makeToBeOrderedReportMessage( orders ) {
-
-        console.log( 'orders: ' + JSON.stringify( orders ) );
 
         var str = "";
 
@@ -249,8 +242,6 @@ export class ReportProvider {
         }
         str += '\n\nViesti on lähetetty julkaisumyynnin kassajärjestelmästä automaattisesti.'
 
-        console.log( '*** report: ' + str );
-
         return str;
     }
 
@@ -258,7 +249,6 @@ export class ReportProvider {
         this.restProvider.sendRequest( 'not_reported_receipts', [] ).then(( result: any ) => {
             var receipts = JSON.parse( result.result );
             var cashier = "";
-            console.log( 'receipts: ' + JSON.stringify( receipts ) );
             this.reportMessage.subject = "Julkaisumyyntiraportti";
             if ( receipts.length > 0 ) {
                 cashier = receipts[receipts.length - 1].cashier;
@@ -267,9 +257,7 @@ export class ReportProvider {
             this.reportMessage.recipient = this.transactionReportAddress;
             this.reportMessage.format = "text/html";
             this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
-                console.log( 'report mail sent' );
                 this.restProvider.sendRequest( 'set_as_reported', receipts ).then(( result: any ) => {
-                    console.log( 'receipts updated' );
                 }, ( err ) => {
                     console.log( err );
                 } );
@@ -282,7 +270,6 @@ export class ReportProvider {
     }
 
     sendProductInfoDbDumb() {
-        console.log( '>> sendProductInfoDbDumb ' );
         this.reportMessage.subject = "productInfo";
         this.reportMessage.content = JSON.stringify( this.productList.products() );
         this.reportMessage.recipient = this.adminEmail;
@@ -296,17 +283,14 @@ export class ReportProvider {
     }
 
     senddBClassDumb( dbClass ) {
-        console.log( '>> senddBClassDumb: ' + dbClass );
         this.dbDump.dbentry = dbClass;
         this.restProvider.sendRequest( 'db_entries', this.dbDump ).then(( result: any ) => {
             var entries = JSON.parse( result.result );
-            console.log( '>>' + JSON.stringify( entries ) );
             this.reportMessage.subject = dbClass;
             this.reportMessage.content = JSON.stringify( entries );
             this.reportMessage.recipient = this.adminEmail;
             this.reportMessage.format = "text/plain";
             this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
-                console.log( dbClass + ' dump mail sent' );
             }, ( err ) => {
                 console.log( err );
             } );
@@ -396,7 +380,6 @@ export class ReportProvider {
     }
 
     sendReceipt( receiptData ) {
-        console.log( "sendReceipt" );
         console.log( JSON.stringify( receiptData ) );
         var receiptStr = this.makeReceipt( receiptData );
         console.log( receiptStr );
