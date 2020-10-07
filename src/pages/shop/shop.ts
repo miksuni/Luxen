@@ -76,7 +76,7 @@ export class ShopPage {
 
     customerEmail = "";
 
-    version = "Kassaversio 1.1.3";
+    version = "Kassaversio 1.1.4";
 
     // TODO: KUN COMBINED PAYMENT TALLETETTU, NOLLAA NÄMÄ !!!
     toBePaid: number = 0;
@@ -1019,7 +1019,7 @@ export class ShopPage {
                 items[i].timeStr = date.toLocaleTimeString();
             }
             this.soldItems = items;
-            this.checkLastCardPayment();
+            //this.checkLastCardPayment();
         }, ( err ) => {
             console.log( err );
         } );
