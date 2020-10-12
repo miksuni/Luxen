@@ -120,8 +120,9 @@
 								<table class="table_product_input_fields">
 									<tr>
 										<td><ion-input [(ngModel)]="productNameInitials"
-												placeholder="Tuotteen nimi" (click)="onInputClicked()"
-												(ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+												placeholder="Tähän tuotteen nimi" (click)="onInputClicked()"
+												(ionChange)="onProductNameUpdated()" name="productName">
+                                                </ion-input>
 										</td>
 										<td><ion-input type="number"
 												[(ngModel)]="productNumberInitials"
