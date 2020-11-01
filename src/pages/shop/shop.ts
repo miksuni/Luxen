@@ -451,11 +451,13 @@ export class ShopPage {
         var receiptData = {
             receiptNr: 0,
             cashier: '',
+            testUser: false,
             items: []
         }
 
         receiptData.receiptNr = this.currentState.lastReceiptNr;
         receiptData.cashier = this.cashier;
+        receiptData.testUser = this.testUser;
 
         this.payments[5] = this.totalSum;
 
@@ -560,11 +562,13 @@ export class ShopPage {
         var receiptData = {
             receiptNr: 0,
             cashier: '',
+            testUser: false,
             items: []
         }
 
         receiptData.receiptNr = this.currentState.lastReceiptNr;
         receiptData.cashier = this.cashier;
+        receiptData.testUser = this.testUser;
 
         /************************** Ry gift card ***************************/
         if ( this.payments[0] > 0 ) {
