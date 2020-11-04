@@ -248,22 +248,22 @@ export class ReportProvider {
     sendReports() {
         this.restProvider.sendRequest( 'not_reported_receipts', [] ).then(( result: any ) => {
             var receipts = JSON.parse( result.result );
-            var cashier = "";
-            this.reportMessage.subject = "Julkaisumyyntiraportti";
             if ( receipts.length > 0 ) {
+                var cashier = "";
+                this.reportMessage.subject = "Julkaisumyyntiraportti";
                 cashier = receipts[receipts.length - 1].cashier;
-            }
-            this.reportMessage.content = this.makeTransactionReportMessage( receipts, cashier );
-            this.reportMessage.recipient = this.transactionReportAddress;
-            this.reportMessage.format = "text/html";
-            this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
-                this.restProvider.sendRequest( 'set_as_reported', receipts ).then(( result: any ) => {
+                this.reportMessage.content = this.makeTransactionReportMessage( receipts, cashier );
+                this.reportMessage.recipient = this.transactionReportAddress;
+                this.reportMessage.format = "text/html";
+                this.restProvider.sendRequest( 'send_email', this.reportMessage ).then(( result: any ) => {
+                    this.restProvider.sendRequest( 'set_as_reported', receipts ).then(( result: any ) => {
+                    }, ( err ) => {
+                        console.log( err );
+                    } );
                 }, ( err ) => {
                     console.log( err );
                 } );
-            }, ( err ) => {
-                console.log( err );
-            } );
+            }
         }, ( err ) => {
             console.log( err );
         } );

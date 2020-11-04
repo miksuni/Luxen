@@ -76,7 +76,7 @@ export class ShopPage {
 
     customerEmail = "";
 
-    version = "Kassaversio 1.1.4";
+    version = "Kassaversio 1.1.5";
 
     // TODO: KUN COMBINED PAYMENT TALLETETTU, NOLLAA NÄMÄ !!!
     toBePaid: number = 0;

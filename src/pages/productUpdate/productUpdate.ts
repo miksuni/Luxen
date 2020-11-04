@@ -16,7 +16,8 @@ export class ProductUpdatePage {
     productName: string = "";
     productCode: string = "";
     price: string = "";
-    amountInStock: string = "";
+    amountInStock: string = ""; // should actually be of number type
+    previousAmountInStock: number = 0;
     inProduction: boolean = false;
     inventoryCorrection: boolean = false;
 
@@ -32,7 +33,7 @@ export class ProductUpdatePage {
     productUpdates: any;
 
     //productInfoStr: any;
-    productInfo = { objectId: '', ISBN: '', productName: '', price: '', amountInStock: '', productCode: '', availableFromPublisher: false, inventoryCorrection: false };
+    productInfo = { objectId: '', ISBN: '', productName: '', price: '', amountInStock: '', previousAmount: 0, productCode: '', availableFromPublisher: false, inventoryCorrection: false };
 
     constructor( public navCtrl: NavController,
         private barcodeScanner: BarcodeScanner,
@@ -52,9 +53,10 @@ export class ProductUpdatePage {
         this.presentLoading();
         this.productInfo.objectId = this.objectId;
         //this.productInfo.ISBN = this.productNumber;
-        //this.productInfo.productName = this.productName;
+        this.productInfo.productName = this.productName;
         this.productInfo.price = this.price;
         this.productInfo.amountInStock = this.amountInStock;
+        this.productInfo.previousAmount = this.previousAmountInStock;
         this.productInfo.availableFromPublisher = this.inProduction;
         this.productInfo.inventoryCorrection = this.inventoryCorrection;
         console.log( '>> home.saveProduct ' + JSON.stringify( this.productInfo ) );
@@ -140,6 +142,7 @@ export class ProductUpdatePage {
         console.log( '>> productUpdate.removeProduct' );
         this.presentLoading();
         this.productInfo.objectId = this.objectId;
+        this.productInfo.productName = this.productNameInitials;
         console.log( '>> productUpdate.product to be removed: ' + JSON.stringify( this.productInfo ) );
         this.productList.removeProduct( this.productInfo );
         setTimeout(() => {
@@ -168,13 +171,20 @@ export class ProductUpdatePage {
 
     onProductNameUpdated() {
         console.log( '>> productUpdate.onProductNameUpdated: ' + this.productNameInitials );
-        var found = this.productList.getProductByWord( this.productNameInitials );
-        this.searchResult = found;
-        console.log( '>> found: ' + found.length );
+        if ( this.productNameInitials.length > 0 ) {
+            var found = this.productList.getProductByWord( this.productNameInitials );
+            this.searchResult = found;
+            console.log( '>> found: ' + found.length );
+        }
     }
 
     onProductCodeUpdated() {
         console.log( '>> productUpdate.onProductCodeUpdated: ' + this.productCode );
+    }
+
+    clearProductName() {
+        this.productNameInitials = "";
+        this.previousAmountInStock = 0;
     }
 
     onProductSelected( productName, index ) {
@@ -188,6 +198,7 @@ export class ProductUpdatePage {
         this.productNameInitials = this.searchResult[index].productName;
         this.price = this.searchResult[index].price;
         this.amountInStock = this.searchResult[index].amountInStock;
+        this.previousAmountInStock = this.searchResult[index].amountInStock;
         this.inProduction = this.searchResult[index].availableFromPublisher;
         //document.getElementById("product_number_list").style.visibility = "hidden";
         //document.getElementById("product_name_list").style.visibility = "hidden";

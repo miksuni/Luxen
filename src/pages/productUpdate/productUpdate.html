@@ -16,7 +16,7 @@
       </td>
       <td>
         &nbsp;
-        <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
+        <ion-input class="product_data_input" [(ngModel)]="productNameInitials" placeholder="Tuotteen nimi" (click)="clearProductName()" (ionChange)="onProductNameUpdated()" name="productName"></ion-input>
         <div id="product_name_list">
           <ion-list class="product_list">
             <ion-item text-wrap *ngFor="let element of searchResult; let i = index" (click)="onProductSelected(element.productName, i)" >      
@@ -61,7 +61,7 @@
     </tr>
     <tr>
       <td>
-        Varastosaldo:
+        Varastosaldo [{{previousAmountInStock}}]:
       </td>
       <td>
         &nbsp;
