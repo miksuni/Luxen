@@ -103,6 +103,12 @@ export class ShopPage {
     MOBILE_PAY = 4;
     PRODUCT_RETURN = 5;
 
+    PAYMENT_STATUS_CHECK_INTERVAL = 2000;
+    PRODUCT_UPDATE_TIMEOUT = 2000;
+    CARD_PAYMENT_RETRY_COUNT = 1000;
+    PT_CONNECTION_POLL_TIMER = 10000;
+    PT_STATUS_CHECK_TIMER = 5000;
+
     givenAmount = 0;
     cashBack = 0;
 
@@ -417,9 +423,9 @@ export class ShopPage {
     }
 
     async waitForCardPayment() {
-        for ( let i = 0; i < 1000 && this.transactionStatus !== 0; i++ ) {
+        for ( let i = 0; i < this.CARD_PAYMENT_RETRY_COUNT && this.transactionStatus !== 0; i++ ) {
             let promise = new Promise(( res, rej ) => {
-                setTimeout(() => res( "loop purchase response" ), 2000 )
+                setTimeout(() => res( "loop purchase response" ), this.PAYMENT_STATUS_CHECK_INTERVAL )
             } );
 
             // wait until the promise returns us a value
@@ -430,9 +436,9 @@ export class ShopPage {
     }
 
     async waitForCardPaymentCheck() {
-        for ( let i = 0; i < 1000 && this.cardPurchaseCheckingGoingOn; i++ ) {
+        for ( let i = 0; i < this.CARD_PAYMENT_RETRY_COUNT && this.cardPurchaseCheckingGoingOn; i++ ) {
             let promise = new Promise(( res, rej ) => {
-                setTimeout(() => res( "loop check response" ), 2000 )
+                setTimeout(() => res( "loop check response" ), this.PAYMENT_STATUS_CHECK_INTERVAL )
             } );
 
             // wait until the promise returns us a value
@@ -513,9 +519,9 @@ export class ShopPage {
                     this.productList.getTestProductInfo();
                 }
                 this.finishLoading();
-            }, 2000 );
+            }, this.PRODUCT_UPDATE_TIMEOUT );
             this.finishLoading();
-        }, 2000 );
+        }, this.PRODUCT_UPDATE_TIMEOUT );
     }
 
     onProductReturnClicked() {
@@ -707,9 +713,9 @@ export class ShopPage {
                     this.productList.getTestProductInfo();
                 }
                 this.finishLoading();
-            }, 2000 );
+            }, this.PRODUCT_UPDATE_TIMEOUT );
             this.finishLoading();
-        }, 2000 );
+        }, this.PRODUCT_UPDATE_TIMEOUT );
     }
 
     sendReceipt() {
@@ -1546,7 +1552,7 @@ export class ShopPage {
                 if ( !this.ptConnectionTerminated ) {
                     setTimeout(() => {
                         this.getPtConnectionStatus();
-                    }, 5000 );
+                    }, this.PT_STATUS_CHECK_TIMER );
                 }
             }, ( err ) => {
                 console.log( 'error in connect: ' + err );
@@ -1566,7 +1572,7 @@ export class ShopPage {
                 // update connection status only after timeout to give time for state change
                 setTimeout(() => {
                     this.getPtConnectionStatus();
-                }, 5000 );
+                }, this.PT_STATUS_CHECK_TIMER );
             }, ( err ) => {
                 console.log( 'error in disconnect: ' + err );
             } )
@@ -1674,7 +1680,7 @@ export class ShopPage {
             this.paymentPollTimer = setInterval(() => {
                 this.ptConnectionInitiated = false;
                 this.connectToPt();
-            }, 10000 );
+            }, this.PT_CONNECTION_POLL_TIMER );
         }
     }
 
