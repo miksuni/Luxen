@@ -28,6 +28,7 @@ export class RestProvider {
             this.http.post( this.herokuUrl + '/' + request, JSON.stringify( data ), httpOptions )
                 .subscribe( res => {
                     resolve( res );
+                    console.log( "sendRequest result: " + JSON.stringify( res ) );
                 }, ( err ) => {
                     reject( err );
                 } );

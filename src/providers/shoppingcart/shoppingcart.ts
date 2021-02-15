@@ -115,7 +115,17 @@ export class ShoppingcartProvider {
     saveReceipt( receiptData ) {
         this.purchaseData.productList = this.shoppingCart;
         this.purchaseData.receiptData = receiptData;
-        this.restProvider.sendRequest( "save_purchase_data", this.purchaseData );
+        //this.restProvider.sendRequest( "save_purchase_data", this.purchaseData );
+
+        this.restProvider.sendRequest( "save_purchase_data", this.purchaseData ).then(( result: any ) => {
+            var response = JSON.parse( result.result );
+            console.log( "saveReceipt result: " + JSON.stringify( response ) );
+        }, ( err ) => {
+            console.log( 'error in authorization: ' + err );
+        } ).catch(( result: any ) => {
+            console.log( 'authorization failed' );
+        } )
+
     }
 
     getPurchaseData() {

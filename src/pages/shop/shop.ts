@@ -93,7 +93,15 @@ export class ShopPage {
     cashPay: number = 0.0;
     cardPay: number = 0.0;
     mobilePay: number = 0.0;
+
+    // available payment methods
     payments = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // Used only with combined payment view
+    RY_GIFT_CARD = 0;
+    SRK_GIFT_CARD = 1;
+    CASH = 2;
+    CARD_PAYMENT = 3;
+    MOBILE_PAY = 4;
+    PRODUCT_RETURN = 5;
 
     givenAmount = 0;
     cashBack = 0;
@@ -375,7 +383,7 @@ export class ShopPage {
                     "amount": sum,
                     "receiptId": this.currentState.lastReceiptNr
                 } ).then(( result: any ) => {
-                    this.payments[3] = sum;
+                    this.payments[this.CARD_PAYMENT] = sum;
                     this.cardPurchaseGoingOn = true;
                     // save for possible payment check
                     this.lastCardPaymentAmount = sum;
@@ -459,11 +467,11 @@ export class ShopPage {
         receiptData.cashier = this.cashier;
         receiptData.testUser = this.testUser;
 
-        this.payments[5] = this.totalSum;
+        this.payments[this.PRODUCT_RETURN] = this.totalSum;
 
         var receiptItemData = {
             sum: 0,
-            sumAsString: this.payments[5].toFixed( 2 ),
+            sumAsString: this.payments[this.PRODUCT_RETURN].toFixed( 2 ),
             paymentMethod: 5,
             paymentMethodDescription: "Ry:n oma osto",
             giftCard1Type: 0,
@@ -476,7 +484,7 @@ export class ShopPage {
             valueAfter: 0
         };
 
-        receiptItemData.sum = this.payments[5];
+        receiptItemData.sum = this.payments[this.PRODUCT_RETURN];
         receiptItemData.handedTo = handedTo;
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
@@ -519,10 +527,10 @@ export class ShopPage {
         var count = 1;
 
         var str = "";
-        if ( this.payments[0] > 0 ) {
+        if ( this.payments[this.RY_GIFT_CARD] > 0 ) {
             str += ( count++ + ". Talleta oman ry:n lahjakortti<br>" );
         }
-        if ( this.payments[1] > 0 ) {
+        if ( this.payments[this.SRK_GIFT_CARD] > 0 ) {
             if ( this.giftCard2AmountAfter > 0 ) {
                 str += ( count++ + ". Kirjoita SRK:n julkaisumyynnin lahjakorttiin jäljellä oleva käyttövara " +
                     this.giftCard2AmountAfter + " € ja anna kortti asiakkaalle<br>" );
@@ -530,16 +538,16 @@ export class ShopPage {
                 str += ( count++ + ". Talleta SRK:n julkaisumyynnin lahjakortti<br>" );
             }
         }
-        if ( this.payments[2] > 0 ) {
+        if ( this.payments[this.CASH] > 0 ) {
             str += ( count++ + ". Suorita käteisveloitus<br>" );
         }
         /*if (!this.ptInUse) {
             // with old pt:
-            if ( this.payments[3] > 0 ) {
+            if ( this.payments[this.CARD_PAYMENT] > 0 ) {
                 str += ( count++ + ". Suorita pankkikorttiveloitus<br>" );
             }
         }*/
-        if ( this.payments[4] > 0 ) {
+        if ( this.payments[this.MOBILE_PAY] > 0 ) {
             str += ( count++ + ". Pyydä asiakasta suorttamaan MobilePay maksu, selitteeksi 'Julkaisumyynti'<br><br>" );
         }
         str += "Kun toimenpiteet suoritettu, paina \"Veloitukset suoritettu\"";
@@ -570,11 +578,14 @@ export class ShopPage {
         receiptData.cashier = this.cashier;
         receiptData.testUser = this.testUser;
 
+        var receiptItemData = {};
+
         /************************** Ry gift card ***************************/
-        if ( this.payments[0] > 0 ) {
-            var receiptItemData0 = {
-                sum: this.payments[0],
-                sumAsString: this.payments[0].toFixed( 2 ),
+        // var introduced in order to get better type checking with used eclipse version
+        if ( this.payments[this.RY_GIFT_CARD] > 0 ) {
+            receiptItemData = {
+                sum: this.payments[this.RY_GIFT_CARD],
+                sumAsString: this.payments[this.RY_GIFT_CARD].toFixed( 2 ),
                 paymentMethod: 0,
                 paymentMethodDescription: "Ry:n lahjakortti",
                 giftCard1Type: this.giftCard1Type,
@@ -584,14 +595,14 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptData.items.push( receiptItemData0 );
+            receiptData.items.push( receiptItemData );
         }
 
         /************************** SRK gift card ***************************/
-        if ( this.payments[1] > 0 ) {
-            var receiptItemData1 = {
-                sum: this.payments[1],
-                sumAsString: this.payments[1].toFixed( 2 ),
+        if ( this.payments[this.SRK_GIFT_CARD] > 0 ) {
+            receiptItemData = {
+                sum: this.payments[this.SRK_GIFT_CARD],
+                sumAsString: this.payments[this.SRK_GIFT_CARD].toFixed( 2 ),
                 paymentMethod: 1,
                 paymentMethodDescription: "SRK:n lahjakortti",
                 giftCard1Type: 0,
@@ -601,14 +612,14 @@ export class ShopPage {
                 valueBefore: this.giftCard2AmountBefore,
                 valueAfter: this.giftCard2AmountAfter
             };
-            receiptData.items.push( receiptItemData1 );
+            receiptData.items.push( receiptItemData );
         }
 
         /************************** Cash ***************************/
-        if ( this.payments[2] > 0 ) {
-            var receiptItemData2 = {
-                sum: this.payments[2],
-                sumAsString: this.payments[2].toFixed( 2 ),
+        if ( this.payments[this.CASH] > 0 ) {
+            receiptItemData = {
+                sum: this.payments[this.CASH],
+                sumAsString: this.payments[this.CASH].toFixed( 2 ),
                 paymentMethod: 2,
                 paymentMethodDescription: "Käteinen",
                 giftCard1Type: 0,
@@ -618,14 +629,14 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptData.items.push( receiptItemData2 );
+            receiptData.items.push( receiptItemData );
         }
 
         /************************** Payment card ***************************/
-        if ( this.payments[3] > 0 ) {
-            var receiptItemData3 = {
-                sum: this.payments[3],
-                sumAsString: this.payments[3].toFixed( 2 ),
+        if ( this.payments[this.CARD_PAYMENT] > 0 ) {
+            receiptItemData = {
+                sum: this.payments[this.CARD_PAYMENT],
+                sumAsString: this.payments[this.CARD_PAYMENT].toFixed( 2 ),
                 paymentMethod: 3,
                 paymentMethodDescription: "Pankkikortti",
                 giftCard1Type: 0,
@@ -635,14 +646,14 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptData.items.push( receiptItemData3 );
+            receiptData.items.push( receiptItemData );
         }
 
         /************************** MobilePay ***************************/
-        if ( this.payments[4] > 0 ) {
-            var receiptItemData4 = {
-                sum: this.payments[4],
-                sumAsString: this.payments[4].toFixed( 2 ),
+        if ( this.payments[this.MOBILE_PAY] > 0 ) {
+            receiptItemData = {
+                sum: this.payments[this.MOBILE_PAY],
+                sumAsString: this.payments[this.MOBILE_PAY].toFixed( 2 ),
                 paymentMethod: 4,
                 paymentMethodDescription: "MobilePay",
                 giftCard1Type: 0,
@@ -652,13 +663,13 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptData.items.push( receiptItemData4 );
+            receiptData.items.push( receiptItemData );
         }
 
         /************************** Product return ***************************/
         // Special case and a bit different handling
         if ( this.productReturnValue < 0 ) {
-            var receiptItemData7 = {
+            receiptItemData = {
                 sum: 0 - this.productReturnValue,
                 sumAsString: ( 0 - this.productReturnValue ).toFixed( 2 ),
                 paymentMethod: 7,
@@ -670,7 +681,7 @@ export class ShopPage {
                 valueBefore: 0,
                 valueAfter: 0
             };
-            receiptData.items.push( receiptItemData7 );
+            receiptData.items.push( receiptItemData );
         }
 
         this.shoppingCart.saveReceipt( receiptData );
@@ -818,10 +829,10 @@ export class ShopPage {
             }
             ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = value.toString();
             this.enableCm1Fields( true );
-            this.payments[0] = value;
+            this.payments[this.RY_GIFT_CARD] = value;
         } else {
             ( <HTMLInputElement>document.getElementById( "cm11" ) ).value = "0";
-            this.payments[0] = 0;
+            this.payments[this.RY_GIFT_CARD] = 0;
             this.enableCm1Fields( false );
             this.clearCm1Fields();
         }
@@ -879,7 +890,7 @@ export class ShopPage {
         if ( selected ) {
             this.enableCm2Fields( true );
         } else {
-            this.payments[1] = 0;
+            this.payments[this.SRK_GIFT_CARD] = 0;
             this.enableCm2Fields( false );
             this.clearCm2Fields();
 
@@ -893,8 +904,8 @@ export class ShopPage {
     }
 
     cm21Listener( $event ) {
-        this.payments[1] = parseFloat( $event );
-        this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
+        this.payments[this.SRK_GIFT_CARD] = parseFloat( $event );
+        this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[this.SRK_GIFT_CARD];
         this.validateCm();
     }
 
@@ -907,7 +918,7 @@ export class ShopPage {
     }
 
     giftCard2AmountBeforeChanged( $event ) {
-        this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[1];
+        this.giftCard2AmountAfter = this.giftCard2AmountBefore - this.payments[this.SRK_GIFT_CARD];
         this.validateCm();
     }
 
@@ -917,7 +928,7 @@ export class ShopPage {
 
     cm2Valid() {
         if ( ( <HTMLInputElement>document.getElementById( "cm2" ) ).checked ) {
-            if ( ( this.payments[1] > 0 ) &&
+            if ( ( this.payments[this.SRK_GIFT_CARD] > 0 ) &&
                 ( this.giftCard2Receiver.length > 0 ) &&
                 ( this.giftCard2Originator.length > 0 ) &&
                 ( this.giftCard2PurchaseDate.length > 0 ) &&
@@ -960,14 +971,14 @@ export class ShopPage {
         } else {
             ( <HTMLInputElement>document.getElementById( "cm31" ) ).disabled = true;
             ( <HTMLInputElement>document.getElementById( "cm31" ) ).value = "0";
-            this.payments[2] = 0;
+            this.payments[this.CASH] = 0;
 
         }
         this.validateCm();
     }
 
     cm31Listener( $event ) {
-        this.payments[2] = parseFloat( $event );
+        this.payments[this.CASH] = parseFloat( $event );
         this.validateCm();
     }
 
@@ -981,14 +992,14 @@ export class ShopPage {
         } else {
             ( <HTMLInputElement>document.getElementById( "cm41" ) ).disabled = true;
             ( <HTMLInputElement>document.getElementById( "cm41" ) ).value = "0";
-            this.payments[3] = 0;
+            this.payments[this.CARD_PAYMENT] = 0;
 
         }
         this.validateCm();
     }
 
     cm41Listener( $event ) {
-        this.payments[3] = parseFloat( $event );
+        this.payments[this.CARD_PAYMENT] = parseFloat( $event );
         this.validateCm();
     }
 
@@ -1002,14 +1013,14 @@ export class ShopPage {
         } else {
             ( <HTMLInputElement>document.getElementById( "cm51" ) ).disabled = true;
             ( <HTMLInputElement>document.getElementById( "cm51" ) ).value = "0";
-            this.payments[4] = 0;
+            this.payments[this.MOBILE_PAY] = 0;
 
         }
         this.validateCm();
     }
 
     cm51Listener( $event ) {
-        this.payments[4] = parseFloat( $event );
+        this.payments[this.MOBILE_PAY] = parseFloat( $event );
         this.validateCm();
     }
 
@@ -1156,7 +1167,7 @@ export class ShopPage {
                 {
                     text: 'Siirrä maksu maksupäätteelle',
                     handler: () => {
-                        this.cardPayment( this.payments[3] );
+                        this.cardPayment( this.payments[this.CARD_PAYMENT] );
                     }
                 }
             ]
@@ -1213,7 +1224,7 @@ export class ShopPage {
                 {
                     text: 'Ok',
                     handler: () => {
-                        this.payments[3] = sum;
+                        this.payments[this.CARD_PAYMENT] = sum;
                         this.combinedPayment();
                     }
                 },
@@ -1247,7 +1258,7 @@ export class ShopPage {
                         if ( this.moneyGiven > this.totalSum ) {
                             this.showPrompt2( this.moneyGiven - this.totalSum );
                         } else if ( this.moneyGiven == this.totalSum ) {
-                            this.payments[2] = this.totalSum;
+                            this.payments[this.CASH] = this.totalSum;
                             this.combinedPayment();
                         } else {
                             this.showPrompt3( this.totalSum, this.moneyGiven );
@@ -1279,7 +1290,7 @@ export class ShopPage {
                     text: 'Tasaraha',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        this.payments[2] = this.totalSum;
+                        this.payments[this.CASH] = this.totalSum;
                         this.combinedPayment();
                     },
                 },
@@ -1300,7 +1311,7 @@ export class ShopPage {
                 {
                     text: 'OK',
                     handler: data => {
-                        this.payments[2] = this.totalSum;
+                        this.payments[this.CASH] = this.totalSum;
                         this.combinedPayment();
                     }
                 }
@@ -1424,11 +1435,11 @@ export class ShopPage {
                 {
                     text: 'Veloitukset suoritettu',
                     handler: () => {
-                        if ( this.payments[3] > 0 ) {
+                        if ( this.payments[this.CARD_PAYMENT] > 0 ) {
                             if ( this.ptInUse ) {
                                 this.promptDoPaymentCardPayment();
                             } else {
-                                this.promptPaymentCardInstructions( this.payments[3] )
+                                this.promptPaymentCardInstructions( this.payments[this.CARD_PAYMENT] )
                             }
                         } else {
                             this.combinedPayment();
