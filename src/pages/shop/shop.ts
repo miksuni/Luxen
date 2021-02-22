@@ -101,7 +101,8 @@ export class ShopPage {
     CASH = 2;
     CARD_PAYMENT = 3;
     MOBILE_PAY = 4;
-    PRODUCT_RETURN = 5;
+
+    OWN_PURCHASE = 5;
 
     PAYMENT_STATUS_CHECK_INTERVAL = 2000;
     PRODUCT_UPDATE_TIMEOUT = 2000;
@@ -473,11 +474,11 @@ export class ShopPage {
         receiptData.cashier = this.cashier;
         receiptData.testUser = this.testUser;
 
-        this.payments[this.PRODUCT_RETURN] = this.totalSum;
+        this.payments[this.OWN_PURCHASE] = this.totalSum;
 
         var receiptItemData = {
             sum: 0,
-            sumAsString: this.payments[this.PRODUCT_RETURN].toFixed( 2 ),
+            sumAsString: this.payments[this.OWN_PURCHASE].toFixed( 2 ),
             paymentMethod: 5,
             paymentMethodDescription: "Ry:n oma osto",
             giftCard1Type: 0,
@@ -490,7 +491,7 @@ export class ShopPage {
             valueAfter: 0
         };
 
-        receiptItemData.sum = this.payments[this.PRODUCT_RETURN];
+        receiptItemData.sum = this.payments[this.OWN_PURCHASE];
         receiptItemData.handedTo = handedTo;
         receiptItemData.committee = committee;
         receiptItemData.receiver = receiver;
@@ -565,6 +566,10 @@ export class ShopPage {
         this.combinedPaymentGuide();
     }
 
+    // combined payment handles the next cases: 
+    //   - more that one payment method is used
+    //   - gift card is used
+    //   - MobilePay is used
     combinedPayment() {
         $( "#payment_data_area" ).hide();
         $( "#shopping_cart_area" ).show();
@@ -743,8 +748,8 @@ export class ShopPage {
     }
 
     checkIfReceiptSendingEnabled() {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return !re.test( String( this.customerEmail ).toLowerCase() );
+        const emailAddressRegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return !emailAddressRegExp.test( String( this.customerEmail ).toLowerCase() );
     }
 
     showCombinedPayment() {
@@ -1262,12 +1267,12 @@ export class ShopPage {
                     handler: data => {
                         this.moneyGiven = data.Money;
                         if ( this.moneyGiven > this.totalSum ) {
-                            this.showPrompt2( this.moneyGiven - this.totalSum );
+                            this.showMoneyBackPrompt( this.moneyGiven - this.totalSum );
                         } else if ( this.moneyGiven == this.totalSum ) {
                             this.payments[this.CASH] = this.totalSum;
                             this.combinedPayment();
                         } else {
-                            this.showPrompt3( this.totalSum, this.moneyGiven );
+                            this.showNotEnoughCashPrompt( this.totalSum, this.moneyGiven );
                         }
                     },
                 },
@@ -1275,21 +1280,21 @@ export class ShopPage {
                     text: '10 e',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        this.showPrompt2( 10 - this.totalSum );
+                        this.showMoneyBackPrompt( 10 - this.totalSum );
                     },
                 },
                 {
                     text: '20 e',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        this.showPrompt2( 20 - this.totalSum );
+                        this.showMoneyBackPrompt( 20 - this.totalSum );
                     },
                 },
                 {
                     text: '50 e',
                     handler: data => {
                         this.moneyGiven = data.Money;
-                        this.showPrompt2( 50 - this.totalSum );
+                        this.showMoneyBackPrompt( 50 - this.totalSum );
                     },
                 },
                 {
@@ -1310,7 +1315,7 @@ export class ShopPage {
         prompt.present();
     }
 
-    showPrompt2( moneyback ) {
+    showMoneyBackPrompt( moneyback ) {
         const prompt = this.alertController.create( {
             title: 'Takaisin ' + moneyback.toString() + ' e',
             buttons: [
@@ -1326,7 +1331,7 @@ export class ShopPage {
         prompt.present();
     }
 
-    showPrompt3( totalsum, givensum ) {
+    showNotEnoughCashPrompt( totalsum, givensum ) {
         const prompt = this.alertController.create( {
             title: 'Annettu summa ' + givensum.toString() + 'e ei riitä loppusummaan '
             + totalsum + 'e , syötä maksu uudestaan',
