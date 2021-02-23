@@ -12,16 +12,18 @@ export class RestProvider {
 
     apiUrl = 'https://jsonplaceholder.typicode.com';
     herokuUrl = 'https://luxen.herokuapp.com/parse/functions'; // '/hello';
+    appId = "";
 
     constructor( public http: HttpClient ) {
         console.log( 'Hello RestProvider Provider' );
+        this.getEnv();
     }
 
     sendRequest( request, data ) {
         const httpOptions = {
             headers: new HttpHeaders( {
                 'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
+                'X-Parse-Application-Id': this.appId
             } )
         };
         return new Promise(( resolve, reject ) => {
@@ -36,121 +38,42 @@ export class RestProvider {
     }
 
     cashiers( data ) {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
-            } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/cashiers', JSON.stringify( data ), httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+        return this.sendRequest( 'cashiers', data );
     }
 
     productInfo( data ) {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
-            } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/productinfo', '{}', httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+        return this.sendRequest( 'productinfo', JSON.parse( '{}' ) );
     }
 
     addProduct( data ) {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
-            } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/addproduct', JSON.stringify( data ), httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+        return this.sendRequest( 'addproduct', data );
     }
 
     saveProduct( data ) {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
-            } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/saveproduct', JSON.stringify( data ), httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+        return this.sendRequest( 'saveproduct', data );
     }
 
     removeProduct( data ) {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
-            } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/removeproduct', JSON.stringify( data ), httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+        return this.sendRequest( 'removeproduct', data );
     }
 
     connectToPT() {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
-            } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/connect_to_pt', '[]', httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+        return this.sendRequest( 'connect_to_pt', '[]' );
     }
 
     disconnectPT() {
-        const httpOptions = {
-            headers: new HttpHeaders( {
-                'Content-Type': 'application/json',
-                'X-Parse-Application-Id': '365_ghg_867_fhj'
+        return this.sendRequest( 'close_pt_connection', JSON.parse( '[]' ) );
+    }
+
+
+    getEnv() {
+        this.http
+            .get( '../../assets/data/env.json', {
+                responseType: 'text'
             } )
-        };
-        return new Promise(( resolve, reject ) => {
-            this.http.post( this.herokuUrl + '/close_pt_connection', '[]', httpOptions )
-                .subscribe( res => {
-                    resolve( res );
-                }, ( err ) => {
-                    reject( err );
-                } );
-        } );
+            .subscribe(
+            data => { this.appId = JSON.parse( data ).APP_ID; console.log( this.appId ) },
+            err => console.log( 'something went wrong: ', err )
+            );
     }
 }
